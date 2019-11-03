@@ -1,0 +1,105 @@
+﻿<Window x:Class="NoDb.Apps.UI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+        xmlns:local="clr-namespace:NoDb.Apps.UI"
+        mc:Ignorable="d"
+        Title="NoDb" Height="600" Width="1000" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" Background="#FFEFEFEF">
+    <Window.CommandBindings>
+        <CommandBinding Command="Open" Executed="XMenuNew_Click"/>
+        <CommandBinding Command="New" Executed="XMenuNew_Click"/>
+    </Window.CommandBindings>
+    <Window.InputBindings>
+        <KeyBinding Key="N" Modifiers="Control" Command="New"/>
+        <KeyBinding Key="O" Modifiers="Control" Command="Open"/>
+    </Window.InputBindings>
+    <Window.Resources>
+        <ContextMenu x:Key="xContextMenuForColumns">
+            <MenuItem Header="Remove" />
+        </ContextMenu>
+    </Window.Resources>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top" Padding="6">
+            <MenuItem Header="_File">
+                <MenuItem Name="xMenuNew" Header="_New" Command="Open"/>
+                <MenuItem Name="xMenuOpen" Header="_Open" Command="New" />
+                <Separator />
+                <MenuItem Header="_Exit" Click="XMenuItemExit_Click" />
+            </MenuItem>
+            <MenuItem Header="_View" Name="xViewMenu">
+                <MenuItem Header="_Enum List" Click="XMenuEnum_Click" />
+                <MenuItem Header="_Revisions" Click="XMenuRevision_Click" />
+                <MenuItem Header="_Table Scripts" Click="XMenuTableScripts_Click" />
+                <Separator />
+                <MenuItem Name="xMenuSetting" Header="_Settings" Click="XMenuSetting_Click" />
+            </MenuItem>
+        </Menu>
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem>
+                <TextBlock Name="lblStatusInfo" TextTrimming="CharacterEllipsis"/>
+            </StatusBarItem>
+        </StatusBar>
+        <Grid x:Name="xMainGrid">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200" MinWidth="100" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid Margin="10,10,0,10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="50"/>
+                </Grid.RowDefinitions>
+                <ListView x:Name="xTables" SelectionMode="Single" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                </ListView>
+                <Grid Grid.Row="1" Margin="0,10,0,0">
+                    <Button Content="New Table" Click="NewTableButton_Click" HorizontalAlignment="Left"/>
+                    <Button Content="Delete Table" Style="{StaticResource ButtonDanger}" Click="DeleteTableButton_Click" HorizontalAlignment="Right"/>
+                </Grid>
+            </Grid>
+            <GridSplitter Style="{StaticResource SplitterVertical}" Grid.Column="1" />
+            <Grid Grid.Column="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" MinWidth="100" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="200" />
+                </Grid.ColumnDefinitions>
+                <Grid x:Name="xColumnsGrid">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="60*" MinHeight="100" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="40*" />
+                    </Grid.RowDefinitions>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <ToolBarTray>
+                            <ToolBar HorizontalAlignment="Left">
+                                <Button Content="Save" Style="{StaticResource ButtonSuccess}" Click="Save" />
+                            </ToolBar>
+                            <ToolBar HorizontalAlignment="Right">
+                                <Separator />
+                                <Button Content="Index" Click="IndexButton_Clicked"/>
+                                <Button Content="Relation" Click="RelationButton_Clicked"/>
+                                <Button Content="Search" Click="SearchButton_Clicked"/>
+                            </ToolBar>
+                        </ToolBarTray>
+                        <DataGrid Grid.Row="1" x:Name="xColumns" />
+                    </Grid>
+                    <GridSplitter Grid.Row="1" Style="{StaticResource SplitterHorizontal}" />
+                    <WindowsFormsHost Grid.Row="2">
+                        <wf:PropertyGrid Dock="Fill" x:Name="xColumnDetail"/>
+                    </WindowsFormsHost>
+                </Grid>
+                <GridSplitter Grid.Column="1" Style="{StaticResource SplitterVertical}" />
+                <WindowsFormsHost Grid.Column="2" Margin="0,10,10,10">
+                    <wf:PropertyGrid Dock="Fill" x:Name="xTableDetail"/>
+                </WindowsFormsHost>
+            </Grid>
+        </Grid>
+    </DockPanel>
+</Window>

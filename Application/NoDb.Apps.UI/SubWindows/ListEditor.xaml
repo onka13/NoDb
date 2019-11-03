@@ -1,0 +1,43 @@
+﻿<Window x:Class="NoDb.Apps.UI.SubWindows.ListEditor"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+        xmlns:local="clr-namespace:NoDb.Apps.UI.SubWindows"
+        mc:Ignorable="d"
+        Title="List Editor" Height="359" Width="619" WindowStartupLocation="CenterScreen" WindowStyle="SingleBorderWindow">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Margin="10,10,0,10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="40" />
+            </Grid.RowDefinitions>
+            <ListView x:Name="xList" SelectionMode="Single" VerticalAlignment="Stretch">
+            </ListView>
+            <Grid Grid.Row="1">
+                <Button Content=" Add " Click="AddButton_Click" HorizontalAlignment="Left"/>
+                <Button Content="Remove" Click="DeleteButton_Click" HorizontalAlignment="Right"/>
+            </Grid>
+        </Grid>
+        <GridSplitter Grid.Column="1" Style="{StaticResource SplitterVertical}" />
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+            <WindowsFormsHost>
+                <wf:PropertyGrid Dock="Fill" x:Name="xDetail"/>
+            </WindowsFormsHost>
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+                <Button Content="SAVE" Style="{StaticResource ButtonSuccess}" Name="xSaveButton" Margin="0,0,20,0"/>
+                <Button Content="Close" Click="CloseButton_Click"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

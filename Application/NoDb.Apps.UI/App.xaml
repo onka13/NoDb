@@ -1,0 +1,83 @@
+﻿<Application x:Class="NoDb.Apps.UI.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:NoDb.Apps.UI"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+
+                <!--<ResourceDictionary Source="SettingsDictionary.xaml"/>-->
+
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style x:Key="MR" TargetType="FrameworkElement">
+                <Setter Property="Margin" Value="0,0,20,0" />
+            </Style>
+            <Style TargetType="TextBlock">
+
+            </Style>
+            <Style TargetType="Button">
+                <Setter Property="Padding" Value="10,5" />
+            </Style>
+            <Style x:Key="ButtonDanger" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                <Setter Property="Background" Value="IndianRed" />
+            </Style>
+            <Style x:Key="ButtonSuccess" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                <Setter Property="Background" Value="DarkOliveGreen" />
+                <Setter Property="Foreground" Value="White" />
+            </Style>
+            <Style x:Key="{x:Static ToolBar.ButtonStyleKey}" TargetType="Button">
+                <Setter Property="Padding" Value="10,5" />
+            </Style>
+            <Style TargetType="ComboBox">
+                <Setter Property="Padding" Value="5" />
+                <Setter Property="MinWidth" Value="100" />
+            </Style>
+            <Style TargetType="TextBox">
+                <Setter Property="MinWidth" Value="100" />
+                <Setter Property="Padding" Value="5" />
+            </Style>
+            <Style x:Key="StackHorizontal" TargetType="StackPanel">
+                <Style.Resources>
+                    <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                        <Setter Property="VerticalAlignment"  Value="Center" />
+                        <Setter Property="Margin" Value="0,0,10,0" />
+                    </Style>
+                    <Style TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
+                        <Setter Property="VerticalAlignment"  Value="Center" />
+                        <Setter Property="Margin" Value="0,0,10,0" />
+                    </Style>
+                </Style.Resources>
+            </Style>
+            <Style x:Key="SplitterVertical" TargetType="GridSplitter">
+                <Setter Property="VerticalAlignment" Value="Stretch"/>
+                <Setter Property="HorizontalAlignment" Value="Center"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <Grid Width="5" Margin="8,0,8,0">
+                                <Button Content="▌▌▌▌▌▌" BorderThickness="0" />
+                                <Rectangle Fill="#00FFFFFF" />
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="SplitterHorizontal" TargetType="GridSplitter">
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <Grid Height="5" Margin="0,8,0,8">
+                                <Button Content="▌▌▌▌▌▌" BorderThickness="0" />
+                                <Rectangle Fill="#00FFFFFF" />
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

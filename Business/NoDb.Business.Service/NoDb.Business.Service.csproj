@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\dotnet-core-common\CoreCommon.Infra\CoreCommon.Infra.csproj" />
+    <ProjectReference Include="..\..\Data\NoDb.Data.Domain\NoDb.Data.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

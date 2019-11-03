@@ -1,0 +1,43 @@
+﻿<Window x:Class="NoDb.Apps.UI.SubWindows.TableScriptsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NoDb.Apps.UI.SubWindows"
+        mc:Ignorable="d"
+        Title="Table Scripts" Height="450" Width="800" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
+        <ListView x:Name="xTables" SelectionMode="Extended" VerticalAlignment="Stretch" SelectionChanged="XTables_SelectionChanged"/>
+        <GridSplitter Grid.Column="1" Style="{StaticResource SplitterVertical}" />
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="5" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+            <RichTextBox x:Name="xQuery">
+                <RichTextBox.Resources>
+                    <Style TargetType="{x:Type Paragraph}">
+                        <Setter Property="Margin" Value="0"/>
+                    </Style>
+                </RichTextBox.Resources>
+            </RichTextBox>
+            <GridSplitter Grid.Row="1" Height="5" HorizontalAlignment="Stretch" />
+            <Grid Grid.Row="2" Margin="20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <ComboBox Grid.Column="0" Name="xQueryType" HorizontalAlignment="Left" SelectionChanged="XQueryType_SelectionChanged"/>
+                <CheckBox Name="xDropBefore" Grid.Column="1" Content="Drop Before" VerticalAlignment="Center" Margin="20,0" Click="XDropBefore_Click"/>
+                <Button Grid.Column="2" Content="Display Query Executer" Click="XQueryButton_Click" HorizontalAlignment="Right"/>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

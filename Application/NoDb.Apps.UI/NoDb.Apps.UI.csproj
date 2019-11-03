@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Authors>onka</Authors>
+    <Product>NoDb</Product>
+    <Copyright>onka 2019</Copyright>
+    <PackageProjectUrl>https://github.com/onka13/NoDb</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/onka13/NoDb</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AvalonEdit" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Business\NoDb.Business.Service\NoDb.Business.Service.csproj" />
+    <ProjectReference Include="..\..\Data\NoDb.Data.Domain\NoDb.Data.Domain.csproj" />
+  </ItemGroup>
+
+</Project>
