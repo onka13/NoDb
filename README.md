@@ -6,6 +6,6 @@ The aim of the project is storing definitions and use them to generate codes or 
 
 ### Screenshots
 
-![Image](https://github.com/onka13/NoDb/tree/master/_docs/home.jpg)
+![Image](https://raw.githubusercontent.com/onka13/NoDb/master/_docs/home.jpg)
 
-![Image](https://github.com/onka13/NoDb/tree/master/_docs/tableScripts.jpg)
+![Image](https://raw.githubusercontent.com/onka13/NoDb/master/_docs/tableScripts.jpg)
