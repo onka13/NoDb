@@ -88,6 +88,12 @@ namespace NoDb.Apps.UI
             xMainGrid.IsEnabled = false;
             xColumnsGrid.IsEnabled = false;
             xViewMenu.IsEnabled = false;
+
+            if (!string.IsNullOrEmpty(App.Folder))
+            {
+                lblStatusInfo.Text = App.Folder;
+                InitService(App.Folder);
+            }
         }
 
         private void XColumns_SelectionChanged(object sender, SelectionChangedEventArgs e)

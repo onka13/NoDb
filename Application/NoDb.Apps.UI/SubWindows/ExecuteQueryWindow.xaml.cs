@@ -23,10 +23,14 @@ namespace NoDb.Apps.UI.SubWindows
         NoDbService _noDbService;
         NoDbConnectionType _connectionType;
 
+        public ExecuteQueryWindow() : this(null)
+        {
+        }
+
         public ExecuteQueryWindow(NoDbService noDbService)
         {
+            _noDbService = noDbService ?? App.NoDbService;
             InitializeComponent();
-            _noDbService = noDbService;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

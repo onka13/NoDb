@@ -21,9 +21,13 @@ namespace NoDb.Apps.UI.SubWindows
     {
         NoDbService _noDbService;
 
+        public SettingsWindow() : this(null)
+        {
+        }
+        
         public SettingsWindow(NoDbService noDbService)
         {
-            _noDbService = noDbService;
+            _noDbService = noDbService ?? App.NoDbService;
             InitializeComponent();
         }
 
