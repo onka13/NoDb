@@ -9,10 +9,12 @@ namespace NoDb.Data.Domain.DbModels
 {
     public class NoDbRelationItem
     {
+        [Description("Column name")]
         [Category("General")]
         [TypeConverter(typeof(ColumnConverter))]
         public string ColumnName { get; set; }
 
+        [Description("Foreign column")]
         [NoDbColumn(NoDbColumnType.ForeignColumnPrimaryKey)]
         [Category("General")]
         [TypeConverter(typeof(ColumnConverter))]

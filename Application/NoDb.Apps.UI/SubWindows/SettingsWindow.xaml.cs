@@ -24,7 +24,7 @@ namespace NoDb.Apps.UI.SubWindows
         public SettingsWindow() : this(null)
         {
         }
-        
+
         public SettingsWindow(NoDbService noDbService)
         {
             _noDbService = noDbService ?? App.NoDbService;
@@ -41,7 +41,24 @@ namespace NoDb.Apps.UI.SubWindows
         {
             _noDbService.SettingsService.New(new NoDbSetting
             {
-                SettingsKey = xSettingKey.Text
+                SettingsKey = xSettingKey.Text,
+                Schema = "dbo",
+                ConnectionType = Data.Domain.Enums.NoDbConnectionType.Mssql,
+                ConnectionName = "MainConnection",
+                DotNetCoreProject = new DotNetCoreProject
+                {
+                    EntityNamespaces = "using CoreCommon.Data.Domain.Entitites;\r\nusing CoreCommon.Data.Domain.Enums;",
+                    RepositoryNamespaces = "using CoreCommon.Data.Domain.Entitites;\r\nusing CoreCommon.Data.Domain.Enums;\r\nusing CoreCommon.Data.EntityFrameworkBase.Base;\r\nusing CoreCommon.Data.ElasticSearch.Base;\r\nusing CoreCommon.Data.Domain.Business;",
+                    ServiceNamespaces = "using CoreCommon.Business.Service.Base;\r\nusing CoreCommon.Data.Domain.Business;\r\nusing CoreCommon.Data.Domain.Entitites;\r\nusing CoreCommon.Data.Domain.Enums;",
+                    DbContextNamespaces = "CoreCommon.Data.EntityFrameworkBase.Base",
+                    EntityBase = "IEntityBase",
+                    EntityRepoBase = "EntityFrameworkBaseRepository",
+                    EntityServiceBase = "BusinessLogicBase",
+                    ElasticEntityBase = "IElasticSearchEntity",
+                    ElasticRepoBase = "ElasticSearchRepositoryBase",
+                    EntityRepoInterfaceBase = "IRepositoryBase",
+                    EntityServiceInterfaceBase = "IBusinessLogicBase"
+                }
             });
             xSettingKey.Text = "";
             BindSettings();
@@ -69,6 +86,6 @@ namespace NoDb.Apps.UI.SubWindows
             xSettings.ItemsSource = _noDbService.SettingsService.Settings;
             xSettings.SelectedIndex = selected;
         }
-        
+
     }
 }

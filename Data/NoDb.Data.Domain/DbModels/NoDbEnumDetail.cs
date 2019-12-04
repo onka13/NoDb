@@ -8,8 +8,10 @@ namespace NoDb.Data.Domain.DbModels
 {
     public class NoDbEnumDetail : NoDbBase
     {
+        [Description("Enum name")]
         public string Name { get; set; }
 
+        [Description("Enum data type")]
         public NoDbDataEnumType EnumType { get; set; }
 
         [TypeConverter(typeof(NoDbCollectionTypeConverter))]

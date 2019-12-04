@@ -7,12 +7,15 @@ namespace NoDb.Data.Domain.DbModels
 {
     public class NoDbIndex : NoDbBase
     {
+        [Description("Index name")]
         [Category("Identity")]
         public string Name { get; set; }
 
+        [Description("True if index is also a primary key.")]
         [Category("General")]
         public bool IsPrimaryKey { get; set; }
 
+        [Description("Is index unique?")]
         [Category("General")]
         public bool IsUnique { get; set; }
 

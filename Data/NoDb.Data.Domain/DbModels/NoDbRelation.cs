@@ -9,12 +9,15 @@ namespace NoDb.Data.Domain.DbModels
 {
     public class NoDbRelation : NoDbBase
     {
+        [Description("Relation Name")]
         [Category("Identity")]
         public string Name { get; set; }
 
+        [Description("Delete rule")]
         [Category("Table Designer")]
         public NoDbRelationRule DeleteRule { get; set; }
 
+        [Description("Update Rule")]
         [Category("Table Designer")]
         public NoDbRelationRule UpdateRule { get; set; }
 
@@ -35,6 +38,7 @@ namespace NoDb.Data.Domain.DbModels
         [TypeConverter(typeof(NoDbCollectionTypeConverter))]
         public List<NoDbRelationItem> Items { get; set; }
 
+        [Description("Relation type")]
         [Category("General")]
         public NoDbRelationType RelationType { get; set; }
 
