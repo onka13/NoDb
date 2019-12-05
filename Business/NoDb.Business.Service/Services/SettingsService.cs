@@ -25,11 +25,13 @@ namespace NoDb.Business.Service.Services
             var noDbFolderInfo = new DirectoryInfo(_noDbService.NoDbFolder);
             var dirs = new[] {
                 noDbFolderInfo.FullName,
-                noDbFolderInfo.Parent.FullName,
-                noDbFolderInfo.Parent.Parent.FullName
+                noDbFolderInfo.Parent?.FullName,
+                noDbFolderInfo.Parent?.Parent?.FullName,
+                noDbFolderInfo.Parent?.Parent?.Parent?.FullName,
             };
             foreach (var folder in dirs)
             {
+                if (folder == null) continue;
                 NoDbSettingsFolder = Path.Combine(folder, "NoDbSettings");
                 if (Directory.Exists(NoDbSettingsFolder))
                 {

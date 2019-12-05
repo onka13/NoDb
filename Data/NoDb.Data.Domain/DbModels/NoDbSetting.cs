@@ -35,6 +35,9 @@ namespace NoDb.Data.Domain.DbModels
         {
             Connections = new List<NoDbSettingConnection>();
             DotNetCoreProject = new DotNetCoreProject();
+            Schema = "dbo";
+            ConnectionType = NoDbConnectionType.Mssql;
+            ConnectionName = "MainConnection";
         }
 
         public override string ToString()
@@ -84,6 +87,21 @@ namespace NoDb.Data.Domain.DbModels
         public string EntityServiceBase { get; set; }
         [Category("Service")]
         public string EntityServiceInterfaceBase { get; set; }
+
+        public DotNetCoreProject()
+        {
+            EntityNamespaces = "using CoreCommon.Data.Domain.Entitites;\r\nusing CoreCommon.Data.Domain.Enums;";
+            RepositoryNamespaces = "using CoreCommon.Data.Domain.Entitites;\r\nusing CoreCommon.Data.Domain.Enums;\r\nusing CoreCommon.Data.EntityFrameworkBase.Base;\r\nusing CoreCommon.Data.ElasticSearch.Base;\r\nusing CoreCommon.Data.Domain.Business;";
+            ServiceNamespaces = "using CoreCommon.Business.Service.Base;\r\nusing CoreCommon.Data.Domain.Business;\r\nusing CoreCommon.Data.Domain.Entitites;\r\nusing CoreCommon.Data.Domain.Enums;";
+            DbContextNamespaces = "CoreCommon.Data.EntityFrameworkBase.Base";
+            EntityBase = "IEntityBase";
+            EntityRepoBase = "EntityFrameworkBaseRepository";
+            EntityServiceBase = "BusinessLogicBase";
+            ElasticEntityBase = "IElasticSearchEntity";
+            ElasticRepoBase = "ElasticSearchRepositoryBase";
+            EntityRepoInterfaceBase = "IRepositoryBase";
+            EntityServiceInterfaceBase = "IBusinessLogicBase";
+        }
 
         public override string ToString()
         {
