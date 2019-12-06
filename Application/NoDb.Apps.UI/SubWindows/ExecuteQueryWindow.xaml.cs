@@ -1,4 +1,6 @@
-﻿using NoDb.Business.Service.Services;
+﻿using CoreCommon.Data.EntityFrameworkBase.Components;
+using NoDb.Business.Service.Managers;
+using NoDb.Business.Service.Services;
 using NoDb.Data.Domain.DbModels;
 using NoDb.Data.Domain.Enums;
 using System;
@@ -36,12 +38,20 @@ namespace NoDb.Apps.UI.SubWindows
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             xSettings.ItemsSource = _noDbService.SettingsService.Settings;
-            if(xSettings.Items.Count > 0) xSettings.SelectedIndex = 0;
+            if (xSettings.Items.Count > 0) xSettings.SelectedIndex = 0;
         }
 
         private void XExecute_Click(object sender, RoutedEventArgs e)
         {
-
+            if (xConnections.SelectedItem == null) return;
+            var connection = xConnections.SelectedItem as NoDbSettingConnection;
+            if (connection.ConnectionType == NoDbConnectionType.None || connection.ConnectionType == NoDbConnectionType.ElasticSearch)
+            {
+                System.Windows.Forms.MessageBox.Show("Only Sql providers supported for now!");
+                return;
+            }
+            QueryManager.ExecuteQuery(connection, xQuery.Text);
+            System.Windows.Forms.MessageBox.Show("Done");
         }
 
         public void SetQuery(string query, NoDbConnectionType type)

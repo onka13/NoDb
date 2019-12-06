@@ -269,7 +269,7 @@ namespace NoDb.Apps.UI
 
         void Save(object sender, RoutedEventArgs e)
         {
-            var table = GetSelectedTable();
+            var table = _selectedTable;
             if (table == null) return;
             table.Columns = xColumns.ItemsSource as List<NoDbColumn>;
             table.Detail = xTableDetail.SelectedObject as NoDbTableDetail;

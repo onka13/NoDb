@@ -38,7 +38,7 @@ namespace NoDb.Business.Service.Services
             else
             {
                 var json = File.ReadAllText(TableFilePath);
-                Tables = ConversionHelper.Deserialize<List<NoDbTable>>(json);
+                Tables = ConversionHelper.Deserialize<List<NoDbTable>>(json).OrderBy(x => x?.Detail?.Name).ToList();
             }
             ConverterManager.SetTables(Tables);
         }

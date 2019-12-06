@@ -1,4 +1,6 @@
-﻿using NoDb.Business.Service.Queries;
+﻿using CoreCommon.Data.EntityFrameworkBase.Components;
+using Microsoft.EntityFrameworkCore;
+using NoDb.Business.Service.Queries;
 using NoDb.Data.Domain.DbModels;
 using NoDb.Data.Domain.Enums;
 using System.Collections.Generic;
@@ -9,6 +11,17 @@ namespace NoDb.Business.Service.Managers
 {
     public class QueryManager
     {
+        public static void ExecuteQuery(NoDbSettingConnection connection, string query)
+        {
+            if (connection.ConnectionType == NoDbConnectionType.Mssql ||
+                connection.ConnectionType == NoDbConnectionType.Mysql ||
+                connection.ConnectionType == NoDbConnectionType.Postgres)
+            {
+                var context = EmptyDbContext.Init(connection.ConnectionType.ToString(), connection.ConnectionString);
+                context.Database.ExecuteSqlCommand(query);
+            }
+        }
+        
         public static NoDbQueryBase GetNoDbQueryService(NoDbConnectionType connectionType)
         {
             switch (connectionType)

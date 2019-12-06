@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NoDb.Apps.UI", "Application
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoreCommon.Infra", "..\dotnet-core-common\CoreCommon.Infra\CoreCommon.Infra.csproj", "{58EFF6D5-92F6-4245-8F2D-A8FDFFB6083E}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoreCommon.Data.EntityFrameworkBase", "..\dotnet-core-common\CoreCommon.Data.EntityFrameworkBase\CoreCommon.Data.EntityFrameworkBase.csproj", "{229AB804-E95E-414E-B3E9-279712AF9A03}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,10 @@ Global
 		{58EFF6D5-92F6-4245-8F2D-A8FDFFB6083E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{58EFF6D5-92F6-4245-8F2D-A8FDFFB6083E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{58EFF6D5-92F6-4245-8F2D-A8FDFFB6083E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{229AB804-E95E-414E-B3E9-279712AF9A03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{229AB804-E95E-414E-B3E9-279712AF9A03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{229AB804-E95E-414E-B3E9-279712AF9A03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{229AB804-E95E-414E-B3E9-279712AF9A03}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -50,6 +56,7 @@ Global
 		{A6D6D6BC-C24E-4C7F-8782-C426AA20C258} = {03D10A11-1B41-4DDB-A3DA-9959AFB9201D}
 		{E13D89E0-36BB-4A56-ACCD-E2D8993D77E2} = {D016468D-D949-45ED-AC07-278E6FF40336}
 		{58EFF6D5-92F6-4245-8F2D-A8FDFFB6083E} = {9B608C38-239B-4C3F-9EF0-97EDA13A48B6}
+		{229AB804-E95E-414E-B3E9-279712AF9A03} = {B1AA77DE-36D3-42BA-97DB-3146959F4E09}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3E0B3CE4-48C5-4F0F-8E69-93617AF151EC}

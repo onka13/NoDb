@@ -6,6 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\dotnet-core-common\CoreCommon.Data.EntityFrameworkBase\CoreCommon.Data.EntityFrameworkBase.csproj" />
     <ProjectReference Include="..\..\..\dotnet-core-common\CoreCommon.Infra\CoreCommon.Infra.csproj" />
     <ProjectReference Include="..\..\Data\NoDb.Data.Domain\NoDb.Data.Domain.csproj" />
   </ItemGroup>
