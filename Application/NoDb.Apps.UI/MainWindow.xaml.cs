@@ -23,6 +23,10 @@ namespace NoDb.Apps.UI
     public partial class MainWindow : Window
     {
         NoDbService _noDbService;
+
+        /// <summary>
+        /// Clone of the selected table.
+        /// </summary>
         NoDbTable _selectedTable;
 
         public MainWindow()
@@ -34,6 +38,7 @@ namespace NoDb.Apps.UI
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            Title = "NoDb - v" + GetType().Assembly.GetName().Version.ToString();
             #region " Columns Grid Default Columns "
 
             xColumns.CanUserAddRows = true;
@@ -133,12 +138,13 @@ namespace NoDb.Apps.UI
         {
             if (xTables.SelectedItem == null)
             {
+                _selectedTable = null;
                 ClearAllRelatedWithTable();
                 ConverterManager.SetSelectedTable(null);
                 return;
             }
 
-            _selectedTable = GetSelectedTable().JsonClone();
+            _selectedTable = (xTables.SelectedItem as NoDbTable).JsonClone();
             xColumns.ItemsSource = _selectedTable.Columns;
             xTableDetail.SelectedObject = _selectedTable.Detail;
             xColumnsGrid.IsEnabled = true;
@@ -149,7 +155,7 @@ namespace NoDb.Apps.UI
         {
             var newTableWindow = new SubWindows.NewTable((string name, string template) =>
             {
-                _noDbService.TableService.New(name, template);
+                _selectedTable = _noDbService.TableService.New(name, template);
                 BindTables();
                 return true;
             });
@@ -159,7 +165,7 @@ namespace NoDb.Apps.UI
 
         private void DeleteTableButton_Click(object sender, RoutedEventArgs e)
         {
-            var table = GetSelectedTable();
+            var table = GetOriginalSelectedTable();
             if (table == null) return;
             _noDbService.TableService.Delete(table);
             BindTables();
@@ -173,19 +179,17 @@ namespace NoDb.Apps.UI
 
         private void IndexButton_Clicked(object sender, RoutedEventArgs e)
         {
-            var table = GetSelectedTable();
-            if (table == null) return;
+            if (_selectedTable == null) return;
             var editor = new SubWindows.ListEditor("Indexes / Keys");
-            editor.InitList(table.Indices);
+            editor.InitList(_selectedTable.Indices);
             editor.ShowDialog();
         }
 
         private void RelationButton_Clicked(object sender, RoutedEventArgs e)
         {
-            var table = GetSelectedTable();
-            if (table == null) return;
+            if (_selectedTable == null) return;
             var editor = new SubWindows.ListEditor("Relations");
-            editor.InitList(table.Relations, onSelectionChanged: relation =>
+            editor.InitList(_selectedTable.Relations, onSelectionChanged: relation =>
             {
                 if (relation != null) ConverterManager.SetSelectedForeignTable(relation.ForeignTable);
             });
@@ -194,10 +198,9 @@ namespace NoDb.Apps.UI
 
         private void SearchButton_Clicked(object sender, RoutedEventArgs e)
         {
-            var table = GetSelectedTable();
-            if (table == null) return;
+            if (_selectedTable == null) return;
             var editor = new SubWindows.ListEditor("Search Items");
-            editor.InitList(table.SearchItems, defaultValueFunc: (list) =>
+            editor.InitList(_selectedTable.SearchItems, defaultValueFunc: (list) =>
             {
                 return _noDbService.SearchService.GetDefaultSearchItem(_selectedTable, list as List<NoDbSearchItem>);
             });
@@ -246,17 +249,22 @@ namespace NoDb.Apps.UI
             xViewMenu.IsEnabled = true;
         }
 
-        NoDbTable GetSelectedTable()
-        {
-            if (xTables.SelectedIndex == -1) return null;
-            return xTables.SelectedItem as NoDbTable;
-        }
-
         void BindTables()
         {
             ClearAllRelatedWithTable();
+            var lastSelectedTableHash = _selectedTable?.Hash;
             xTables.ItemsSource = null;
             xTables.ItemsSource = _noDbService.TableService.Tables.OrderBy(x => x.Detail.Name).ToList();
+            if (lastSelectedTableHash != null) xTables.SelectedItem = _noDbService.TableService.Tables.FirstOrDefault(x => x.Hash == lastSelectedTableHash);
+        }
+
+        /// <summary>
+        /// xTables stores unmodified table data
+        /// </summary>
+        /// <returns></returns>
+        NoDbTable GetOriginalSelectedTable()
+        {
+            return xTables.SelectedItem as NoDbTable;
         }
 
         void ClearAllRelatedWithTable()
@@ -274,7 +282,7 @@ namespace NoDb.Apps.UI
             table.Columns = xColumns.ItemsSource as List<NoDbColumn>;
             table.Detail = xTableDetail.SelectedObject as NoDbTableDetail;
             _noDbService.TableService.UpdateTable(table);
-            XTables_SelectionChanged(null, null);
+            BindTables();
 
             WF.MessageBox.Show("Saved");
         }

@@ -6,7 +6,7 @@
         xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
         xmlns:local="clr-namespace:NoDb.Apps.UI.SubWindows"
         mc:Ignorable="d"
-        Title="List Editor" Height="359" Width="619" WindowStartupLocation="CenterScreen" WindowStyle="SingleBorderWindow">
+        Title="List Editor" Height="500" Width="800" WindowStartupLocation="CenterScreen" WindowStyle="SingleBorderWindow">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"/>

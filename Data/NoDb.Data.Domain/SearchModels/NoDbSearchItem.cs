@@ -40,6 +40,12 @@ namespace NoDb.Data.Domain.SearchModels
         [TypeConverter(typeof(NoDbCollectionTypeConverter))]
         public List<NoDbSearchDisplayedColumnDetail> DisplayedColumns { get; set; }
 
+        [Category("UI")]
+        public string Menu { get; set; }
+
+        [Category("UI")]
+        public int MenuOrder { get; set; }
+
         public NoDbSearchItem()
         {
             Columns = new List<NoDbSearchColumnDetail>();

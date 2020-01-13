@@ -29,7 +29,8 @@ namespace NoDb.Business.Service.Templates
             {
                 Detail = new NoDbTableDetail
                 {
-                    Name = tableName
+                    Name = tableName,
+                    TitleColumn = "Id"
                 },
                 Indices = new List<NoDbIndex>
                 {
@@ -63,7 +64,8 @@ namespace NoDb.Business.Service.Templates
             {
                 Detail = new NoDbTableDetail
                 {
-                    Name = tableName
+                    Name = tableName,
+                    TitleColumn = "Name"
                 },
                 Indices = new List<NoDbIndex>
                 {

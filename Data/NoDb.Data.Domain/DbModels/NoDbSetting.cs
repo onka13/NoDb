@@ -31,6 +31,12 @@ namespace NoDb.Data.Domain.DbModels
         [Category("Project")]
         public DotNetCoreProject DotNetCoreProject { get; set; }
 
+        [Category("Project")]
+        public string JsPanelProjectPath { get; set; }
+
+        [Category("General")]
+        public string[] ExcludeTablePrefixes { get; set; }
+
         public NoDbSetting()
         {
             Connections = new List<NoDbSettingConnection>();
@@ -88,6 +94,12 @@ namespace NoDb.Data.Domain.DbModels
         [Category("Service")]
         public string EntityServiceInterfaceBase { get; set; }
 
+        [Category("Search")]
+        public string SearchRequestBase { get; set; }
+
+        [Category("Search")]
+        public string SearchControllerNamespaces { get; set; }
+
         public DotNetCoreProject()
         {
             EntityNamespaces = "using CoreCommon.Data.Domain.Entitites;\r\nusing CoreCommon.Data.Domain.Enums;";
@@ -101,6 +113,8 @@ namespace NoDb.Data.Domain.DbModels
             ElasticRepoBase = "ElasticSearchRepositoryBase";
             EntityRepoInterfaceBase = "IRepositoryBase";
             EntityServiceInterfaceBase = "IBusinessLogicBase";
+            SearchRequestBase = "";
+            SearchControllerNamespaces = "using CoreCommon.Data.Domain.Business;\r\nusing CoreCommon.Data.Domain.Models;\r\n";
         }
 
         public override string ToString()

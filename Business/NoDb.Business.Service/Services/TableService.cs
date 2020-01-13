@@ -43,7 +43,7 @@ namespace NoDb.Business.Service.Services
             ConverterManager.SetTables(Tables);
         }
 
-        public void New(string tableName, string template = "")
+        public NoDbTable New(string tableName, string template = "")
         {
             if (string.IsNullOrEmpty(tableName))
             {
@@ -57,6 +57,7 @@ namespace NoDb.Business.Service.Services
             var table = TableTemplates.Get(tableName, template);
             Tables.Add(table);
             WriteToFile();
+            return table;
         }
 
         public void Delete(string tick)
