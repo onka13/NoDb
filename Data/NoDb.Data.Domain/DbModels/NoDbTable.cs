@@ -31,6 +31,11 @@ namespace NoDb.Data.Domain.DbModels
         {
             return Indices.Any(x => x.IsPrimaryKey && x.Columns.Any(y => y.ColumnName == column));
         }
+        
+        public bool IsIndexColumn(string column)
+        {
+            return Indices.Any(x => x.Columns.Any(y => y.ColumnName == column));
+        }
 
         public List<NoDbColumn> GetPkColumns()
         {

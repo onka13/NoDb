@@ -6,6 +6,7 @@
         Mssql,
         Mysql,
         Postgres,
-        ElasticSearch
+        ElasticSearch,
+        MongoDB
     }
 }

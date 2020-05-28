@@ -47,6 +47,10 @@ namespace NoDb.Data.Domain.DbModels
         [Category("Extra")]
         public int Length { get; set; }
 
+        [Category("Extra")]
+        [Description("Column Short Name. ex. for using mongoDB column name")]
+        public string ShortName { get; set; }
+
         public NoDbColumn()
         {
             DataType = NoDbDataType.STRING;

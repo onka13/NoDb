@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
     <Authors>onka</Authors>
@@ -11,7 +11,7 @@
     <PackageProjectUrl>https://github.com/onka13/NoDb</PackageProjectUrl>
     <RepositoryUrl>https://github.com/onka13/NoDb</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <Version>0.0.6</Version>
+    <Version>0.0.8</Version>
   </PropertyGroup>
 
   <ItemGroup>

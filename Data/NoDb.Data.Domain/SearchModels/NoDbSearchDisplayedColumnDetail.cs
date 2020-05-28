@@ -17,6 +17,9 @@ namespace NoDb.Data.Domain.SearchModels
 
         public bool SkipForJs { get; set; }
 
+        [Description("Custom Component Name")]
+        public string Component { get; set; }
+
         public override string ToString()
         {
             return ColumnName + " " + Title;
