@@ -33,6 +33,9 @@ namespace NoDb.Data.Domain.DbModels
 
         [Category("Project")]
         public string JsPanelProjectPath { get; set; }
+        
+        [Category("Project")]
+        public NoDbAdminPanelType JsPanelProjectType { get; set; }
 
         [Category("General")]
         public string[] ExcludeTablePrefixes { get; set; }
@@ -44,6 +47,7 @@ namespace NoDb.Data.Domain.DbModels
             Schema = "dbo";
             ConnectionType = NoDbConnectionType.Mssql;
             ConnectionName = "MainConnection";
+            JsPanelProjectType = NoDbAdminPanelType.React;
         }
 
         public override string ToString()
