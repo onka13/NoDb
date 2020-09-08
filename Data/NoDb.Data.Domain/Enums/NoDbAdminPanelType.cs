@@ -4,6 +4,7 @@
     {
         React,
         Angular,
-        VueJs
+        VueJs,
+        Reactv2
     }
 }
