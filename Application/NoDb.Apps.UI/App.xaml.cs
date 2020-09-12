@@ -15,7 +15,10 @@ namespace NoDb.Apps.UI
     public partial class App : Application
     {
         public static string Folder { get; set; }
+        public static string SolutionFolder { get; set; }
         public static bool OpenSettings { get; set; }
+        public static bool OpenSolutionSettings { get; set; }
+        public static NoDbSolutionService SolutionService { get; set; }
         public static NoDbService NoDbService { get; set; }
 
         public App()
@@ -35,18 +38,32 @@ namespace NoDb.Apps.UI
                     if (args[i] == "-folder")
                     {
                         Folder = args[i + 1];
-                    } 
+                    }
+                    else if (args[i] == "-solution")
+                    {
+                        SolutionFolder = args[i + 1];
+                    }
                     else if (args[i] == "-openSettings")
                     {
                         OpenSettings = args[i + 1] == "true";
                     }
+                    else if (args[i] == "-openSolutionSettings")
+                    {
+                        OpenSolutionSettings = args[i + 1] == "true";
+                    }
                 }
             }
-
             if (OpenSettings)
             {
                 NoDbService = new NoDbService(Folder);
                 StartupUri = new Uri("SubWindows/SettingsWindow.xaml", UriKind.Relative);
+                return;
+            }
+
+            if (OpenSolutionSettings)
+            {
+                SolutionService = new NoDbSolutionService(SolutionFolder);
+                StartupUri = new Uri("SubWindows/SolutionWindow.xaml", UriKind.Relative);
                 return;
             }
 

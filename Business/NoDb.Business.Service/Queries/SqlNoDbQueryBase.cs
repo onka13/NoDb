@@ -94,7 +94,7 @@ namespace NoDb.Business.Service.Queries
         {
             string schema = GetSchema(table);
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.AppendFormat("DROP TABLE {1}.{0};", Escape(table.Detail.Name), schema);
+            stringBuilder.AppendFormat("IF OBJECT_ID('{1}.{0}', 'U') IS NOT NULL\nDROP TABLE {1}.{0};", Escape(table.Detail.Name), schema);
             return stringBuilder.ToString();
         }
 
