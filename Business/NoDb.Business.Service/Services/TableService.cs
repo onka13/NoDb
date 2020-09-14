@@ -40,7 +40,7 @@ namespace NoDb.Business.Service.Services
                 var json = File.ReadAllText(TableFilePath);
                 Tables = ConversionHelper.Deserialize<List<NoDbTable>>(json).OrderBy(x => x?.Detail?.Name).ToList();
             }
-            ConverterManager.SetTables(Tables);
+            StaticManager.SetTables(Tables);
         }
 
         public NoDbTable New(string tableName, string template = "")
@@ -87,7 +87,7 @@ namespace NoDb.Business.Service.Services
         
         private void WriteToFile()
         {
-            ConverterManager.SetTables(Tables);
+            StaticManager.SetTables(Tables);
 
             var json = ConversionHelper.Serialize(Tables);
             File.WriteAllText(TableFilePath, json);

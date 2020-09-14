@@ -21,7 +21,7 @@ namespace NoDb.Business.Service.Services
             {
                 RepositoryMethod = "Search" + (currentItems?.Count > 0 ? "_" + currentItems?.Count : "")
             };
-            foreach (var column in table.Columns)
+            foreach (var column in table.ColumnsWithRelated())
             {
                 defaultItem.DisplayedColumns.Add(new NoDbSearchDisplayedColumnDetail
                 {

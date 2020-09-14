@@ -4,12 +4,16 @@ using System.Linq;
 
 namespace NoDb.Data.Domain.Converters
 {
-    public static class ConverterManager
+    public static class StaticManager
     {
+        private static NoDbSolutionModel Solution;
+        public static string SelectedProject { get; set; }
+        public static string SelectedForeignTable { get; set; }
+
         private static NoDbEnum NoDbEnum;
         private static List<NoDbTable> Tables;
         private static NoDbTable SelectedTable;
-        private static string SelectedForeignTable;
+        
 
         #region " Enums"
 
@@ -23,10 +27,21 @@ namespace NoDb.Data.Domain.Converters
         {
             NoDbEnum = noDbEnum;
         }
-        
+
         #endregion
 
         #region " Tables "
+
+        public static NoDbSolutionModel GetSolution()
+        {
+            if (Solution == null) Solution = new NoDbSolutionModel();
+            return Solution;
+        }
+
+        public static void SetSolution(NoDbSolutionModel solution)
+        {
+            Solution = solution;
+        }       
 
         public static List<NoDbTable> GetTables()
         {

@@ -17,13 +17,17 @@ namespace NoDb.Data.Domain.Converters
             if (onkafAttribute != null)
             {
                 //if (onkafAttribute.ColumnType == NoDbColumnType.ForeignColumn)
-                    response = ConverterManager.GetSelectedForeignTable()?.Columns;
+                var project = StaticManager.GetSolution().Projects.FirstOrDefault(x => x.Project.Name == StaticManager.SelectedProject);
+                var table = project.Tables.FirstOrDefault(x => x.Detail.Name == StaticManager.SelectedForeignTable);
+                if (table != null)
+                    response = table.ColumnsWithRelated();
+
                 //else if (onkafAttribute.ColumnType == NoDbColumnType.ForeignColumnPrimaryKey)
                 //    response = ConverterManager.GetSelectedForeignTable()?.GetPkColumns();
             }
             else
             {
-                response = ConverterManager.GetSelectedTable()?.Columns;
+                response = StaticManager.GetSelectedTable()?.ColumnsWithRelated();
             }
             return response ?? new List<NoDbColumn>();
         }

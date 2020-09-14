@@ -1,4 +1,5 @@
-﻿using NoDb.Data.Domain.Enums;
+﻿using NoDb.Data.Domain.Converters;
+using NoDb.Data.Domain.Enums;
 using System.ComponentModel;
 
 namespace NoDb.Data.Domain.DbModels
@@ -18,6 +19,7 @@ namespace NoDb.Data.Domain.DbModels
         public bool Ignored { get; set; }
 
         [Description("A column name will be used for 1-n relations.")]
+        [TypeConverter(typeof(ColumnConverter))]
         public string TitleColumn { get; set; }
 
         [Description("Table schema")]
@@ -35,9 +37,11 @@ namespace NoDb.Data.Domain.DbModels
         //public string BaseFullName { get; set; }
         
         [Description("Custom base project name")]
+        [TypeConverter(typeof(ProjectConverter))]
         public string BaseProject { get; set; }
 
         [Description("Custom base table name")]
+        [TypeConverter(typeof(TableConverter))]
         public string BaseTable { get; set; }
 
         public override string ToString()

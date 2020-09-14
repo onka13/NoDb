@@ -1,13 +1,11 @@
-﻿using NoDb.Data.Domain.DbModels;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 
 namespace NoDb.Data.Domain.Converters
 {
-    public class EnumColumnConverter : TypeConverter
+    public class ProjectConverter : TypeConverter
     {
         public override bool GetStandardValuesSupported(ITypeDescriptorContext context)
         {
@@ -16,7 +14,9 @@ namespace NoDb.Data.Domain.Converters
 
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
         {
-            return new StandardValuesCollection(StaticManager.GetEnums().Select(x => x.Name).ToList());
+            var values = StaticManager.GetSolution().Projects.Select(x => x.Project.Name).ToList();
+            values.Insert(0, "");
+            return new StandardValuesCollection(values);
         }
 
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
@@ -30,15 +30,14 @@ namespace NoDb.Data.Domain.Converters
 
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {
-            if (value != null)
+            if (value is string)
             {
-                foreach (var b in StaticManager.GetEnums())
-                {
-                    if (b.Name == value.ToString())
-                    {
-                        return b.Name;
-                    }
-                }
+                //var projectModel = ConverterManager.GetSolution().Projects.FirstOrDefault(x => x.Project.Name == value?.ToString());
+                //if (projectModel != null)
+                //{
+                //    return projectModel.Project.Name;
+                //}
+                return value?.ToString();
             }
             try
             {
@@ -46,7 +45,6 @@ namespace NoDb.Data.Domain.Converters
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
                 return value;
             }
         }

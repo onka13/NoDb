@@ -24,5 +24,29 @@ namespace NoDb.Data.Domain.DbModels
         {
             return Name;
         }
-    }   
+    }
+
+    public class NoDbSolutionModel
+    {
+        public List<NoDbProjectModel> Projects { get; set; }
+
+        public NoDbSolutionModel()
+        {
+            Projects = new List<NoDbProjectModel>();
+        }
+    }
+
+    public class NoDbProjectModel
+    {
+        public NoDbProject Project { get; set; }
+
+        public List<NoDbTable> Tables { get; set; }
+
+        public NoDbEnum NoDbEnum { get; set; }
+
+        public override string ToString()
+        {
+            return Project.Name;
+        }
+    }
 }

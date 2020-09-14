@@ -100,6 +100,7 @@ namespace NoDb.Apps.UI
                 lblStatusInfo.Text = App.Folder;
                 InitService(App.Folder);
             }
+            BindProjects();
         }
 
         private void XColumns_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -141,7 +142,7 @@ namespace NoDb.Apps.UI
             {
                 _selectedTable = null;
                 ClearAllRelatedWithTable();
-                ConverterManager.SetSelectedTable(null);
+                StaticManager.SetSelectedTable(null);
                 return;
             }
 
@@ -149,7 +150,7 @@ namespace NoDb.Apps.UI
             xColumns.ItemsSource = _selectedTable.Columns;
             xTableDetail.SelectedObject = _selectedTable.Detail;
             xColumnsGrid.IsEnabled = true;
-            ConverterManager.SetSelectedTable(_selectedTable);
+            StaticManager.SetSelectedTable(_selectedTable);
         }
 
         private void NewTableButton_Click(object sender, RoutedEventArgs e)
@@ -192,7 +193,7 @@ namespace NoDb.Apps.UI
             var editor = new SubWindows.ListEditor("Relations");
             editor.InitList(_selectedTable.Relations, onSelectionChanged: relation =>
             {
-                if (relation != null) ConverterManager.SetSelectedForeignTable(relation.ForeignTable);
+                if (relation != null) StaticManager.SetSelectedForeignTable(relation.ForeignTable);
             });
             editor.ShowDialog();
         }
@@ -263,6 +264,7 @@ namespace NoDb.Apps.UI
             }
             var project = xProjects.SelectedItem as NoDbProject;
             InitService(Path.Combine(App.SolutionFolder, project.Path, NoDbSolutionService.NODB_FOLDER_NAME));
+            StaticManager.SelectedProject = project.Name;
         }
 
         private void XSolutionSetting_Click(object sender, RoutedEventArgs e)
@@ -302,11 +304,31 @@ namespace NoDb.Apps.UI
         void BindProjects()
         {
             if (App.SolutionService == null) return;
+            var projects = App.SolutionService.GetSelectedProjects();
             var selected = xProjects.SelectedIndex;
+            if (App.InitialProject != null)
+            {
+                selected = projects.FindIndex(x => x.Name == App.InitialProject);
+                App.InitialProject = null;
+            }
             xProjects.ItemsSource = null;
-            xProjects.ItemsSource = App.SolutionService.GetSelectedProjects();
+            xProjects.ItemsSource = projects;
             xProjects.SelectedIndex = selected != -1 ? selected : 0;
             XProjects_SelectionChanged(null, null);
+
+            StaticManager.SetSolution(new NoDbSolutionModel
+            {
+                Projects = projects.Select(x =>
+                {
+                    var projectService = new NoDbService(Path.Combine(App.SolutionFolder, x.Path, NoDbSolutionService.NODB_FOLDER_NAME));
+                    return new NoDbProjectModel
+                    {
+                        Project = x,
+                        Tables = projectService.TableService.Tables,
+                        NoDbEnum = projectService.EnumService.Enums
+                    };
+                }).ToList()
+            });
         }
 
         /// <summary>

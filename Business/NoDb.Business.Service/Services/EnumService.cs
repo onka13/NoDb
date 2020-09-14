@@ -36,12 +36,12 @@ namespace NoDb.Business.Service.Services
                 var jsonEnum = File.ReadAllText(EnumFilePath);
                 Enums = ConversionHelper.Deserialize<NoDbEnum>(jsonEnum);
             }
-            ConverterManager.SetEnums(Enums);
+            StaticManager.SetEnums(Enums);
         }
 
         public void Save()
         {
-            ConverterManager.SetEnums(Enums);
+            StaticManager.SetEnums(Enums);
 
             var json = ConversionHelper.Serialize(Enums);
             File.WriteAllText(EnumFilePath, json);

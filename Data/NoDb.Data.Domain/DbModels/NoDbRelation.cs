@@ -30,7 +30,7 @@ namespace NoDb.Data.Domain.DbModels
             set
             {
                 _foreignTable = value;
-                ConverterManager.SetSelectedForeignTable(value);
+                StaticManager.SelectedForeignTable = value;
             }
         }
 

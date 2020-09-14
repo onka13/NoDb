@@ -11,9 +11,9 @@ namespace NoDb.Business.Service.Services
         readonly string _settingsFolder;
         public List<NoDbSetting> Settings { get; set; }
 
-        public SettingsService(string solutionFolder)
+        public SettingsService(string settingsFolder)
         {
-            _settingsFolder = solutionFolder;
+            _settingsFolder = settingsFolder;
             Settings = new List<NoDbSetting>();
             ReadFromSettingsFolder();
         }

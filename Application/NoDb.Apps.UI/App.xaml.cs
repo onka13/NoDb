@@ -1,10 +1,5 @@
 ﻿using NoDb.Business.Service.Services;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace NoDb.Apps.UI
@@ -16,6 +11,7 @@ namespace NoDb.Apps.UI
     {
         public static string Folder { get; set; }
         public static string SolutionFolder { get; set; }
+        public static string InitialProject { get; set; }
         public static bool OpenSettings { get; set; }
         public static bool OpenSolutionSettings { get; set; }
         public static NoDbSolutionService SolutionService { get; set; }
@@ -43,6 +39,10 @@ namespace NoDb.Apps.UI
                     {
                         SolutionFolder = args[i + 1];
                     }
+                    else if (args[i] == "-project")
+                    {
+                        InitialProject = args[i + 1];
+                    }
                     else if (args[i] == "-openSettings")
                     {
                         OpenSettings = args[i + 1] == "true";
@@ -53,16 +53,24 @@ namespace NoDb.Apps.UI
                     }
                 }
             }
-            if (OpenSettings)
+            if (SolutionFolder != null)
+            {
+                SolutionService = new NoDbSolutionService(SolutionFolder);
+            }
+
+            if (Folder != null)
             {
                 NoDbService = new NoDbService(Folder);
+            }
+
+            if (OpenSettings)
+            {
                 StartupUri = new Uri("SubWindows/SettingsWindow.xaml", UriKind.Relative);
                 return;
             }
 
             if (OpenSolutionSettings)
             {
-                SolutionService = new NoDbSolutionService(SolutionFolder);
                 StartupUri = new Uri("SubWindows/SolutionWindow.xaml", UriKind.Relative);
                 return;
             }
