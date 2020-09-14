@@ -14,6 +14,7 @@ using NoDb.Business.Service.Templates;
 using NoDb.Data.Domain.Converters;
 using NoDb.Data.Domain.SearchModels;
 using CoreCommon.Infra.Helpers;
+using System.IO;
 
 namespace NoDb.Apps.UI
 {
@@ -235,7 +236,47 @@ namespace NoDb.Apps.UI
 
         private void XMenuSetting_Click(object sender, RoutedEventArgs e)
         {
-            var window = new SubWindows.SettingsWindow(_noDbService);
+            if (App.SolutionService == null)
+            {
+                xSolution_Click(null, null);
+                return;
+            }
+            var window = new SubWindows.SettingsWindow();
+            window.Show();
+        }
+
+        private void xSolution_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new WF.FolderBrowserDialog();
+            if (dialog.ShowDialog() != WF.DialogResult.OK) return;
+            App.SolutionFolder = dialog.SelectedPath;
+            App.SolutionService = new NoDbSolutionService(App.SolutionFolder);
+            BindProjects();
+        }
+
+        private void XProjects_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (App.SolutionFolder == null || xProjects.SelectedItem == null)
+            {
+                ClearServiceValues();
+                return;
+            }
+            var project = xProjects.SelectedItem as NoDbProject;
+            InitService(Path.Combine(App.SolutionFolder, project.Path, NoDbSolutionService.NODB_FOLDER_NAME));
+        }
+
+        private void XSolutionSetting_Click(object sender, RoutedEventArgs e)
+        {
+            if (App.SolutionService == null)
+            {
+                xSolution_Click(null, null);
+                return;
+            }
+            var window = new SubWindows.SolutionWindow();
+            window.OnUpdated = () =>
+            {
+                BindProjects();
+            };
             window.Show();
         }
 
@@ -258,6 +299,16 @@ namespace NoDb.Apps.UI
             if (lastSelectedTableHash != null) xTables.SelectedItem = _noDbService.TableService.Tables.FirstOrDefault(x => x.Hash == lastSelectedTableHash);
         }
 
+        void BindProjects()
+        {
+            if (App.SolutionService == null) return;
+            var selected = xProjects.SelectedIndex;
+            xProjects.ItemsSource = null;
+            xProjects.ItemsSource = App.SolutionService.GetSelectedProjects();
+            xProjects.SelectedIndex = selected != -1 ? selected : 0;
+            XProjects_SelectionChanged(null, null);
+        }
+
         /// <summary>
         /// xTables stores unmodified table data
         /// </summary>
@@ -265,6 +316,15 @@ namespace NoDb.Apps.UI
         NoDbTable GetOriginalSelectedTable()
         {
             return xTables.SelectedItem as NoDbTable;
+        }
+
+        void ClearServiceValues()
+        {
+            _noDbService = null;
+            xMainGrid.IsEnabled = false;
+            xViewMenu.IsEnabled = false;
+            xTables.ItemsSource = null;
+            XTables_SelectionChanged(null, null);
         }
 
         void ClearAllRelatedWithTable()

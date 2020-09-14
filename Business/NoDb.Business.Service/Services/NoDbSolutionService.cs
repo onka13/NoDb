@@ -9,15 +9,20 @@ namespace NoDb.Business.Service.Services
 {
     public class NoDbSolutionService
     {
+        public static string NODB_SETTINGS_FOLDER_NAME = "NoDbSettings";
+        public static string NODB_FOLDER_NAME = "__NoDb__";
+
         NoDbSolution _noDbSolution;
-        readonly string _solutionFolder;
+        public string SolutionFolder { get; set; }
         public string SolutionFilePath
         {
             get
             {
-                return _solutionFolder + Path.DirectorySeparatorChar + "NoDbSettings" + Path.DirectorySeparatorChar + "solution.json";
+                return GetSettingsFolder() + Path.DirectorySeparatorChar + "solution.json";
             }
         }
+
+        public string GetSettingsFolder() => SolutionFolder + Path.DirectorySeparatorChar + NODB_SETTINGS_FOLDER_NAME;
 
         public List<NoDbProject> Projects => _noDbSolution.Projects;
 
@@ -28,7 +33,7 @@ namespace NoDb.Business.Service.Services
 
         public NoDbSolutionService(string solutionFolder)
         {
-            _solutionFolder = solutionFolder;
+            SolutionFolder = solutionFolder;
             ReadFromSettingsFolder();
         }
 

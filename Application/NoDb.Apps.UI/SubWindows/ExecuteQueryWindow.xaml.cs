@@ -37,7 +37,7 @@ namespace NoDb.Apps.UI.SubWindows
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            xSettings.ItemsSource = _noDbService.SettingsService.Settings;
+            xSettings.ItemsSource = new SettingsService(App.SolutionService.GetSettingsFolder()).Settings;
             if (xSettings.Items.Count > 0) xSettings.SelectedIndex = 0;
         }
 

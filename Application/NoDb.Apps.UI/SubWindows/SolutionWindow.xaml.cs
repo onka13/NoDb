@@ -2,15 +2,7 @@
 using NoDb.Data.Domain.DbModels;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace NoDb.Apps.UI.SubWindows
 {
@@ -20,6 +12,7 @@ namespace NoDb.Apps.UI.SubWindows
     public partial class SolutionWindow : Window
     {
         NoDbSolutionService solutionService;
+        public Action OnUpdated { get; set; }
 
         public SolutionWindow() : this(null)
         {
@@ -40,6 +33,7 @@ namespace NoDb.Apps.UI.SubWindows
         {
             solutionService.UpdateAllModules(xProjects.ItemsSource as List<NoDbProject>, false);
             System.Windows.Forms.MessageBox.Show("Saved");
+            OnUpdated?.Invoke();
         }
     }
 }

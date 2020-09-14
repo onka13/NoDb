@@ -8,19 +8,17 @@ namespace NoDb.Business.Service.Services
 {
     public class SettingsService
     {
-        NoDbService _noDbService;
-        public string NoDbSettingsFolder { get; private set; }
-
+        readonly string _settingsFolder;
         public List<NoDbSetting> Settings { get; set; }
 
-        public SettingsService(NoDbService noDbService)
+        public SettingsService(string solutionFolder)
         {
-            _noDbService = noDbService;
+            _settingsFolder = solutionFolder;
             Settings = new List<NoDbSetting>();
-            CheckSettingsFolder();
+            ReadFromSettingsFolder();
         }
 
-        public void CheckSettingsFolder()
+        /*public void CheckSettingsFolder()
         {
             var noDbFolderInfo = new DirectoryInfo(_noDbService.NoDbFolder);
             var dirs = new[] {
@@ -49,12 +47,12 @@ namespace NoDb.Business.Service.Services
                 });
             }
             ReadFromSettingsFolder();
-        }
+        }*/
 
         public void ReadFromSettingsFolder()
         {
             Settings.Clear();
-            var settingFiles = Directory.GetFiles(NoDbSettingsFolder, "*.json");
+            var settingFiles = Directory.GetFiles(_settingsFolder, "*.json");
             foreach (var settingFile in settingFiles)
             {
                 var json = File.ReadAllText(settingFile);
@@ -66,7 +64,7 @@ namespace NoDb.Business.Service.Services
         public void Save(NoDbSetting setting)
         {
             var json = ConversionHelper.Serialize(setting);
-            var path = Path.Combine(NoDbSettingsFolder, setting.SettingsKey + ".json");
+            var path = Path.Combine(_settingsFolder, setting.SettingsKey + ".json");
             File.WriteAllText(path, json);
             ReadFromSettingsFolder();
         }
@@ -77,7 +75,7 @@ namespace NoDb.Business.Service.Services
             {
                 throw new Exception("Empty setting key!");
             }
-            var path = Path.Combine(NoDbSettingsFolder, setting.SettingsKey + ".json");
+            var path = Path.Combine(_settingsFolder, setting.SettingsKey + ".json");
             if (File.Exists(path))
             {
                 throw new Exception("Setting key already exists!");
@@ -87,7 +85,7 @@ namespace NoDb.Business.Service.Services
 
         public void Delete(NoDbSetting setting)
         {
-            var path = Path.Combine(NoDbSettingsFolder, setting.SettingsKey + ".json");
+            var path = Path.Combine(_settingsFolder, setting.SettingsKey + ".json");
             File.Delete(path);
             ReadFromSettingsFolder();
         }

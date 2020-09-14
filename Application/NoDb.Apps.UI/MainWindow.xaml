@@ -26,13 +26,17 @@
                 <MenuItem Name="xMenuNew" Header="_New" Command="Open"/>
                 <MenuItem Name="xMenuOpen" Header="_Open" Command="New" />
                 <Separator />
+                <MenuItem Header="_Open Solution" Click="xSolution_Click"/>
+                <Separator />
                 <MenuItem Header="_Exit" Click="XMenuItemExit_Click" />
             </MenuItem>
             <MenuItem Header="_View" Name="xViewMenu">
                 <MenuItem Header="_Enum List" Click="XMenuEnum_Click" />
                 <MenuItem Header="_Revisions" Click="XMenuRevision_Click" />
                 <MenuItem Header="_Table Scripts" Click="XMenuTableScripts_Click" />
-                <Separator />
+            </MenuItem>
+            <MenuItem Header="_Settings">
+                <MenuItem Name="xSolutionSetting" Header="_Projects" Click="XSolutionSetting_Click" />
                 <MenuItem Name="xMenuSetting" Header="_Settings" Click="XMenuSetting_Click" />
             </MenuItem>
         </Menu>
@@ -41,6 +45,12 @@
                 <TextBlock Name="lblStatusInfo" TextTrimming="CharacterEllipsis"/>
             </StatusBarItem>
         </StatusBar>
+        <Grid DockPanel.Dock="Top" Margin="10,0,10,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+            </Grid.RowDefinitions>
+            <ComboBox Name="xProjects" Grid.Row="0" HorizontalAlignment="Left" SelectionChanged="XProjects_SelectionChanged" IsTextSearchEnabled="False" MinWidth="190"/>
+        </Grid>
         <Grid x:Name="xMainGrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="200" MinWidth="100" />
@@ -52,7 +62,7 @@
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="50"/>
                 </Grid.RowDefinitions>
-                <ListView x:Name="xTables" SelectionMode="Single" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                <ListView Grid.Row="0" x:Name="xTables" SelectionMode="Single" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                 </ListView>
                 <Grid Grid.Row="1" Margin="0,10,0,0">
                     <Button Content="New Table" Click="NewTableButton_Click" HorizontalAlignment="Left"/>

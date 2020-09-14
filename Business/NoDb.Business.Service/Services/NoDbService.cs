@@ -10,7 +10,6 @@ namespace NoDb.Business.Service.Services
         public EnumService EnumService { get; set; }
         public RevisionService RevisionService { get; set; }
         public SearchService SearchService { get; set; }
-        public SettingsService SettingsService { get; set; }
 
         public NoDbService(string folder)
         {
@@ -28,7 +27,6 @@ namespace NoDb.Business.Service.Services
             EnumService = new EnumService(this);
             RevisionService = new RevisionService(this);
             SearchService = new SearchService(this);
-            SettingsService = new SettingsService(this);
         }
     }
 }
