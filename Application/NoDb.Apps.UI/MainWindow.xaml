@@ -36,6 +36,7 @@
                 <MenuItem Header="_Table Scripts" Click="XMenuTableScripts_Click" />
             </MenuItem>
             <MenuItem Header="_Settings">
+                <MenuItem Name="xQueryHistories" Header="_Query Histories" Click="XQueryHistories_Click" />
                 <MenuItem Name="xSolutionSetting" Header="_Projects" Click="XSolutionSetting_Click" />
                 <MenuItem Name="xMenuSetting" Header="_Settings" Click="XMenuSetting_Click" />
             </MenuItem>

@@ -68,7 +68,7 @@ namespace NoDb.Business.Service.Queries
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.AppendFormat("CREATE TABLE {1}.{0}(\n", Escape(table.Detail.Name), schema);
 
-            stringBuilder.AppendFormat("\t{0}\n", string.Join(",\n\t", table.Columns.Select(x => ColumnQuery(x))));
+            stringBuilder.AppendFormat("\t{0}\n", string.Join(",\n\t", table.ColumnsWithRelated().Select(x => ColumnQuery(x))));
 
             stringBuilder.Append("\n);\n");
             foreach (var item in table.Indices)

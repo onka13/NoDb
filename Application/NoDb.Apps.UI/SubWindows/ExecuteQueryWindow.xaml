@@ -11,19 +11,28 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="auto"/>
+            <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
         <avalonEdit:TextEditor
             Name="xQuery"           
             ShowLineNumbers="True"
             FontFamily="Consolas"
             FontSize="10pt"/>
-        <Grid Grid.Row="2" Margin="10">
+        <Grid Grid.Row="1" Margin="10">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Style="{StaticResource StackHorizontal}">
                 <TextBlock>Setting</TextBlock>
                 <ComboBox Name="xSettings" SelectionChanged="XSettings_SelectionChanged"/>
                 <TextBlock>Connection</TextBlock>
                 <ComboBox Name="xConnections" />
                 <Button Content="Execute" Click="XExecute_Click"/>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Row="2" Margin="10">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Style="{StaticResource StackHorizontal}">
+                <Button Content="Open Query History" Click="XOpenQueryHistory_Click"/>
+                <TextBlock>Query History</TextBlock>
+                <ComboBox Name="xQueryHistory" />
+                <Button Content="Append Query" Click="XAppendQuery_Click"/>
             </StackPanel>
         </Grid>
     </Grid>

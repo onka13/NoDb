@@ -235,6 +235,17 @@ namespace NoDb.Apps.UI
             window.Show();
         }
 
+        private void XQueryHistories_Click(object sender, RoutedEventArgs e)
+        {
+            if (App.SolutionService == null)
+            {
+                xSolution_Click(null, null);
+                return;
+            }
+            var window = new SubWindows.QueryHistoryWindow();
+            window.Show();
+        }
+        
         private void XMenuSetting_Click(object sender, RoutedEventArgs e)
         {
             if (App.SolutionService == null)

@@ -24,4 +24,16 @@
     <ProjectReference Include="..\..\Data\NoDb.Data.Domain\NoDb.Data.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="SubWindows\QueryHistoryWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="SubWindows\QueryHistoryWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+
 </Project>
