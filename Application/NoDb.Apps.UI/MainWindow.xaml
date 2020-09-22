@@ -34,6 +34,7 @@
                 <MenuItem Header="_Enum List" Click="XMenuEnum_Click" />
                 <MenuItem Header="_Revisions" Click="XMenuRevision_Click" />
                 <MenuItem Header="_Table Scripts" Click="XMenuTableScripts_Click" />
+                <MenuItem Header="_Execute Query" Click="XExecuteQuery_Click" />
             </MenuItem>
             <MenuItem Header="_Settings">
                 <MenuItem Name="xQueryHistories" Header="_Query Histories" Click="XQueryHistories_Click" />

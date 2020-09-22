@@ -11,7 +11,7 @@ namespace NoDb.Business.Service.Queries
     {
         public override string Escape(string name)
         {
-            return "[" + name + "]";
+            return "\"" + name + "\"";
         }
 
         public override string ColumnDataType(NoDbColumn column)
@@ -134,6 +134,14 @@ namespace NoDb.Business.Service.Queries
                         "ALTER COLUMN {2} TYPE {3} --USING ({2}::integer) \n" +
                         ",ALTER COLUMN {2} {4} NOT NULL;", schema, Escape(table.Detail.Name),
                         Escape(column.Name), ColumnDataType(column), column.Required ? "SET" : "DROP");
+            return stringBuilder.ToString();
+        }
+
+        public override string DropTableQuery(NoDbTable table)
+        {
+            string schema = GetSchema(table);
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.AppendFormat("DROP TABLE IF EXISTS {1}.{0};", Escape(table.Detail.Name), schema);
             return stringBuilder.ToString();
         }
     }

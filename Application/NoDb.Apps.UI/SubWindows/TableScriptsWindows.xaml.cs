@@ -26,6 +26,7 @@ namespace NoDb.Apps.UI.SubWindows
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            
             xTables.ItemsSource = _noDbService.TableService.Tables.Where(x => !x.Detail.Ignored).ToList();
             xQueryType.ItemsSource = Enum.GetNames(typeof(NoDbConnectionType));
             xQueryType.SelectedItem = _noDbConnectionType.ToString();
@@ -34,6 +35,14 @@ namespace NoDb.Apps.UI.SubWindows
 
         private void XTables_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if(xTables.SelectedItems.Count > 0)
+            {
+                var table = xTables.SelectedItems[0] as NoDbTable;
+                if(table.Detail.ConnectionType != NoDbConnectionType.None)
+                {
+                    _noDbConnectionType = table.Detail.ConnectionType;
+                }
+            }
             UpdateQuery();
         }
 
@@ -60,8 +69,8 @@ namespace NoDb.Apps.UI.SubWindows
             xQuery.Document.Blocks.Clear();
             if (_noDbConnectionType == NoDbConnectionType.None) return;
             if (xTables.SelectedItems.Count == 0) return;
-
             var tables = xTables.SelectedItems.Cast<NoDbTable>().ToList();
+            
             xQuery.AppendText(QueryManager.GetTableQueries(tables, _noDbConnectionType, xDropBefore.IsChecked ?? false));
         }
 

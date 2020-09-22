@@ -61,7 +61,6 @@ namespace NoDb.Business.Service.Queries
             return stringBuilder.ToString();
         }
 
-
         public override string CreateTableQuery(NoDbTable table)
         {
             string schema = GetSchema(table);

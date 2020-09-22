@@ -235,6 +235,13 @@ namespace NoDb.Apps.UI
             window.Show();
         }
 
+        private void XExecuteQuery_Click(object sender, RoutedEventArgs e)
+        {
+            var window = new SubWindows.ExecuteQueryWindow(_noDbService);
+            window.SetQuery("", NoDbConnectionType.Mssql);
+            window.Show();
+        }
+
         private void XQueryHistories_Click(object sender, RoutedEventArgs e)
         {
             if (App.SolutionService == null)
