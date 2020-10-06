@@ -14,7 +14,7 @@ namespace NoDb.Data.Domain.Converters
 
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
         {
-            var values = StaticManager.GetSolution().Projects.Select(x => x.Project.Name).ToList();
+            var values = StaticManager.Solution.Projects.Select(x => x.Project.Name).ToList();
             values.Insert(0, "");
             return new StandardValuesCollection(values);
         }
@@ -32,11 +32,6 @@ namespace NoDb.Data.Domain.Converters
         {
             if (value is string)
             {
-                //var projectModel = ConverterManager.GetSolution().Projects.FirstOrDefault(x => x.Project.Name == value?.ToString());
-                //if (projectModel != null)
-                //{
-                //    return projectModel.Project.Name;
-                //}
                 return value?.ToString();
             }
             try

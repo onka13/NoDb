@@ -20,7 +20,13 @@
             <Button Content="Create New" Padding="10,5" Click="XCreateNew_Click"/>
         </StackPanel>
         <ComboBox Name="xHistory" Grid.Row="1" HorizontalAlignment="Left" Margin="0,20,0,0" MinWidth="100" SelectionChanged="XHistory_SelectionChanged" IsTextSearchEnabled="False"/>
-        <RichTextBox x:Name="xContent" Grid.Row="2" Margin="10" />
+        <RichTextBox x:Name="xContent" Grid.Row="2" Margin="10" VerticalScrollBarVisibility="Visible">
+            <RichTextBox.Resources>
+                <Style TargetType="{x:Type Paragraph}">
+                    <Setter Property="Margin" Value="0"/>
+                </Style>
+            </RichTextBox.Resources>
+        </RichTextBox>
         <Grid Grid.Row="3" Margin="10">
             <Button Content="Save" HorizontalAlignment="Right" Click="XSave_Click"/>
         </Grid>

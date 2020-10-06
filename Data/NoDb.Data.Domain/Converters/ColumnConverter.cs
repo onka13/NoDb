@@ -16,18 +16,14 @@ namespace NoDb.Data.Domain.Converters
             var onkafAttribute = (NoDbColumnAttribute)context.PropertyDescriptor.Attributes?[typeof(NoDbColumnAttribute)];
             if (onkafAttribute != null)
             {
-                //if (onkafAttribute.ColumnType == NoDbColumnType.ForeignColumn)
-                var project = StaticManager.GetSolution().Projects.FirstOrDefault(x => x.Project.Name == StaticManager.SelectedProject);
+                var project = StaticManager.GetSelectedProject(StaticManager.SelectedProject);
                 var table = project.Tables.FirstOrDefault(x => x.Detail.Name == StaticManager.SelectedForeignTable);
                 if (table != null)
                     response = table.ColumnsWithRelated();
-
-                //else if (onkafAttribute.ColumnType == NoDbColumnType.ForeignColumnPrimaryKey)
-                //    response = ConverterManager.GetSelectedForeignTable()?.GetPkColumns();
             }
             else
             {
-                response = StaticManager.GetSelectedTable()?.ColumnsWithRelated();
+                response = StaticManager.SelectedTable?.ColumnsWithRelated();
             }
             return response ?? new List<NoDbColumn>();
         }
@@ -56,13 +52,6 @@ namespace NoDb.Data.Domain.Converters
             if (value != null)
             {
                 return value.ToString();
-                //foreach (var b in GetColumns(context))
-                //{
-                //    if (b.Name == value.ToString())
-                //    {
-                //        return b.Name;
-                //    }
-                //}
             }
             try
             {

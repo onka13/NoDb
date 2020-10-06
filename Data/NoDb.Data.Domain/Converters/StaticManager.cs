@@ -6,84 +6,57 @@ namespace NoDb.Data.Domain.Converters
 {
     public static class StaticManager
     {
-        private static NoDbSolutionModel Solution;
-        public static string SelectedProject { get; set; }
+        static NoDbSolutionModel _solution;
+        public static NoDbSolutionModel Solution
+        {
+            get
+            {
+                if (_solution == null) _solution = new NoDbSolutionModel();
+                return _solution;
+            }
+            set
+            {
+                _solution = value;
+            }
+        }
+
+        static string _selectedProject;
+        public static string SelectedProject
+        {
+            get
+            {
+                return _selectedProject;
+            }
+            set
+            {
+                _selectedProject = value;
+                _enums = null;
+            }
+        }
+        
+        static List<NoDbEnumDetail> _enums;
+        public static List<NoDbEnumDetail> Enums
+        {
+            get
+            {
+                if(_enums == null) _enums = GetSelectedProject(SelectedProject).NoDbEnum.EnumList;
+                return _enums;
+            }
+            set
+            {
+                _enums = value;
+            }
+        }
+
+        public static NoDbTable SelectedTable { get; set; }
+
+
         public static string SelectedForeignTable { get; set; }
 
-        private static NoDbEnum NoDbEnum;
-        private static List<NoDbTable> Tables;
-        private static NoDbTable SelectedTable;
-        
-
-        #region " Enums"
-
-        public static List<NoDbEnumDetail> GetEnums()
+        public static NoDbProjectModel GetSelectedProject(string projectName)
         {
-            if (NoDbEnum == null) NoDbEnum = new NoDbEnum();
-            return NoDbEnum.EnumList;
+            var project = Solution.Projects.FirstOrDefault(x => x.Project.Name == projectName);
+            return project;
         }
-
-        public static void SetEnums(NoDbEnum noDbEnum)
-        {
-            NoDbEnum = noDbEnum;
-        }
-
-        #endregion
-
-        #region " Tables "
-
-        public static NoDbSolutionModel GetSolution()
-        {
-            if (Solution == null) Solution = new NoDbSolutionModel();
-            return Solution;
-        }
-
-        public static void SetSolution(NoDbSolutionModel solution)
-        {
-            Solution = solution;
-        }       
-
-        public static List<NoDbTable> GetTables()
-        {
-            if (Tables == null) Tables = new List<NoDbTable>();
-            return Tables;
-        }
-
-        public static void SetTables(List<NoDbTable> tables)
-        {
-            Tables = tables;
-        }
-
-        public static NoDbTable GetTable(string name)
-        {
-            return GetTables().FirstOrDefault(x => x.Detail.Name == name);
-        }
-
-        public static List<string> GetTableNames()
-        {
-            return GetTables().Select(x => x.Detail.Name).ToList();
-        }
-
-        public static NoDbTable GetSelectedTable()
-        {
-            return SelectedTable;
-        }
-
-        public static void SetSelectedTable(NoDbTable table)
-        {
-            SelectedTable = table;
-        }
-
-        public static NoDbTable GetSelectedForeignTable()
-        {
-            return GetTable(SelectedForeignTable);
-        }
-
-        public static void SetSelectedForeignTable(string table)
-        {
-            SelectedForeignTable = table;
-        }
-
-        #endregion
     }
 }

@@ -20,7 +20,7 @@
                 <RowDefinition Height="5" />
                 <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
-            <RichTextBox x:Name="xQuery">
+            <RichTextBox x:Name="xQuery" VerticalScrollBarVisibility="Visible">
                 <RichTextBox.Resources>
                     <Style TargetType="{x:Type Paragraph}">
                         <Setter Property="Margin" Value="0"/>

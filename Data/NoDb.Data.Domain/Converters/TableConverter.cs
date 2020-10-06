@@ -31,7 +31,7 @@ namespace NoDb.Data.Domain.Converters
                 }
             }
 
-            var project = StaticManager.GetSolution().Projects.FirstOrDefault(x => x.Project.Name == projectName);
+            var project = StaticManager.GetSelectedProject(projectName);
             if (project != null) return new StandardValuesCollection(project.Tables.Select(x => x.Detail.Name).ToList());
 
             return new StandardValuesCollection(new List<string>());

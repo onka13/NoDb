@@ -142,7 +142,7 @@ namespace NoDb.Apps.UI
             {
                 _selectedTable = null;
                 ClearAllRelatedWithTable();
-                StaticManager.SetSelectedTable(null);
+                StaticManager.SelectedTable = null;
                 return;
             }
 
@@ -150,7 +150,7 @@ namespace NoDb.Apps.UI
             xColumns.ItemsSource = _selectedTable.Columns;
             xTableDetail.SelectedObject = _selectedTable.Detail;
             xColumnsGrid.IsEnabled = true;
-            StaticManager.SetSelectedTable(_selectedTable);
+            StaticManager.SelectedTable = _selectedTable;
         }
 
         private void NewTableButton_Click(object sender, RoutedEventArgs e)
@@ -193,7 +193,6 @@ namespace NoDb.Apps.UI
             var editor = new SubWindows.ListEditor("Relations");
             editor.InitList(_selectedTable.Relations, onSelectionChanged: relation =>
             {
-                if (relation != null) StaticManager.SetSelectedForeignTable(relation.ForeignTable);
             });
             editor.ShowDialog();
         }
@@ -334,7 +333,7 @@ namespace NoDb.Apps.UI
             xProjects.SelectedIndex = selected != -1 ? selected : 0;
             XProjects_SelectionChanged(null, null);
 
-            StaticManager.SetSolution(new NoDbSolutionModel
+            StaticManager.Solution = new NoDbSolutionModel
             {
                 Projects = projects.Select(x =>
                 {
@@ -346,7 +345,7 @@ namespace NoDb.Apps.UI
                         NoDbEnum = projectService.EnumService.Enums
                     };
                 }).ToList()
-            });
+            };
         }
 
         /// <summary>

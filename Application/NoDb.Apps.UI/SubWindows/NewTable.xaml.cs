@@ -33,7 +33,7 @@ namespace NoDb.Apps.UI.SubWindows
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            if (OnAdd(xTableName.Text, xTableName.Text))
+            if (OnAdd(xTableName.Text, xTemplate.SelectedItem?.ToString()))
             {
                 Close();
             }

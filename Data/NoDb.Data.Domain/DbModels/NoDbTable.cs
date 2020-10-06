@@ -49,7 +49,7 @@ namespace NoDb.Data.Domain.DbModels
             var columns = new List<NoDbColumn>(Columns);
             if (!string.IsNullOrEmpty(Detail.BaseProject))
             {
-                var relatedProject = StaticManager.GetSolution().Projects.FirstOrDefault(x => x.Project.Name == Detail.BaseProject);
+                var relatedProject = StaticManager.Solution.Projects.FirstOrDefault(x => x.Project.Name == Detail.BaseProject);
                 if (relatedProject != null)
                 {
                     var baseTable = relatedProject.Tables.FirstOrDefault(x => x.Detail.Name == Detail.BaseTable);

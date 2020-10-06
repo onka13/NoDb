@@ -16,7 +16,7 @@ namespace NoDb.Data.Domain.Converters
 
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
         {
-            return new StandardValuesCollection(StaticManager.GetEnums().Select(x => x.Name).ToList());
+            return new StandardValuesCollection(StaticManager.Enums.Select(x => x.Name).ToList());
         }
 
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
@@ -32,7 +32,7 @@ namespace NoDb.Data.Domain.Converters
         {
             if (value != null)
             {
-                foreach (var b in StaticManager.GetEnums())
+                foreach (var b in StaticManager.Enums)
                 {
                     if (b.Name == value.ToString())
                     {
