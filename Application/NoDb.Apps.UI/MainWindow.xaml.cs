@@ -204,6 +204,20 @@ namespace NoDb.Apps.UI
             editor.InitList(_selectedTable.SearchItems, defaultValueFunc: (list) =>
             {
                 return _noDbService.SearchService.GetDefaultSearchItem(_selectedTable, list as List<NoDbSearchItem>);
+            }, extraActions: new Dictionary<string, Action<NoDbSearchItem>>
+            {
+                {"Refresh All Columns", (NoDbSearchItem searchItem) => {
+                    if(searchItem == null) return;
+                    searchItem.AllColumns = _noDbService.SearchService.GetDefaultSearchItem(_selectedTable, null).AllColumns;
+                }},
+                {"Refresh Filter Columns", (NoDbSearchItem searchItem) => {
+                    if(searchItem == null) return;
+                    searchItem.Columns = _noDbService.SearchService.GetDefaultSearchItem(_selectedTable, null).Columns;
+                }},
+                {"Refresh Grid Columns", (NoDbSearchItem searchItem) => {
+                    if(searchItem == null) return;
+                    searchItem.DisplayedColumns = _noDbService.SearchService.GetDefaultSearchItem(_selectedTable, null).DisplayedColumns;
+                }}
             });
             editor.ShowDialog();
         }
@@ -218,6 +232,16 @@ namespace NoDb.Apps.UI
             {
                 _noDbService.EnumService.Enums.EnumList = list;
                 _noDbService.EnumService.Save();
+            }, extraActions: new Dictionary<string, Action<NoDbEnumDetail>>
+            {
+                {"Auto Numerate", (NoDbEnumDetail item) => {
+                    if(item == null || item.Items.Count < 2) return;
+                    var start = item.Items.FirstOrDefault().Value;
+                    for (int i = 1; i < item.Items.Count; i++)
+                    {
+                        item.Items[i].Value = start + i;
+                    }
+                }}
             });
             editor.ShowDialog();
         }
@@ -251,7 +275,7 @@ namespace NoDb.Apps.UI
             var window = new SubWindows.QueryHistoryWindow();
             window.Show();
         }
-        
+
         private void XMenuSetting_Click(object sender, RoutedEventArgs e)
         {
             if (App.SolutionService == null)

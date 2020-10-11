@@ -23,13 +23,13 @@ namespace NoDb.Data.Domain.Converters
                 {
                     return string.Join(",", (value as List<NoDbRelationItem>).Select(x => x.ColumnName + "-" + x.ForeignColumn));
                 }
-                if (value is List<NoDbSearchColumnDetail>)
+                if (value is List<NoDbSearchFilterColumn>)
                 {
-                    return string.Join(",", (value as List<NoDbSearchColumnDetail>).Select(x => x.ColumnName));
+                    return string.Join(",", (value as List<NoDbSearchFilterColumn>).Select(x => x.ColumnName));
                 }
-                if (value is List<NoDbSearchDisplayedColumnDetail>)
+                if (value is List<NoDbSearchGridColumn>)
                 {
-                    return string.Join(",", (value as List<NoDbSearchDisplayedColumnDetail>).Select(x => x.ColumnName));
+                    return string.Join(",", (value as List<NoDbSearchGridColumn>).Select(x => x.ColumnName));
                 }
                 if (value is List<string>)
                 {

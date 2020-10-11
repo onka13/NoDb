@@ -34,7 +34,7 @@
             <WindowsFormsHost>
                 <wf:PropertyGrid Dock="Fill" x:Name="xDetail"/>
             </WindowsFormsHost>
-            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+            <StackPanel x:Name="xActionsPanel" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
                 <Button Content="SAVE" Style="{StaticResource ButtonSuccess}" Name="xSaveButton" Margin="0,0,20,0"/>
                 <Button Content="Close" Click="CloseButton_Click"/>
             </StackPanel>

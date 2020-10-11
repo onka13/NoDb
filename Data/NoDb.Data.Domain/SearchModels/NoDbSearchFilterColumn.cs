@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace NoDb.Data.Domain.SearchModels
 {
-    public class NoDbSearchColumnDetail
+    public class NoDbSearchFilterColumn
     {
         [Category("General")]
         [TypeConverter(typeof(ColumnConverter))]
@@ -22,10 +22,14 @@ namespace NoDb.Data.Domain.SearchModels
 
         [Category("UI")]
         public bool SkipForJs { get; set; }
+
         [Category("UI")]
         public bool AlwaysOn { get; set; }
 
-        public string GetColumnPropertyName(List<NoDbSearchColumnDetail> Columns)
+        [Description("Custom Component Name")]
+        public string Component { get; set; }
+
+        public string GetColumnPropertyName(List<NoDbSearchFilterColumn> Columns)
         {
             var parameterName = ColumnName;
             if (Columns.Count(x => x.ColumnName == parameterName) > 1)

@@ -23,20 +23,28 @@ namespace NoDb.Business.Service.Services
             };
             foreach (var column in table.ColumnsWithRelated())
             {
-                defaultItem.DisplayedColumns.Add(new NoDbSearchDisplayedColumnDetail
+                defaultItem.AllColumns.Add(new NoDbSearchColumn
+                {
+                    Name = column.Name,
+                    DisplayInCreate = true,
+                    DisplayInEdit = true,
+                    DisplayInDetail = true
+                });
+
+                defaultItem.DisplayedColumns.Add(new NoDbSearchGridColumn
                 {
                     ColumnName = column.Name
                 });
 
                 if (NoDbHelper.IsDate(column.DataType))
                 {
-                    defaultItem.Columns.Add(new NoDbSearchColumnDetail
+                    defaultItem.Columns.Add(new NoDbSearchFilterColumn
                     {
                         ColumnName = column.Name,
                         Title = column.Name + ">",
                         Sign = NoDbSearchSign.Greater
                     });
-                    defaultItem.Columns.Add(new NoDbSearchColumnDetail
+                    defaultItem.Columns.Add(new NoDbSearchFilterColumn
                     {
                         ColumnName = column.Name,
                         Title = column.Name + "<=",
@@ -47,14 +55,14 @@ namespace NoDb.Business.Service.Services
 
                 if (column.DataType == NoDbDataType.STRING)
                 {
-                    defaultItem.Columns.Add(new NoDbSearchColumnDetail
+                    defaultItem.Columns.Add(new NoDbSearchFilterColumn
                     {
                         ColumnName = column.Name,
                         Sign = NoDbSearchSign.Contain
                     });
                     continue;
                 }
-                defaultItem.Columns.Add(new NoDbSearchColumnDetail
+                defaultItem.Columns.Add(new NoDbSearchFilterColumn
                 {
                     ColumnName = column.Name,
                     Sign = NoDbSearchSign.Equal

@@ -1,8 +1,6 @@
 ﻿using NoDb.Data.Domain.Converters;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Text;
 
 namespace NoDb.Data.Domain.SearchModels
 {
@@ -34,11 +32,15 @@ namespace NoDb.Data.Domain.SearchModels
 
         [Category("General")]
         [TypeConverter(typeof(NoDbCollectionTypeConverter))]
-        public List<NoDbSearchColumnDetail> Columns { get; set; }
+        public List<NoDbSearchColumn> AllColumns { get; set; }
+        
+        [Category("General")]
+        [TypeConverter(typeof(NoDbCollectionTypeConverter))]
+        public List<NoDbSearchFilterColumn> Columns { get; set; }
 
         [Category("General")]
         [TypeConverter(typeof(NoDbCollectionTypeConverter))]
-        public List<NoDbSearchDisplayedColumnDetail> DisplayedColumns { get; set; }
+        public List<NoDbSearchGridColumn> DisplayedColumns { get; set; }
 
         [Category("UI")]
         public string Menu { get; set; }
@@ -48,8 +50,9 @@ namespace NoDb.Data.Domain.SearchModels
 
         public NoDbSearchItem()
         {
-            Columns = new List<NoDbSearchColumnDetail>();
-            DisplayedColumns = new List<NoDbSearchDisplayedColumnDetail>();
+            AllColumns = new List<NoDbSearchColumn>();
+            Columns = new List<NoDbSearchFilterColumn>();
+            DisplayedColumns = new List<NoDbSearchGridColumn>();
             IsExportable = IsEditable = HasDetail = IsDeleteable = IsCreateable = true;
         }
 

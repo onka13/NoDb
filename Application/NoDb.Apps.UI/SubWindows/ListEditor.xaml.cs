@@ -20,7 +20,12 @@ namespace NoDb.Apps.UI.SubWindows
             Title = title;
         }
 
-        public void InitList<T>(List<T> items, Func<System.Collections.IList, T> defaultValueFunc = null, Action<List<T>> saveAction = null, Action<T> onSelectionChanged = null)
+        public void InitList<T>(List<T> items,
+            Func<System.Collections.IList, T> defaultValueFunc = null,
+            Action<List<T>> saveAction = null,
+            Action<T> onSelectionChanged = null,
+            Dictionary<string, Action<T>> extraActions = null
+            )
         {
             xList.ItemsSource = items;
             _getSelected = new Func<T>(() =>
@@ -50,6 +55,24 @@ namespace NoDb.Apps.UI.SubWindows
                     onSelectionChanged(_getSelected());
                 };
             }
+            if (extraActions != null)
+            {
+                foreach (var action in extraActions)
+                {
+                    var actionButton = new Button()
+                    {
+                        Content = action.Key,
+                        Margin = new Thickness(10, 0, 0, 0)
+                    };
+                    actionButton.Click += (sender, e) =>
+                    {
+                        action.Value(_getSelected());
+                        xDetail.Refresh();
+                    };
+                    xActionsPanel.Children.Add(actionButton);
+                }
+            }
+
         }
 
         private void XList_SelectionChanged(object sender, SelectionChangedEventArgs e)

@@ -1,12 +1,9 @@
 ﻿using NoDb.Data.Domain.Converters;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Text;
 
 namespace NoDb.Data.Domain.SearchModels
 {
-    public class NoDbSearchDisplayedColumnDetail
+    public class NoDbSearchGridColumn
     {
         [TypeConverter(typeof(ColumnConverter))]
         public string ColumnName { get; set; }

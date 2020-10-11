@@ -28,38 +28,67 @@ namespace NoDb.Data.Domain.DbModels
             return Detail?.Name ?? "?";
         }
 
+        private NoDbTable GetBaseTable()
+        {
+            if (!string.IsNullOrEmpty(Detail.BaseProject))
+            {
+                var relatedProject = StaticManager.Solution.Projects.FirstOrDefault(x => x.Project.Name == Detail.BaseProject);
+                if (relatedProject != null)
+                {
+                    return relatedProject.Tables.FirstOrDefault(x => x.Detail.Name == Detail.BaseTable);                    
+                }
+            }
+            return null;
+        }
+
         public bool IsPrimaryKey(string column)
         {
-            return Indices.Any(x => x.IsPrimaryKey && x.Columns.Any(y => y.ColumnName == column));
+            return IndicesWithRelated().Any(x => x.IsPrimaryKey && x.Columns.Any(y => y.ColumnName == column));
         }
 
         public bool IsIndexColumn(string column)
         {
-            return Indices.Any(x => x.Columns.Any(y => y.ColumnName == column));
+            return IndicesWithRelated().Any(x => x.Columns.Any(y => y.ColumnName == column));
         }
 
         public List<NoDbColumn> GetPkColumns()
         {
-            var pk = Indices.FirstOrDefault(y => y.IsPrimaryKey);
+            var pk = IndicesWithRelated().FirstOrDefault(y => y.IsPrimaryKey);
+            if (pk == null) return new List<NoDbColumn>();
             return ColumnsWithRelated().Where(x => pk.Columns.Any(y => y.ColumnName == x.Name)).ToList();
         }
 
         public List<NoDbColumn> ColumnsWithRelated()
         {
             var columns = new List<NoDbColumn>(Columns);
-            if (!string.IsNullOrEmpty(Detail.BaseProject))
+            var baseTable = GetBaseTable();
+            if (baseTable != null)
             {
-                var relatedProject = StaticManager.Solution.Projects.FirstOrDefault(x => x.Project.Name == Detail.BaseProject);
-                if (relatedProject != null)
-                {
-                    var baseTable = relatedProject.Tables.FirstOrDefault(x => x.Detail.Name == Detail.BaseTable);
-                    if (baseTable != null)
-                    {
-                        columns.AddRange(baseTable.Columns);
-                    }
-                }
+                columns.AddRange(baseTable.Columns);
             }
             return columns;
+        }
+        
+        public List<NoDbIndex> IndicesWithRelated()
+        {
+            var indices = new List<NoDbIndex>(Indices);
+            var baseTable = GetBaseTable();
+            if (baseTable != null)
+            {
+                indices.AddRange(baseTable.Indices);
+            }
+            return indices;
+        }
+        
+        public List<NoDbRelation> RelationsWithRelated()
+        {
+            var relations = new List<NoDbRelation>(Relations);
+            var baseTable = GetBaseTable();
+            if (baseTable != null)
+            {
+                relations.AddRange(baseTable.Relations);
+            }
+            return relations;
         }
     }
 }
