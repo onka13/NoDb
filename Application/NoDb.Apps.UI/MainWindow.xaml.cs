@@ -163,6 +163,7 @@ namespace NoDb.Apps.UI
             });
 
             newTableWindow.ShowDialog();
+            refreshStaticManagerSolutions();
         }
 
         private void DeleteTableButton_Click(object sender, RoutedEventArgs e)
@@ -171,6 +172,7 @@ namespace NoDb.Apps.UI
             if (table == null) return;
             _noDbService.TableService.Delete(table);
             BindTables();
+            refreshStaticManagerSolutions();
         }
 
         private void XMenuItemExit_Click(object sender, RoutedEventArgs e)
@@ -206,15 +208,26 @@ namespace NoDb.Apps.UI
                 return _noDbService.SearchService.GetDefaultSearchItem(_selectedTable, list as List<NoDbSearchItem>);
             }, extraActions: new Dictionary<string, Action<NoDbSearchItem>>
             {
-                {"Refresh All Columns", (NoDbSearchItem searchItem) => {
+                {"Refresh All Col.", (NoDbSearchItem searchItem) => {
                     if(searchItem == null) return;
                     searchItem.AllColumns = _noDbService.SearchService.GetDefaultSearchItem(_selectedTable, null).AllColumns;
                 }},
-                {"Refresh Filter Columns", (NoDbSearchItem searchItem) => {
+                {"Add Missing Col.", (NoDbSearchItem searchItem) => {
+                    if(searchItem == null) return;
+                    var newColumns = _noDbService.SearchService.GetDefaultSearchItem(_selectedTable, null).AllColumns;
+                    for (int i = 0; i < newColumns.Count; i++)
+                    {
+                        if(!searchItem.AllColumns.Any(x => x.Name == newColumns[i].Name))
+                        {
+                            searchItem.AllColumns.Add(newColumns[i]);
+                        }
+                    }
+                }},
+                {"Refresh Filter Col.", (NoDbSearchItem searchItem) => {
                     if(searchItem == null) return;
                     searchItem.Columns = _noDbService.SearchService.GetDefaultSearchItem(_selectedTable, null).Columns;
                 }},
-                {"Refresh Grid Columns", (NoDbSearchItem searchItem) => {
+                {"Refresh Grid Col.", (NoDbSearchItem searchItem) => {
                     if(searchItem == null) return;
                     searchItem.DisplayedColumns = _noDbService.SearchService.GetDefaultSearchItem(_selectedTable, null).DisplayedColumns;
                 }}
@@ -357,19 +370,7 @@ namespace NoDb.Apps.UI
             xProjects.SelectedIndex = selected != -1 ? selected : 0;
             XProjects_SelectionChanged(null, null);
 
-            StaticManager.Solution = new NoDbSolutionModel
-            {
-                Projects = projects.Select(x =>
-                {
-                    var projectService = new NoDbService(Path.Combine(App.SolutionFolder, x.Path, NoDbSolutionService.NODB_FOLDER_NAME));
-                    return new NoDbProjectModel
-                    {
-                        Project = x,
-                        Tables = projectService.TableService.Tables,
-                        NoDbEnum = projectService.EnumService.Enums
-                    };
-                }).ToList()
-            };
+            refreshStaticManagerSolutions();
         }
 
         /// <summary>
@@ -408,6 +409,24 @@ namespace NoDb.Apps.UI
             BindTables();
 
             WF.MessageBox.Show("Saved");
+        }
+
+        void refreshStaticManagerSolutions()
+        {
+            var projects = App.SolutionService.GetSelectedProjects();
+            StaticManager.Solution = new NoDbSolutionModel
+            {
+                Projects = projects.Select(x =>
+                {
+                    var projectService = new NoDbService(Path.Combine(App.SolutionFolder, x.Path, NoDbSolutionService.NODB_FOLDER_NAME));
+                    return new NoDbProjectModel
+                    {
+                        Project = x,
+                        Tables = projectService.TableService.Tables,
+                        NoDbEnum = projectService.EnumService.Enums
+                    };
+                }).ToList()
+            };
         }
     }
 }

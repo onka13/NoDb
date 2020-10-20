@@ -29,6 +29,7 @@ namespace NoDb.Apps.UI.SubWindows
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             xTemplate.ItemsSource = TableTemplates.DefinedTemplates.Keys;
+            xTemplate.SelectedIndex = 0;
         }
 
         private void AddButton_Click(object sender, RoutedEventArgs e)

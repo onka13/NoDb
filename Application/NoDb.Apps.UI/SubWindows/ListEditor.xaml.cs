@@ -68,6 +68,7 @@ namespace NoDb.Apps.UI.SubWindows
                     {
                         action.Value(_getSelected());
                         xDetail.Refresh();
+                        System.Windows.Forms.MessageBox.Show("Done");
                     };
                     xActionsPanel.Children.Add(actionButton);
                 }
