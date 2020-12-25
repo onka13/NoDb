@@ -52,6 +52,10 @@ namespace NoDb.Business.Service.Services
         public void ReadFromSettingsFolder()
         {
             Settings.Clear();
+            if (!File.Exists(_settingsFolder))
+            {
+                Directory.CreateDirectory(_settingsFolder);
+            }
             var settingFiles = Directory.GetFiles(_settingsFolder, "*.json");
             foreach (var settingFile in settingFiles)
             {

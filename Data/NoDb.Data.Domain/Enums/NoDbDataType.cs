@@ -14,5 +14,6 @@
         GUID = 9,
         STRING = 10,
         DATE = 11,
+        OBJECT = 12
     }
 }

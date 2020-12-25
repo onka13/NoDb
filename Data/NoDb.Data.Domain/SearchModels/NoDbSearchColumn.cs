@@ -20,6 +20,7 @@ namespace NoDb.Data.Domain.SearchModels
         [Category("Display")] public bool DisplayInDetail { get; set; }
         [Category("Display")] public bool DisplayInEdit { get; set; }
         [Category("Display")] public bool DisplayInCreate { get; set; }
+        [Category("Display")] public int? FieldSize { get; set; }
 
         [Category("Component")] public string EditComponent { get; set; }
         [Category("Component")] public string CreateComponent { get; set; }

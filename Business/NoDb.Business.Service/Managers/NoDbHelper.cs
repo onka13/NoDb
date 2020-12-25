@@ -84,6 +84,9 @@ namespace NoDb.Business.Service.Managers
                 case NoDbDataType.STRING:
                     output = "string";
                     break;
+                case NoDbDataType.OBJECT:
+                    output = "object";
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -91,6 +94,11 @@ namespace NoDb.Business.Service.Managers
             if (column.DataType != NoDbDataType.STRING && !column.Required)
             {
                 output += "?";
+            }
+
+            if (column.IsList)
+            {
+                return string.Format("List<{0}>", output);
             }
 
             return output;

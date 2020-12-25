@@ -51,6 +51,10 @@ namespace NoDb.Data.Domain.DbModels
         [Description("Column Short Name. ex. for using mongoDB column name")]
         public string ShortName { get; set; }
 
+        [Category("Advance")]
+        [Description("Is list?")]
+        public bool IsList { get; set; }
+
         public NoDbColumn()
         {
             DataType = NoDbDataType.STRING;

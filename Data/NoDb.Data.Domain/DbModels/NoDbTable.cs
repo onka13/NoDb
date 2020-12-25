@@ -51,6 +51,11 @@ namespace NoDb.Data.Domain.DbModels
             return IndicesWithRelated().Any(x => x.Columns.Any(y => y.ColumnName == column));
         }
 
+        public bool IsForeignKey(string column)
+        {
+            return RelationsWithRelated().Any(x => x.Items.Any(y => y.ColumnName == column));
+        }
+
         public List<NoDbColumn> GetPkColumns()
         {
             var pk = IndicesWithRelated().FirstOrDefault(y => y.IsPrimaryKey);
