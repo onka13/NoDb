@@ -1,5 +1,6 @@
 ﻿using NoDb.Data.Domain.Converters;
 using NoDb.Data.Domain.Enums;
+using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace NoDb.Data.Domain.SearchModels
@@ -29,6 +30,20 @@ namespace NoDb.Data.Domain.SearchModels
         [Category("Advance")]
         [TypeConverter(typeof(ExpandableObjectConverter))]
         public NoDbSearchColumnReference Reference { get; set; }
+        
+        [Category("Advance")]
+        [TypeConverter(typeof(NoDbCollectionTypeConverter))]
+        public List<NoDbSearchColumnDepend> Depends { get; set; }
+
+        [Category("Advance")]
+        public bool IsReadOnly { get; set; }
+
+        [Category("Advance")]
+        public string NullString { get; set; }
+        
+        [Category("Advance")]
+        [Description("Commo seperated (email,)")]
+        public string Validations { get; set; }       
 
         public override string ToString()
         {
@@ -38,6 +53,7 @@ namespace NoDb.Data.Domain.SearchModels
         public NoDbSearchColumn()
         {
             Reference = new NoDbSearchColumnReference();
+            Depends = new List<NoDbSearchColumnDepend>();
         }
     }
 
@@ -46,5 +62,23 @@ namespace NoDb.Data.Domain.SearchModels
         public string Route { get; set; }
         public string FilterField { get; set; }
         public string DataField { get; set; }
+        public string Limit { get; set; }
+        public string SortField { get; set; }
+        public string SortDirection { get; set; }
+        public bool AddAllButton { get; set; }
+        public string TreeParentFieldId { get; set; }
+        public string TreeParentFieldName { get; set; }
+    }
+
+    public class NoDbSearchColumnDepend
+    {
+        public string Name { get; set; }
+        public string Field { get; set; }
+        public string Value { get; set; }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }
