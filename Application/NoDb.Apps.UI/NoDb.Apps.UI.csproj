@@ -11,7 +11,7 @@
     <PackageProjectUrl>https://github.com/onka13/NoDb</PackageProjectUrl>
     <RepositoryUrl>https://github.com/onka13/NoDb</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <Version>0.1.2</Version>
+    <Version>0.1.3</Version>
   </PropertyGroup>
 
   <ItemGroup>

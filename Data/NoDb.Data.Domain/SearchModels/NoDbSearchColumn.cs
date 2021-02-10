@@ -39,6 +39,12 @@ namespace NoDb.Data.Domain.SearchModels
         public bool IsReadOnly { get; set; }
 
         [Category("Advance")]
+        public bool IsReadOnlyCreate { get; set; }
+
+        [Category("Advance")]
+        public bool IsReadOnlyEdit { get; set; }
+
+        [Category("Advance")]
         public string NullString { get; set; }
         
         [Category("Advance")]
@@ -68,6 +74,8 @@ namespace NoDb.Data.Domain.SearchModels
         public bool AddAllButton { get; set; }
         public string TreeParentFieldId { get; set; }
         public string TreeParentFieldName { get; set; }
+        public bool DisplayParentWithNoChild { get; set; }
+        public bool ParentIsAddable { get; set; }
     }
 
     public class NoDbSearchColumnDepend

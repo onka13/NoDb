@@ -30,6 +30,7 @@ namespace NoDb.Apps.UI.SubWindows
 
         private void XCreateNew_Click(object sender, RoutedEventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(xSettingKey.Text)) return;
             _settingsService.New(new NoDbSetting
             {
                 SettingsKey = xSettingKey.Text,
