@@ -25,6 +25,9 @@ namespace NoDb.Data.Domain.SearchModels
         public bool HasDetail { get; set; }
 
         [Category("Advance")]
+        public bool InlineEditing { get; set; }
+
+        [Category("Advance")]
         public string RepositoryMethod { get; set; }
 
         [Category("UI")]

@@ -7,6 +7,7 @@
         Mysql,
         Postgres,
         ElasticSearch,
-        MongoDB
+        MongoDB,
+        CosmosDB,
     }
 }

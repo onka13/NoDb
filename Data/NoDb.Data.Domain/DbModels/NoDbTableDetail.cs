@@ -10,6 +10,10 @@ namespace NoDb.Data.Domain.DbModels
         [Category("Identity")]
         public string Name { get; set; }
 
+        [Description("Table System name")]
+        [Category("Identity")]
+        public string SystemName { get; set; }
+
         [Description("Table description")]
         [Category("Identity")]
         //[TypeConverter(typeof(MultilineStringConverter))]

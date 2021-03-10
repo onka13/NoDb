@@ -47,7 +47,7 @@ namespace NoDb.Data.Domain.DbModels
             Schema = "dbo";
             ConnectionType = NoDbConnectionType.Mssql;
             ConnectionName = "MainConnection";
-            JsPanelProjectType = NoDbAdminPanelType.React;
+            JsPanelProjectType = NoDbAdminPanelType.Reactv2;
         }
 
         public override string ToString()

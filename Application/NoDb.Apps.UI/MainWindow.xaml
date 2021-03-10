@@ -98,6 +98,7 @@
                                 <Button Content="Index" Click="IndexButton_Clicked"/>
                                 <Button Content="Relation" Click="RelationButton_Clicked"/>
                                 <Button Content="Search" Click="SearchButton_Clicked"/>
+                                <Button Content="Import" Click="ImportButton_Clicked"/>
                             </ToolBar>
                         </ToolBarTray>
                         <DataGrid Grid.Row="1" x:Name="xColumns" />

@@ -15,6 +15,7 @@ using NoDb.Data.Domain.Converters;
 using NoDb.Data.Domain.SearchModels;
 using CoreCommon.Infra.Helpers;
 using System.IO;
+using Newtonsoft.Json.Linq;
 
 namespace NoDb.Apps.UI
 {
@@ -427,6 +428,81 @@ namespace NoDb.Apps.UI
                     };
                 }).ToList()
             };
+        }
+
+        private void ImportButton_Clicked(object sender, RoutedEventArgs e)
+        {
+            var newTableWindow = new SubWindows.ImportWindow((string json) =>
+            {
+                try
+                {
+                    var jsonData = JObject.Parse(json).ToObject<Dictionary<string, object>>();
+
+                    var table = _selectedTable;
+                    if (table == null) return false;
+                    var columns = table.Columns = xColumns.ItemsSource as List<NoDbColumn>;
+
+                    foreach (var item in jsonData)
+                    {
+                        if (columns.Any(x => x.Name == item.Key || x.ShortName == item.Key)) continue;
+                        var dataType = NoDbDataType.STRING;
+                        if (item.Value is int)
+                        {
+                            dataType = NoDbDataType.INT;
+                        }
+                        else if (item.Value is float || item.Value is double)
+                        {
+                            dataType = NoDbDataType.FLOAT;
+                        }
+                        else if (item.Value is decimal)
+                        {
+                            dataType = NoDbDataType.DECIMAL;
+                        }
+                        else if (item.Value is byte)
+                        {
+                            dataType = NoDbDataType.BYTE;
+                        }
+                        else if (item.Value is long)
+                        {
+                            dataType = NoDbDataType.LONG;
+                        }
+                        else if (item.Value is bool)
+                        {
+                            dataType = NoDbDataType.BOOL;
+                        }
+                        else if (item.Value is JObject)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            if (item.Value != null)
+                            {
+                                if (DateTime.TryParse(item.Value.ToString(), out DateTime date))
+                                {
+                                    dataType = NoDbDataType.DATETIME;
+                                }
+                            }
+                        }
+
+                        columns.Add(new NoDbColumn
+                        {
+                            Name = item.Key,
+                            DataType = dataType,
+                        });
+                    }
+                    xColumns.ItemsSource = null;
+                    xColumns.ItemsSource = columns;
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    WF.MessageBox.Show("Error:" + ex.Message);
+                }
+                return false;
+            });
+
+            newTableWindow.ShowDialog();
         }
     }
 }
