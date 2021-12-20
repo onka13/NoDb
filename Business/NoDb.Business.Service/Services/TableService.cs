@@ -86,7 +86,7 @@ namespace NoDb.Business.Service.Services
         
         private void WriteToFile()
         {
-            var json = ConversionHelper.Serialize(Tables);
+            var json = ConversionHelper.Serialize(Tables, isIndented: true);
             File.WriteAllText(TableFilePath, json);
         }
     }

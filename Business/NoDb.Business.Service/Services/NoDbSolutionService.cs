@@ -83,7 +83,7 @@ namespace NoDb.Business.Service.Services
 
         private void WriteToFile()
         {
-            var json = ConversionHelper.Serialize(_noDbSolution);
+            var json = ConversionHelper.Serialize(_noDbSolution, isIndented: true);
             File.WriteAllText(SolutionFilePath, json);
         }
     }

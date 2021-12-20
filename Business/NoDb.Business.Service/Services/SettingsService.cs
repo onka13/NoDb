@@ -67,7 +67,7 @@ namespace NoDb.Business.Service.Services
 
         public void Save(NoDbSetting setting)
         {
-            var json = ConversionHelper.Serialize(setting);
+            var json = ConversionHelper.Serialize(setting, isIndented: true);
             var path = Path.Combine(_settingsFolder, setting.SettingsKey + ".json");
             File.WriteAllText(path, json);
             ReadFromSettingsFolder();

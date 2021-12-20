@@ -18,7 +18,7 @@ namespace NoDb.Business.Service.Managers
                 connection.ConnectionType == NoDbConnectionType.Postgres)
             {
                 var context = EmptyDbContext.Init(connection.ConnectionType.ToString(), connection.ConnectionString);
-                context.Database.ExecuteSqlCommand(query);
+                context.Database.ExecuteSqlRaw(query);
             }
         }
         

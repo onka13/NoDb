@@ -72,7 +72,7 @@ namespace NoDb.Business.Service.Queries
             stringBuilder.Append("\n);\n");
             foreach (var item in table.Indices)
             {
-                stringBuilder.Append(CreateIndexQuery(table, item));
+                stringBuilder.Append(CreateIndexQuery(table, item) + "\n");
             }
             foreach (var item in table.Relations)
             {

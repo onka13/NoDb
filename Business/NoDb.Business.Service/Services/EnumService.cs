@@ -40,7 +40,7 @@ namespace NoDb.Business.Service.Services
 
         public void Save()
         {
-            var json = ConversionHelper.Serialize(Enums);
+            var json = ConversionHelper.Serialize(Enums, isIndented: true);
             File.WriteAllText(EnumFilePath, json);
         }
     }

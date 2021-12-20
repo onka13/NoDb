@@ -70,7 +70,7 @@ namespace NoDb.Business.Service.Services
                 Directory.CreateDirectory(revisionPath);
             }
             revisionPath += Path.DirectorySeparatorChar + DateTime.Now.ToString("yyyyMMdd_HHmmss") + "_" + (revision.NewTable ?? revision.OldTable)?.Detail.Name + ".json";
-            var jsonRev = ConversionHelper.Serialize(revision);
+            var jsonRev = ConversionHelper.Serialize(revision, isIndented: true);
             File.WriteAllText(revisionPath, jsonRev);
         }
 
