@@ -32,16 +32,16 @@ namespace NoDb.Business.Service.Queries
             StringBuilder stringBuilder = new StringBuilder();
             if (column.Required)
             {
-                stringBuilder.AppendFormat("ALTER TABLE {2}.{0} ADD {1};\n", Escape(table.Detail.Name), ColumnQuery(column), schema);
+                stringBuilder.AppendFormat("ALTER TABLE {2}.{0} ADD {1};\n", Escape(table.Detail.GetTableDbName()), ColumnQuery(column), schema);
                 column.Required = false;
-                stringBuilder.AppendFormat("--ALTER TABLE {2}.{0} ADD {1};\n", Escape(table.Detail.Name), ColumnQuery(column), schema);
-                stringBuilder.AppendFormat("--UPDATE {0}.{1} SET {2} = 0;\n", schema, Escape(table.Detail.Name), Escape(column.Name));
+                stringBuilder.AppendFormat("--ALTER TABLE {2}.{0} ADD {1};\n", Escape(table.Detail.GetTableDbName()), ColumnQuery(column), schema);
+                stringBuilder.AppendFormat("--UPDATE {0}.{1} SET {2} = 0;\n", schema, Escape(table.Detail.GetTableDbName()), Escape(column.Name));
                 column.Required = true;
                 stringBuilder.AppendFormat("--" + UpdateColumnQuery(table, column).Replace("\n", "\n--"));
             }
             else
             {
-                stringBuilder.AppendFormat("ALTER TABLE {2}.{0} ADD {1};", Escape(table.Detail.Name), ColumnQuery(column), schema);
+                stringBuilder.AppendFormat("ALTER TABLE {2}.{0} ADD {1};", Escape(table.Detail.GetTableDbName()), ColumnQuery(column), schema);
             }
             return stringBuilder.ToString();
         }
@@ -50,7 +50,7 @@ namespace NoDb.Business.Service.Queries
         {
             string schema = GetSchema(table);
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.AppendFormat("ALTER TABLE {2}.{0} ADD CONSTRAINT {1}\n", Escape(table.Detail.Name), Escape(relation.Name), schema);
+            stringBuilder.AppendFormat("ALTER TABLE {2}.{0} ADD CONSTRAINT {1}\n", Escape(table.Detail.GetTableDbName()), Escape(relation.Name), schema);
             stringBuilder.AppendFormat("FOREIGN KEY ({0}) REFERENCES {3}.{1} ({2})\n",
                                                 string.Join(",", relation.Items.Select(x => Escape(x.ColumnName))),
                                                 Escape(relation.ForeignTable),
@@ -65,7 +65,7 @@ namespace NoDb.Business.Service.Queries
         {
             string schema = GetSchema(table);
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.AppendFormat("CREATE TABLE {1}.{0}(\n", Escape(table.Detail.Name), schema);
+            stringBuilder.AppendFormat("CREATE TABLE {1}.{0}(\n", Escape(table.Detail.GetTableDbName()), schema);
 
             stringBuilder.AppendFormat("\t{0}\n", string.Join(",\n\t", table.ColumnsWithRelated().Select(x => ColumnQuery(x))));
 
@@ -85,7 +85,7 @@ namespace NoDb.Business.Service.Queries
         {
             string schema = GetSchema(table);
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.AppendFormat("ALTER TABLE {2}.{0} DROP COLUMN {1};", Escape(table.Detail.Name), Escape(column.Name), schema);
+            stringBuilder.AppendFormat("ALTER TABLE {2}.{0} DROP COLUMN {1};", Escape(table.Detail.GetTableDbName()), Escape(column.Name), schema);
             return stringBuilder.ToString();
         }
 
@@ -93,7 +93,7 @@ namespace NoDb.Business.Service.Queries
         {
             string schema = GetSchema(table);
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.AppendFormat("IF OBJECT_ID('{1}.{0}', 'U') IS NOT NULL\nDROP TABLE {1}.{0};", Escape(table.Detail.Name), schema);
+            stringBuilder.AppendFormat("IF OBJECT_ID('{1}.{0}', 'U') IS NOT NULL\nDROP TABLE {1}.{0};", Escape(table.Detail.GetTableDbName()), schema);
             return stringBuilder.ToString();
         }
 

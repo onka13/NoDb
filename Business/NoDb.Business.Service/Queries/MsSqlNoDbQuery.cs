@@ -55,7 +55,7 @@ namespace NoDb.Business.Service.Queries
             {
                 stringBuilder.AppendFormat("ALTER TABLE {3}.{1} ADD CONSTRAINT {0} PRIMARY KEY ({2});",
                     Escape(index.Name),
-                    Escape(table.Detail.Name),
+                    Escape(table.Detail.GetTableDbName()),
                     string.Join(", ", index.Columns.Select(x => Escape(x.ColumnName))),
                     schema
                 );
@@ -64,7 +64,7 @@ namespace NoDb.Business.Service.Queries
             {
                 stringBuilder.AppendFormat("CREATE {3} INDEX {0} ON {4}.{1} ({2});",
                         Escape(index.Name),
-                        Escape(table.Detail.Name),
+                        Escape(table.Detail.GetTableDbName()),
                         string.Join(", ", index.Columns.Select(x => Escape(x.ColumnName) + " " + x.Sort)),
                         (index.IsUnique ? "UNIQUE" : ""),
                         schema
@@ -77,7 +77,7 @@ namespace NoDb.Business.Service.Queries
         {
             string schema = GetSchema(table);
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.AppendFormat("ALTER TABLE {2}.{0} DROP CONSTRAINT {1};", Escape(table.Detail.Name), Escape(relation.Name), schema);
+            stringBuilder.AppendFormat("ALTER TABLE {2}.{0} DROP CONSTRAINT {1};", Escape(table.Detail.GetTableDbName()), Escape(relation.Name), schema);
             return stringBuilder.ToString();
         }
 
@@ -86,9 +86,9 @@ namespace NoDb.Business.Service.Queries
             string schema = GetSchema(table);
             StringBuilder stringBuilder = new StringBuilder();
             if (index.IsPrimaryKey)
-                stringBuilder.AppendFormat("ALTER TABLE {2}.{0} DROP CONSTRAINT {1};", Escape(table.Detail.Name), Escape(index.Name), schema);
+                stringBuilder.AppendFormat("ALTER TABLE {2}.{0} DROP CONSTRAINT {1};", Escape(table.Detail.GetTableDbName()), Escape(index.Name), schema);
             else
-                stringBuilder.AppendFormat("DROP INDEX {0} ON {2}.{1};", Escape(index.Name), Escape(table.Detail.Name), schema);
+                stringBuilder.AppendFormat("DROP INDEX {0} ON {2}.{1};", Escape(index.Name), Escape(table.Detail.GetTableDbName()), schema);
             return stringBuilder.ToString();
         }
 
@@ -96,14 +96,14 @@ namespace NoDb.Business.Service.Queries
         {
             string schema = GetSchema(table);
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.AppendFormat("EXEC sp_rename '{3}.{0}.{1}', '{2}', 'COLUMN';", table.Detail.Name, oldColumn.Name, newColumn.Name, schema);
+            stringBuilder.AppendFormat("EXEC sp_rename '{3}.{0}.{1}', '{2}', 'COLUMN';", table.Detail.GetTableDbName(), oldColumn.Name, newColumn.Name, schema);
             return stringBuilder.ToString();
         }
 
         public override string RenameIndexQuery(NoDbTable table, NoDbIndex oldIndex, NoDbIndex newIndex)
         {
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.AppendFormat("EXEC sp_rename N'{0}.{1}', N'{2}', 'INDEX';", table.Detail.Name, oldIndex.Name, newIndex.Name);
+            stringBuilder.AppendFormat("EXEC sp_rename N'{0}.{1}', N'{2}', 'INDEX';", table.Detail.GetTableDbName(), oldIndex.Name, newIndex.Name);
             return stringBuilder.ToString();
         }
 
@@ -118,7 +118,7 @@ namespace NoDb.Business.Service.Queries
         {
             string schema = GetSchema(table);
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.AppendFormat("ALTER TABLE {2}.{0} ALTER COLUMN {1};", Escape(table.Detail.Name), ColumnQuery(column), schema);
+            stringBuilder.AppendFormat("ALTER TABLE {2}.{0} ALTER COLUMN {1};", Escape(table.Detail.GetTableDbName()), ColumnQuery(column), schema);
             return stringBuilder.ToString();
         }
     }

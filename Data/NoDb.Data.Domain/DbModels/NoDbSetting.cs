@@ -72,6 +72,14 @@ namespace NoDb.Data.Domain.DbModels
 
     public class DotNetCoreProject
     {
+        [Description("Root namespace")]
+        [Category("General")]
+        public string RootNamespace { get; set; }
+        
+        [Description("CoreCommon Data project namespace")]
+        [Category("General")]
+        public string CoreCommonDataNamespace { get; set; }
+
         //[Category("Entity")]
         //public string EntityNamespaces { get; set; }
         //[Category("Entity")]
@@ -118,6 +126,8 @@ namespace NoDb.Data.Domain.DbModels
             //EntityRepoInterfaceBase = "IRepositoryBase";
             //EntityServiceInterfaceBase = "IBusinessLogicBase";
             SearchRequestBase = "";
+            RootNamespace = "";
+            CoreCommonDataNamespace = "CoreCommon.Data";
             //SearchControllerNamespaces = "using CoreCommon.Data.Domain.Business;\r\nusing CoreCommon.Data.Domain.Models;\r\nusing CoreCommon.Data.Domain.Attributes;\r\n";
         }
 
