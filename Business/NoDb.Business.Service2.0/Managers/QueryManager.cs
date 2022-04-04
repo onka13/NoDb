@@ -1,5 +1,4 @@
 ﻿using CoreCommon.Data.EntityFrameworkBase.Components;
-using CoreCommon.Data.EntityFrameworkBase.Models;
 using Microsoft.EntityFrameworkCore;
 using NoDb.Business.Service.Queries;
 using NoDb.Data.Domain.DbModels;
@@ -22,24 +21,7 @@ namespace NoDb.Business.Service.Managers
                 context.Database.ExecuteSqlRaw(query);
             }
         }
-
-        public static List<InformationSchemaTable> GetTablesInformation(NoDbSettingConnection connection)
-        {
-            var context = InformationDbContext.Init(connection.ConnectionType.ToString(), connection.ConnectionString);
-            return context.InformationSchemaTables.FromSqlRaw("SELECT * FROM INFORMATION_SCHEMA.TABLES").Where(x => x.TableType == "BASE TABLE").ToList();
-        }
-
-        public static List<InformationSchemaColumn> GetColumnsInformation(NoDbSettingConnection connection, string tableName = null)
-        {
-            var context = InformationDbContext.Init(connection.ConnectionType.ToString(), connection.ConnectionString);
-            var query = context.InformationSchemaColumns.FromSqlRaw("SELECT * FROM INFORMATION_SCHEMA.COLUMNS");
-            if (tableName != null)
-            {
-                query = query.Where(x => x.TableName == tableName);
-            }
-            return query.ToList();
-        }
-
+        
         public static NoDbQueryBase GetNoDbQueryService(NoDbConnectionType connectionType)
         {
             switch (connectionType)

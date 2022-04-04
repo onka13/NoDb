@@ -36,11 +36,6 @@ namespace NoDb.Business.Service.Queries
             return output;
         }
 
-        public override NoDbDataType DbTypeToNoDbDataType(string columnDbType)
-        {
-            throw new NotImplementedException();
-        }
-
         public override string ColumnQuery(NoDbColumn column)
         {
             StringBuilder stringBuilder = new StringBuilder();
@@ -70,7 +65,7 @@ namespace NoDb.Business.Service.Queries
             {
                 stringBuilder.AppendFormat("ALTER TABLE {3}.{1} ADD CONSTRAINT {0} PRIMARY KEY ({2});",
                     Escape(index.Name),
-                    Escape(table.Detail.GetTableDbName()),
+                    Escape(table.Detail.Name),
                     string.Join(", ", index.Columns.Select(x => Escape(x.ColumnName))),
                     schema
                 );
@@ -79,7 +74,7 @@ namespace NoDb.Business.Service.Queries
             {
                 stringBuilder.AppendFormat("CREATE {3} INDEX {0} ON {4}.{1} ({2});",
                         Escape(index.Name),
-                        Escape(table.Detail.GetTableDbName()),
+                        Escape(table.Detail.Name),
                         string.Join(", ", index.Columns.Select(x => Escape(x.ColumnName) + " " + x.Sort)),
                         (index.IsUnique ? "UNIQUE" : ""),
                         schema
@@ -92,7 +87,7 @@ namespace NoDb.Business.Service.Queries
         {
             string schema = GetSchema(table);
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.AppendFormat("ALTER TABLE {2}.{0} DROP CONSTRAINT {1};", Escape(table.Detail.GetTableDbName()), Escape(relation.Name), schema);
+            stringBuilder.AppendFormat("ALTER TABLE {2}.{0} DROP CONSTRAINT {1};", Escape(table.Detail.Name), Escape(relation.Name), schema);
             return stringBuilder.ToString();
         }
 
@@ -101,7 +96,7 @@ namespace NoDb.Business.Service.Queries
             string schema = GetSchema(table);
             StringBuilder stringBuilder = new StringBuilder();
             if (index.IsPrimaryKey)
-                stringBuilder.AppendFormat("ALTER TABLE {2}.{0} DROP CONSTRAINT {1};", Escape(table.Detail.GetTableDbName()), Escape(index.Name), schema);
+                stringBuilder.AppendFormat("ALTER TABLE {2}.{0} DROP CONSTRAINT {1};", Escape(table.Detail.Name), Escape(index.Name), schema);
             else
                 stringBuilder.AppendFormat("DROP INDEX {1}.{0};", Escape(index.Name), schema);
             return stringBuilder.ToString();
@@ -111,7 +106,7 @@ namespace NoDb.Business.Service.Queries
         {
             string schema = GetSchema(table);
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.AppendFormat("ALTER TABLE {3}.{0} RENAME COLUMN {1} TO {2};", Escape(table.Detail.GetTableDbName()), Escape(oldColumn.Name), Escape(newColumn.Name), schema);
+            stringBuilder.AppendFormat("ALTER TABLE {3}.{0} RENAME COLUMN {1} TO {2};", Escape(table.Detail.Name), Escape(oldColumn.Name), Escape(newColumn.Name), schema);
             return stringBuilder.ToString();
         }
 
@@ -127,7 +122,7 @@ namespace NoDb.Business.Service.Queries
         {
             string schema = GetSchema(table);
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.AppendFormat("ALTER TABLE {3}.{0} RENAME CONSTRAINT {1} TO {2}", Escape(table.Detail.GetTableDbName()), Escape(oldRelation.Name), Escape(newRelation.Name), schema);
+            stringBuilder.AppendFormat("ALTER TABLE {3}.{0} RENAME CONSTRAINT {1} TO {2}", Escape(table.Detail.Name), Escape(oldRelation.Name), Escape(newRelation.Name), schema);
             return stringBuilder.ToString();
         }
 
@@ -137,7 +132,7 @@ namespace NoDb.Business.Service.Queries
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.AppendFormat("ALTER TABLE {0}.{1} " +
                         "ALTER COLUMN {2} TYPE {3} --USING ({2}::integer) \n" +
-                        ",ALTER COLUMN {2} {4} NOT NULL;", schema, Escape(table.Detail.GetTableDbName()),
+                        ",ALTER COLUMN {2} {4} NOT NULL;", schema, Escape(table.Detail.Name),
                         Escape(column.Name), ColumnDataType(column), column.Required ? "SET" : "DROP");
             return stringBuilder.ToString();
         }
@@ -146,7 +141,7 @@ namespace NoDb.Business.Service.Queries
         {
             string schema = GetSchema(table);
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.AppendFormat("DROP TABLE IF EXISTS {1}.{0};", Escape(table.Detail.GetTableDbName()), schema);
+            stringBuilder.AppendFormat("DROP TABLE IF EXISTS {1}.{0};", Escape(table.Detail.Name), schema);
             return stringBuilder.ToString();
         }
     }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using NoDb.Data.Domain.DbModels;
-using NoDb.Data.Domain.Enums;
 
 namespace NoDb.Business.Service.Queries
 {
@@ -11,7 +10,6 @@ namespace NoDb.Business.Service.Queries
         public abstract string Escape(string name);
         public abstract string AddColumnQuery(NoDbTable table, NoDbColumn column);
         public abstract string ColumnDataType(NoDbColumn column);
-        public abstract NoDbDataType DbTypeToNoDbDataType(string columnDbType);
         public abstract string ColumnQuery(NoDbColumn column);
         public abstract string CreateIndexQuery(NoDbTable table, NoDbIndex index);
         public abstract string CreateRelationQuery(NoDbTable table, NoDbRelation relation);
