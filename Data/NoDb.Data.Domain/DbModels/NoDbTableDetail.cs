@@ -48,6 +48,8 @@ namespace NoDb.Data.Domain.DbModels
         [TypeConverter(typeof(TableConverter))]
         public string BaseTable { get; set; }
 
+        public bool IsModel { get; set; }
+
         public string GetTableDbName()
         {
             if (!string.IsNullOrEmpty(SystemName))

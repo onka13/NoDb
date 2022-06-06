@@ -36,6 +36,11 @@ namespace NoDb.Business.Service.Queries
             return output;
         }
 
+        public override NoDbDataType DbTypeToNoDbDataType(string columnDbType)
+        {
+            throw new NotImplementedException();
+        }
+
         public override string ColumnQuery(NoDbColumn column)
         {
             StringBuilder stringBuilder = new StringBuilder();

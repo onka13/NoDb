@@ -36,6 +36,29 @@ namespace NoDb.Business.Service.Queries
             return output;
         }
 
+        public override NoDbDataType DbTypeToNoDbDataType(string columnDbType)
+        {
+            var output = columnDbType switch
+            {
+                "tinyint" => NoDbDataType.BYTE,
+                "smallint" => NoDbDataType.SHORT,
+                "int" => NoDbDataType.INT,
+                "bigint" => NoDbDataType.LONG,
+                "bit" => NoDbDataType.BOOL,
+                "float" => NoDbDataType.FLOAT,
+                "numeric" => NoDbDataType.DECIMAL,
+                "decimal" => NoDbDataType.DECIMAL,
+                "date" => NoDbDataType.DATE,
+                "datetime" => NoDbDataType.DATETIME,
+                "time" => NoDbDataType.TIMESPAN,
+                "uniqueidentifier" => NoDbDataType.GUID,
+                "nvarchar" => NoDbDataType.STRING,
+                "varchar" => NoDbDataType.STRING,
+                _ => throw new ArgumentOutOfRangeException(),
+            };
+            return output;
+        }
+
         public override string ColumnQuery(NoDbColumn column)
         {
             StringBuilder stringBuilder = new StringBuilder();

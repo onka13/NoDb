@@ -290,6 +290,12 @@ namespace NoDb.Apps.UI
             window.Show();
         }
 
+        private void XImport_Click(object sender, RoutedEventArgs e)
+        {
+            var window = new SubWindows.ImportFromSqlWindow(_noDbService);
+            window.Show();
+        }
+
         private void XMenuSetting_Click(object sender, RoutedEventArgs e)
         {
             if (App.SolutionService == null)

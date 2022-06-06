@@ -54,6 +54,10 @@ namespace NoDb.Data.Domain.DbModels
         [Category("Advance")]
         [Description("Is list?")]
         public bool IsList { get; set; }
+        
+        [Category("Advance")]
+        [Description("Custom Data Type")]
+        public string CustomDataType { get; set; }
 
         public NoDbColumn()
         {

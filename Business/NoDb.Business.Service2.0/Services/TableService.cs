@@ -71,7 +71,7 @@ namespace NoDb.Business.Service.Services
             WriteToFile();
         }
 
-        public void UpdateTable(NoDbTable updatedTable, bool saveRevision = true)
+        public void UpdateTable(NoDbTable updatedTable)
         {
             if (string.IsNullOrWhiteSpace(updatedTable.Detail.TitleColumn))
             {
@@ -79,18 +79,14 @@ namespace NoDb.Business.Service.Services
             }
             var index = Tables.FindIndex(x => x.Hash == updatedTable.Hash);
             var originalTable = Tables[index];
-            if(saveRevision)
-            {
-                _noDbService.RevisionService.SaveRevision(originalTable, updatedTable);
-            }
-
+            _noDbService.RevisionService.SaveRevision(originalTable, updatedTable);
             Tables[index] = updatedTable;
             WriteToFile();
         }
         
         private void WriteToFile()
         {
-            var json = ConversionHelper.Serialize(Tables, isIndented: true);
+            var json = ConversionHelper.Serialize(Tables);
             File.WriteAllText(TableFilePath, json);
         }
     }
