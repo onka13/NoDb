@@ -1,4 +1,4 @@
-﻿using CoreCommon.Infra.Helpers;
+﻿using CoreCommon.Infrastructure.Helpers;
 using NoDb.Business.Service.Templates;
 using NoDb.Data.Domain.Converters;
 using NoDb.Data.Domain.DbModels;

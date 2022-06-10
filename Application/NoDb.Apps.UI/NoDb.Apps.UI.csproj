@@ -11,7 +11,7 @@
     <PackageProjectUrl>https://github.com/onka13/NoDb</PackageProjectUrl>
     <RepositoryUrl>https://github.com/onka13/NoDb</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <Version>0.1.5</Version>
+    <Version>0.1.6</Version>
     <StartupObject>NoDb.Apps.UI.App</StartupObject>
   </PropertyGroup>
 
@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\dotnet-core-common\CoreCommon.Data.EntityFrameworkBase\CoreCommon.Data.EntityFrameworkBase.csproj" />
+    <ProjectReference Include="..\..\..\dotnet-core-common\CoreCommon.Infra\CoreCommon.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Business\NoDb.Business.Service\NoDb.Business.Service.csproj" />
     <ProjectReference Include="..\..\Data\NoDb.Data.Domain\NoDb.Data.Domain.csproj" />
   </ItemGroup>
