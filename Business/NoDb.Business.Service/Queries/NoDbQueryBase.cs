@@ -15,7 +15,9 @@ namespace NoDb.Business.Service.Queries
         public abstract string ColumnQuery(NoDbColumn column);
         public abstract string CreateIndexQuery(NoDbTable table, NoDbIndex index);
         public abstract string CreateRelationQuery(NoDbTable table, NoDbRelation relation);
-        public abstract string CreateTableQuery(NoDbTable table);
+        public abstract string CreateTableQuery(NoDbTable table, bool onlyTable = false);
+        public abstract string CreateAllIndexQuery(NoDbTable table);
+        public abstract string CreateAllRelationQuery(NoDbTable table);
         public abstract string DeleteRelationQuery(NoDbTable table, NoDbRelation relation);
         public abstract string DropColumnQuery(NoDbTable table, NoDbColumn column);
         public abstract string DropIndexQuery(NoDbTable table, NoDbIndex index);

@@ -59,24 +59,31 @@ namespace NoDb.Business.Service.Managers
         public static string GetTableQueries(List<NoDbTable> tables, NoDbConnectionType connectionType, bool dropBefore)
         {
             var queryService = GetNoDbQueryService(connectionType);
-            // TODO: order algorithm
-            tables = tables.OrderBy(x => x, new NoDbTableComparer()).OrderBy(x => x, new NoDbTableComparer()).OrderBy(x => x, new NoDbTableComparer()).ToList();
+            var output = new StringBuilder();
 
-            StringBuilder output = new StringBuilder();
             if (dropBefore)
             {
-                // drop query must reverse for foreign keys
-                for (int i = 0; i < tables.Count; i++)
+                foreach (var table in tables)
                 {
-                    var table = tables[i];
                     output.AppendLine(queryService.DropTableQuery(table));
                 }
+
                 output.Append("\n");
             }
-            for (int i = tables.Count - 1; i >= 0; i--)
+
+            foreach (NoDbTable table in tables)
             {
-                var table = tables[i];
-                output.AppendLine(queryService.CreateTableQuery(table) + "\n\n");
+                output.AppendLine(queryService.CreateTableQuery(table, true) + "\n");
+            }
+
+            foreach (NoDbTable table in tables)
+            {
+                output.AppendLine(queryService.CreateAllIndexQuery(table) + "\n");
+            }
+            
+            foreach (NoDbTable table in tables)
+            {
+                output.AppendLine(queryService.CreateAllRelationQuery(table) + "\n");
             }
 
             return output.ToString();
