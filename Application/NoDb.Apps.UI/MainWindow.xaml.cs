@@ -16,6 +16,7 @@ using Newtonsoft.Json.Linq;
 using CoreCommon.Infrastructure.Helpers;
 using MySqlX.XDevAPI.Relational;
 using System.Windows.Documents;
+using NoDb.Business.Service.Services;
 
 namespace NoDb.Apps.UI
 {
@@ -28,10 +29,16 @@ namespace NoDb.Apps.UI
         /// Clone of the selected table.
         /// </summary>
         private NoDbTable selectedTable;
+        private readonly NoDbService noDbService;
 
-        public MainWindow()
+        public MainWindow() : this(null)
+        {
+        }
+
+        public MainWindow(NoDbService noDbService)
         {
             InitializeComponent();
+            this.noDbService = noDbService ?? App.NoDbService;
         }
 
         #region " Events "
@@ -96,9 +103,9 @@ namespace NoDb.Apps.UI
             xColumnsGrid.IsEnabled = false;
             xViewMenu.IsEnabled = false;
 
-            if (App.NoDbService != null)
+            if (noDbService != null)
             {
-                lblStatusInfo.Text = App.NoDbService.NoDbFolder;
+                lblStatusInfo.Text = noDbService.NoDbFolder;
             }
             InitService();
         }
@@ -156,13 +163,13 @@ namespace NoDb.Apps.UI
 
         public void InitService()
         {
-            if (App.NoDbService == null)
+            if (noDbService == null)
             {
                 ClearServiceValues();
                 return;
             }
 
-            lblStatusInfo.Text = App.NoDbService.NoDbFolder;
+            lblStatusInfo.Text = noDbService.NoDbFolder;
             BindTables();
             xMainGrid.IsEnabled = true;
             xViewMenu.IsEnabled = true;
@@ -215,7 +222,7 @@ namespace NoDb.Apps.UI
         {
             var newTableWindow = new SubWindows.NewTable((string name, string template) =>
             {
-                selectedTable = App.NoDbService.TableService.New(name, template);
+                selectedTable = noDbService.TableService.New(name, template);
                 BindTables();
                 return true;
             });
@@ -227,7 +234,7 @@ namespace NoDb.Apps.UI
         {
             var table = GetOriginalSelectedTable();
             if (table == null) return;
-            App.NoDbService.TableService.Delete(table);
+            noDbService.TableService.Delete(table);
             BindTables();
         }
 
@@ -261,16 +268,16 @@ namespace NoDb.Apps.UI
             var editor = new SubWindows.ListEditor("Search Items");
             editor.InitList(selectedTable.SearchItems, defaultValueFunc: (list) =>
             {
-                return App.NoDbService.SearchService.GetDefaultSearchItem(selectedTable, list as List<NoDbSearchItem>);
+                return noDbService.SearchService.GetDefaultSearchItem(selectedTable, list as List<NoDbSearchItem>);
             }, extraActions: new Dictionary<string, Action<NoDbSearchItem>>
             {
                 {"Refresh All Col.", (NoDbSearchItem searchItem) => {
                     if(searchItem == null) return;
-                    searchItem.AllColumns = App.NoDbService.SearchService.GetDefaultSearchItem(selectedTable, null).AllColumns;
+                    searchItem.AllColumns = noDbService.SearchService.GetDefaultSearchItem(selectedTable, null).AllColumns;
                 }},
                 {"Add Missing Col.", (NoDbSearchItem searchItem) => {
                     if(searchItem == null) return;
-                    var newColumns = App.NoDbService.SearchService.GetDefaultSearchItem(selectedTable, null).AllColumns;
+                    var newColumns = noDbService.SearchService.GetDefaultSearchItem(selectedTable, null).AllColumns;
                     for (int i = 0; i < newColumns.Count; i++)
                     {
                         if(!searchItem.AllColumns.Any(x => x.Name == newColumns[i].Name))
@@ -281,11 +288,11 @@ namespace NoDb.Apps.UI
                 }},
                 {"Refresh Filter Col.", (NoDbSearchItem searchItem) => {
                     if(searchItem == null) return;
-                    searchItem.Columns = App.NoDbService.SearchService.GetDefaultSearchItem(selectedTable, null).Columns;
+                    searchItem.Columns = noDbService.SearchService.GetDefaultSearchItem(selectedTable, null).Columns;
                 }},
                 {"Refresh Grid Col.", (NoDbSearchItem searchItem) => {
                     if(searchItem == null) return;
-                    searchItem.DisplayedColumns = App.NoDbService.SearchService.GetDefaultSearchItem(selectedTable, null).DisplayedColumns;
+                    searchItem.DisplayedColumns = noDbService.SearchService.GetDefaultSearchItem(selectedTable, null).DisplayedColumns;
                 }}
             });
             editor.ShowDialog();
@@ -294,13 +301,12 @@ namespace NoDb.Apps.UI
         private void XMenuEnum_Click(object sender, RoutedEventArgs e)
         {
             var editor = new SubWindows.ListEditor("Enum List");
-            editor.InitList(App.NoDbService.EnumService.Enums.EnumList.JsonClone(), (list) =>
+            editor.InitList(noDbService.EnumService.Enums.JsonClone(), (list) =>
             {
                 return EnumTemplates.Default();
             }, (list) =>
             {
-                App.NoDbService.EnumService.Enums.EnumList = list;
-                App.NoDbService.EnumService.Save();
+                noDbService.EnumService.UpdateEnums(list);
             }, extraActions: new Dictionary<string, Action<NoDbEnumDetail>>
             {
                 {"Auto Numerate", (NoDbEnumDetail item) => {
@@ -317,26 +323,26 @@ namespace NoDb.Apps.UI
 
         private void XMenuRevision_Click(object sender, RoutedEventArgs e)
         {
-            var window = new SubWindows.RevisionsWindow(App.NoDbService);
+            var window = new SubWindows.RevisionsWindow(noDbService);
             window.Show();
         }
 
         private void XMenuTableScripts_Click(object sender, RoutedEventArgs e)
         {
-            var window = new SubWindows.TableScriptsWindow(App.NoDbService);
+            var window = new SubWindows.TableScriptsWindow(noDbService);
             window.Show();
         }
 
         private void XExecuteQuery_Click(object sender, RoutedEventArgs e)
         {
-            var window = new SubWindows.ExecuteQueryWindow(App.NoDbService);
+            var window = new SubWindows.ExecuteQueryWindow(noDbService);
             window.SetQuery("", NoDbConnectionType.Mssql);
             window.Show();
         }
 
         private void XQueryHistories_Click(object sender, RoutedEventArgs e)
         {
-            if (App.NoDbService == null)
+            if (noDbService == null)
             {
                 OpenNoDbFolder();
                 return;
@@ -347,13 +353,13 @@ namespace NoDb.Apps.UI
 
         private void XImport_Click(object sender, RoutedEventArgs e)
         {
-            var window = new SubWindows.ImportFromSqlWindow(App.NoDbService);
+            var window = new SubWindows.ImportFromSqlWindow(noDbService);
             window.ShowDialog();
         }
 
         private void XMenuSetting_Click(object sender, RoutedEventArgs e)
         {
-            if (App.NoDbService == null)
+            if (noDbService == null)
             {
                 OpenNoDbFolder();
                 return;
@@ -369,8 +375,8 @@ namespace NoDb.Apps.UI
             ClearAllRelatedWithTable();
             var lastSelectedTableHash = selectedTable?.Hash;
             xTables.ItemsSource = null;
-            xTables.ItemsSource = App.NoDbService.TableService.Tables.OrderBy(x => x.Detail.Name).ToList();
-            if (lastSelectedTableHash != null) xTables.SelectedItem = App.NoDbService.TableService.Tables.FirstOrDefault(x => x.Hash == lastSelectedTableHash);
+            xTables.ItemsSource = noDbService.TableService.Tables.OrderBy(x => x.Detail.Name).ToList();
+            if (lastSelectedTableHash != null) xTables.SelectedItem = noDbService.TableService.Tables.FirstOrDefault(x => x.Hash == lastSelectedTableHash);
         }
 
         /// <summary>
@@ -407,7 +413,7 @@ namespace NoDb.Apps.UI
             if (table == null) return;
             table.Columns = xColumns.ItemsSource as List<NoDbColumn>;
             table.Detail = xTableDetail.SelectedObject as NoDbTableDetail;
-            App.NoDbService.TableService.UpdateTable(table);
+            noDbService.TableService.UpdateTable(table);
             BindTables();
 
             WF.MessageBox.Show("Saved");
@@ -509,6 +515,17 @@ namespace NoDb.Apps.UI
             }
 
             lcv.RemoveAt(xColumns.SelectedIndex);
+        }
+
+        private void xSplitTablesJson_Click(object sender, RoutedEventArgs e)
+        {
+            var window = new SubWindows.SplitTablesJson();
+            window.Show();
+        }
+
+        private void xMenuRefresh_Click(object sender, ExecutedRoutedEventArgs e)
+        {
+            InitService();
         }
     }
 }

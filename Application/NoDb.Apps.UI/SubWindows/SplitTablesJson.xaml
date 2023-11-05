@@ -1,0 +1,19 @@
+﻿<Window x:Class="NoDb.Apps.UI.SubWindows.SplitTablesJson"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NoDb.Apps.UI.SubWindows"
+        mc:Ignorable="d"
+        Title="Split Tables Json" Height="254" Width="402" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
+    <Grid>
+        <StackPanel Margin="20">
+            <Button Content="Select Source Folder" HorizontalAlignment="Left" Click="SelectSourceFolder_Click" Style="{StaticResource ButtonSuccess}" Margin="0,0,0,10"/>
+            <TextBlock Name="lblSourceFolder" />
+            <Button Content="Select Target Folder" HorizontalAlignment="Left" Click="SelectTargetFolder_Click" Style="{StaticResource ButtonSuccess}" Margin="0,0,0,10"/>
+            <TextBlock Name="lblTargetFolder" />
+            <Button Content="Process" HorizontalAlignment="Left" Click="Process_Click" Style="{StaticResource ButtonDanger}" Margin="0,0,0,10"/>
+
+        </StackPanel>
+    </Grid>
+</Window>

@@ -77,9 +77,11 @@ namespace NoDb.Business.Service.Services
                 var tableOriginal = _noDbService.TableService.Tables.FirstOrDefault(x => (x.Detail.SystemName ?? x.Detail.Name) == noDbTable.Detail.SystemName);
                 if (tableOriginal == null)
                 {
-                    tableOriginal = _noDbService.TableService.New(noDbTable);
+                    _noDbService.TableService.New(noDbTable);
+                    continue;
                 }
-                else if (tableOriginal.Detail.ConnectionType == NoDbConnectionType.None)
+
+                if (tableOriginal.Detail.ConnectionType == NoDbConnectionType.None)
                 {
                     if (noDbSetting.ConnectionType != noDbTable.Detail.ConnectionType)
                     {
@@ -90,6 +92,7 @@ namespace NoDb.Business.Service.Services
                 {
                     continue;
                 }
+
                 SyncDbTableWithNoDbTable(tableOriginal, noDbTable);
             }
         }

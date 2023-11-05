@@ -9,10 +9,12 @@
         Title="NoDb" Height="600" Width="1000" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" Background="#FFEFEFEF">
     <Window.CommandBindings>
         <CommandBinding Command="Open" Executed="xMenuOpen_Click"/>
+        <CommandBinding Command="Refresh" Executed="xMenuRefresh_Click"/>
     </Window.CommandBindings>
     <Window.InputBindings>
-        <KeyBinding Key="N" Modifiers="Control" Command="New"/>
+        <KeyBinding Key="N" Modifiers="Control" Command="Open"/>
         <KeyBinding Key="O" Modifiers="Control" Command="Open"/>
+        <KeyBinding Key="R" Modifiers="Control" Command="Refresh"/>
     </Window.InputBindings>
     <Window.Resources>
         <ContextMenu x:Key="xContextMenuForColumns">
@@ -23,6 +25,7 @@
         <Menu DockPanel.Dock="Top" Padding="6">
             <MenuItem Header="_File">
                 <MenuItem Name="xMenuOpen" Header="_Open" Command="Open" />
+                <MenuItem Name="xMenuRefresh" Header="_Refresh" Command="Refresh" />
                 <Separator />
                 <MenuItem Header="_Exit" Click="XMenuItemExit_Click" />
             </MenuItem>
@@ -36,6 +39,10 @@
             <MenuItem Header="_Settings">
                 <MenuItem Name="xQueryHistories" Header="_Query Histories" Click="XQueryHistories_Click" />
                 <MenuItem Name="xMenuSetting" Header="_Settings" Click="XMenuSetting_Click" />
+            </MenuItem>
+            <MenuItem Header="_Tools">
+                <MenuItem Name="xSplitTablesJson" Header="_Split Tables Json" Click="xSplitTablesJson_Click"/>
+                <Separator />
             </MenuItem>
         </Menu>
         <StatusBar DockPanel.Dock="Bottom">

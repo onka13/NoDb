@@ -16,14 +16,14 @@ namespace NoDb.Apps.UI
             Dispatcher.UnhandledException += Dispatcher_UnhandledException;
         }
 
-        public static void InitNoDbService(string solution)
+        public static void InitNoDbService(string solutionFolder)
         {
-            if (string.IsNullOrEmpty(solution))
+            if (string.IsNullOrEmpty(solutionFolder))
             {
                 return;
             }
 
-            NoDbService = new NoDbService(solution);
+            NoDbService = new NoDbService(solutionFolder);
         }
 
         protected override void OnStartup(StartupEventArgs e)

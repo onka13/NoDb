@@ -7,14 +7,12 @@ namespace NoDb.Business.Service.Services
     public class NoDbService
     {
         public const string NODB_FOLDER_NAME = "__NoDb__";
-
-        public string Solution { get; private set; }
         public string SolutionFolder { get; private set; }
         public string NoDbFolder { get; private set; }
 
         public string ProjectsFilePath => Path.Combine(NoDbFolder, "projects.json");
-        public string TableFilePath => Path.Combine(NoDbFolder, "Tables.json");
-        public string EnumFilePath => Path.Combine(NoDbFolder, "Enums.json");
+        public string TableFolderPath => Path.Combine(NoDbFolder, "Tables");
+        public string EnumFolderPath => Path.Combine(NoDbFolder, "Enums");
         public string RevisionFolder => Path.Combine(NoDbFolder, "Revisions");
         public string SettingsFolder => Path.Combine(NoDbFolder, "Settings");
         public string QueriesFolder => Path.Combine(NoDbFolder, "Queries");
@@ -27,18 +25,17 @@ namespace NoDb.Business.Service.Services
         public SettingsService SettingsService { get; set; }
         public QueryHistoryService QueryHistoryService { get; set; }
 
-        public NoDbService(string solution)
+        public NoDbService(string solutionFolder)
         {
-            Init(solution);
+            Init(solutionFolder);
         }
 
-        public void Init(string solution)
+        public void Init(string solutionFolder)
         {
-            Solution = solution;
-            SolutionFolder = Path.GetDirectoryName(solution);
+            SolutionFolder = solutionFolder;
             NoDbFolder = Path.Combine(SolutionFolder, NODB_FOLDER_NAME);
 
-            foreach (var folder in new string[] { NoDbFolder, RevisionFolder, SettingsFolder, QueriesFolder })
+            foreach (var folder in new string[] { NoDbFolder, TableFolderPath, EnumFolderPath, RevisionFolder, SettingsFolder, QueriesFolder })
             {
                 Directory.CreateDirectory(folder);
             }

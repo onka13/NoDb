@@ -83,9 +83,20 @@ namespace NoDb.Apps.UI.SubWindows
         {
             try
             {
+                var tables = xTables.SelectedItems.Cast<InformationSchemaTable>().ToList();
+                if (tables.Count == 0)
+                {
+                    tables = dbTables;
+                }
+
+                if (System.Windows.Forms.MessageBox.Show($"SYNC will be run for {tables.Count} table(s)") != System.Windows.Forms.DialogResult.OK)
+                {
+                    return;
+                }
+
                 var setting = xSettings.SelectedItem as NoDbSetting;
                 var connection = xConnections.SelectedItem as NoDbSettingConnection;
-                new ImportService(noDbService).SyncFromDb(setting, connection.ConnectionType, dbTables, dbColumns);
+                new ImportService(noDbService).SyncFromDb(setting, connection.ConnectionType, tables, dbColumns);
                 System.Windows.Forms.MessageBox.Show("Done!");
             }
             catch (System.Exception ex)

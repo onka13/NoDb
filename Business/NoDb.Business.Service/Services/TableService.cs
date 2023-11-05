@@ -1,4 +1,5 @@
 ﻿using CoreCommon.Infrastructure.Helpers;
+using Google.Protobuf.WellKnownTypes;
 using NoDb.Business.Service.Templates;
 using NoDb.Data.Domain.Converters;
 using NoDb.Data.Domain.DbModels;
@@ -23,41 +24,48 @@ namespace NoDb.Business.Service.Services
 
         public void ReadFromSettingsFolder()
         {
-            if (!File.Exists(noDbService.TableFilePath))
+            Tables = new List<NoDbTable>();
+
+            var files = Directory.GetFiles(noDbService.TableFolderPath);
+            foreach (var file in files)
             {
-                Tables = new List<NoDbTable>();
+                var json = File.ReadAllText(file);
+                var table = ConversionHelper.Deserialize<NoDbTable>(json);
+                Tables.Add(table);
             }
-            else
-            {
-                var json = File.ReadAllText(noDbService.TableFilePath);
-                Tables = ConversionHelper.Deserialize<List<NoDbTable>>(json).OrderBy(x => x?.Detail?.Name).ToList();
-            }
+
+            Tables = Tables.OrderBy(x => x?.Detail?.Name).ToList();
 
             StaticManager.Tables = Tables;
         }
 
-        public NoDbTable New(NoDbTable table)
-        {
-            Tables.Add(table);
-            WriteToFile();
-            return table;
-        }
-        
         public NoDbTable New(string tableName, string template = "")
         {
             if (string.IsNullOrEmpty(tableName))
             {
                 throw new Exception("Tablename can not be empty!");
             }
+
             if (Tables.Any(x => x.Detail.Name.ToLower() == tableName.ToLower()))
             {
                 throw new Exception("Table already exist!");
             }
-           
+
             var table = TableTemplates.Get(tableName, template);
             Tables.Add(table);
             WriteToFile();
             return table;
+        }
+
+        public void New(NoDbTable table)
+        {
+            if (string.IsNullOrWhiteSpace(table.Detail.TitleColumn))
+            {
+                throw new Exception("Please enter TitleColumn field!");
+            }
+
+            Tables.Add(table);
+            WriteToFile();
         }
 
         public void Delete(string tick)
@@ -83,12 +91,12 @@ namespace NoDb.Business.Service.Services
             {
                 throw new Exception("Please enter one column at least!");
             }
-            
+
             if (updatedTable.Columns.Any(x => string.IsNullOrWhiteSpace(x.Name)))
             {
                 throw new Exception("Empty column name not allowed!");
             }
-            
+
             if (updatedTable.Columns.Select(x => x.Name).Distinct().Count() != updatedTable.Columns.Count)
             {
                 throw new Exception("Duplicated column names not allowed!");
@@ -96,7 +104,7 @@ namespace NoDb.Business.Service.Services
 
             var index = Tables.FindIndex(x => x.Hash == updatedTable.Hash);
             var originalTable = Tables[index];
-            if(saveRevision)
+            if (saveRevision)
             {
                 noDbService.RevisionService.SaveRevision(originalTable, updatedTable);
             }
@@ -104,11 +112,42 @@ namespace NoDb.Business.Service.Services
             Tables[index] = updatedTable;
             WriteToFile();
         }
-        
+
+        public static void UpgradeToVersion8(string from, string to)
+        {
+            // Transform tables.json
+            string tablesJsonPath = Path.Combine(from, "Tables.json");
+            string targetTablesFolder = Path.Combine(to, NoDbService.NODB_FOLDER_NAME, "Tables");
+            Directory.CreateDirectory(targetTablesFolder);
+            var jsonContent = File.ReadAllText(tablesJsonPath);
+            var tables = ConversionHelper.Deserialize<List<NoDbTable>>(jsonContent);
+            foreach (var table in tables)
+            {
+                var json = ConversionHelper.Serialize(table, isIndented: true, minimise: true);
+                File.WriteAllText(Path.Combine(targetTablesFolder, table.Detail.Name + ".json"), json);
+            }
+
+            // Move enums
+            string enumsPath = Path.Combine(from, "Enums.json");
+            string targetEnumsFolder = Path.Combine(to, NoDbService.NODB_FOLDER_NAME, "Enums");
+            Directory.CreateDirectory(targetEnumsFolder);
+            var jsonEnum = File.ReadAllText(enumsPath);
+            var enums = ConversionHelper.Deserialize<NoDbEnum>(jsonEnum);
+            foreach (var @enum in enums.EnumList)
+            {
+                var json = ConversionHelper.Serialize(@enum, isIndented: true, minimise: true);
+                File.WriteAllText(Path.Combine(targetEnumsFolder, @enum.Name + ".json"), json);
+            }
+        }
+
         private void WriteToFile()
         {
-            var json = ConversionHelper.Serialize(Tables, isIndented: true);
-            File.WriteAllText(noDbService.TableFilePath, json);
+            foreach (var table in Tables)
+            {
+                var json = ConversionHelper.Serialize(table, isIndented: true, minimise: true);
+                File.WriteAllText(Path.Combine(noDbService.TableFolderPath, table.Detail.Name + ".json"), json);
+            }
+
             StaticManager.Tables = Tables;
         }
     }

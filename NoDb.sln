@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoreCommon.Data.Domain", ".
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoreCommon.Infrastructure", "..\dotnet-core-common\CoreCommon.Infrastructure\CoreCommon.Infrastructure.csproj", "{44B815F7-A102-427F-AD4D-0AD4CB1E75D3}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CoreCommon", "CoreCommon", "{53842A58-931E-4299-B2AC-730BC8983CC2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
