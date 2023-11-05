@@ -56,12 +56,12 @@ namespace NoDb.Business.Service.Managers
             throw new System.Exception("Query service not defined!");
         }
 
-        public static string GetTableQueries(List<NoDbTable> tables, NoDbConnectionType connectionType, bool dropBefore)
+        public static string GetTableQueries(List<NoDbTable> tables, NoDbConnectionType connectionType, bool includeDrop, bool includeIndex, bool includeRelation)
         {
             var queryService = GetNoDbQueryService(connectionType);
             var output = new StringBuilder();
 
-            if (dropBefore)
+            if (includeDrop)
             {
                 foreach (var table in tables)
                 {
@@ -76,14 +76,20 @@ namespace NoDb.Business.Service.Managers
                 output.AppendLine(queryService.CreateTableQuery(table, true) + "\n");
             }
 
-            foreach (NoDbTable table in tables)
+            if (includeIndex)
             {
-                output.AppendLine(queryService.CreateAllIndexQuery(table) + "\n");
+                foreach (NoDbTable table in tables)
+                {
+                    output.AppendLine(queryService.CreateAllIndexQuery(table) + "\n");
+                } 
             }
-            
-            foreach (NoDbTable table in tables)
+
+            if (includeRelation)
             {
-                output.AppendLine(queryService.CreateAllRelationQuery(table) + "\n");
+                foreach (NoDbTable table in tables)
+                {
+                    output.AppendLine(queryService.CreateAllRelationQuery(table) + "\n");
+                }
             }
 
             return output.ToString();

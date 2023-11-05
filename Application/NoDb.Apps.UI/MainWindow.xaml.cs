@@ -510,5 +510,11 @@ namespace NoDb.Apps.UI
 
             newTableWindow.ShowDialog();
         }
+
+        private void xSplitTablesJson_Click(object sender, RoutedEventArgs e)
+        {
+            var window = new SubWindows.SplitTablesJson();
+            window.Show();
+        }
     }
 }

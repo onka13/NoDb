@@ -33,10 +33,14 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
                 <ComboBox Grid.Column="0" Name="xQueryType" HorizontalAlignment="Left" SelectionChanged="XQueryType_SelectionChanged"/>
-                <CheckBox Name="xDropBefore" Grid.Column="1" Content="Drop Before" VerticalAlignment="Center" Margin="20,0" Click="XDropBefore_Click"/>
-                <Button Grid.Column="2" Content="Display Query Executer" Click="XQueryButton_Click" HorizontalAlignment="Right"/>
+                <CheckBox Name="xIncludeIndex" Grid.Column="1" Content="Index" VerticalAlignment="Center" Margin="20,0" Click="XIncludeIndex_Click"/>
+                <CheckBox Name="xIncludeRelation" Grid.Column="2" Content="Relation" VerticalAlignment="Center" Margin="20,0" Click="XIncludeRelation_Click"/>
+                <CheckBox Name="xDropBefore" Grid.Column="3" Content="Drop Before" VerticalAlignment="Center" Margin="20,0" Click="XDropBefore_Click"/>
+                <Button Grid.Column="4" Content="Display Query Executer" Click="XQueryButton_Click" HorizontalAlignment="Right"/>
             </Grid>
         </Grid>
     </Grid>

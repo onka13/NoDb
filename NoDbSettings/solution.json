@@ -6,13 +6,8 @@
       "IsSelected": false
     },
     {
-      "Name": "CoreCommon.Data.EntityFrameworkBase",
-      "Path": "..\\dotnet-core-common\\CoreCommon.Data.EntityFrameworkBase",
-      "IsSelected": false
-    },
-    {
-      "Name": "CoreCommon.Infra",
-      "Path": "..\\dotnet-core-common\\CoreCommon.Infra",
+      "Name": "NoDb.Business.Service",
+      "Path": "Business\\NoDb.Business.Service",
       "IsSelected": false
     },
     {
@@ -21,8 +16,18 @@
       "IsSelected": false
     },
     {
-      "Name": "NoDb.Business.Service",
-      "Path": "Business\\NoDb.Business.Service",
+      "Name": "CoreCommon.Data.Domain",
+      "Path": "..\\dotnet-core-common\\CoreCommon.Data.Domain",
+      "IsSelected": false
+    },
+    {
+      "Name": "CoreCommon.Infrastructure",
+      "Path": "..\\dotnet-core-common\\CoreCommon.Infra",
+      "IsSelected": false
+    },
+    {
+      "Name": "CoreCommon.Data.EntityFrameworkBase",
+      "Path": "..\\dotnet-core-common\\CoreCommon.Data.EntityFrameworkBase",
       "IsSelected": false
     }
   ]

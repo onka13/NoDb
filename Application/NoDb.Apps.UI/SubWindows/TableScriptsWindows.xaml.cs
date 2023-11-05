@@ -71,9 +71,17 @@ namespace NoDb.Apps.UI.SubWindows
             if (xTables.SelectedItems.Count == 0) return;
             var tables = xTables.SelectedItems.Cast<NoDbTable>().ToList();
             
-            xQuery.AppendText(QueryManager.GetTableQueries(tables, _noDbConnectionType, xDropBefore.IsChecked ?? false));
+            xQuery.AppendText(QueryManager.GetTableQueries(tables, _noDbConnectionType, xDropBefore.IsChecked ?? false, xIncludeIndex.IsChecked ?? false, xIncludeRelation.IsChecked ?? false));
         }
 
-        
+        private void XIncludeRelation_Click(object sender, RoutedEventArgs e)
+        {
+            UpdateQuery();
+        }
+
+        private void XIncludeIndex_Click(object sender, RoutedEventArgs e)
+        {
+            UpdateQuery();
+        }
     }
 }

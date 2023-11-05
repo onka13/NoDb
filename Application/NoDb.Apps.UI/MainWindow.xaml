@@ -42,6 +42,10 @@
                 <MenuItem Name="xSolutionSetting" Header="_Projects" Click="XSolutionSetting_Click" />
                 <MenuItem Name="xMenuSetting" Header="_Settings" Click="XMenuSetting_Click" />
             </MenuItem>
+            <MenuItem Header="_Tools">
+                <MenuItem Name="xSplitTablesJson" Header="_Split Tables Json" Click="xSplitTablesJson_Click"/>
+                <Separator />
+            </MenuItem>
         </Menu>
         <StatusBar DockPanel.Dock="Bottom">
             <StatusBarItem>
