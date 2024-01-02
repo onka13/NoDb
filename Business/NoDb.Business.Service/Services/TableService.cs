@@ -42,6 +42,13 @@ namespace NoDb.Business.Service.Services
             }
         }
 
+        public NoDbTable New(NoDbTable table)
+        {
+            Tables.Add(table);
+            WriteToFile();
+            return table;
+        }
+        
         public NoDbTable New(string tableName, string template = "")
         {
             if (string.IsNullOrEmpty(tableName))

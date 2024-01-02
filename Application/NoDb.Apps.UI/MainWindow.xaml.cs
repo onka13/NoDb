@@ -293,7 +293,8 @@ namespace NoDb.Apps.UI
         private void XImport_Click(object sender, RoutedEventArgs e)
         {
             var window = new SubWindows.ImportFromSqlWindow(_noDbService);
-            window.Show();
+            window.ShowDialog();
+            refreshStaticManagerSolutions();
         }
 
         private void XMenuSetting_Click(object sender, RoutedEventArgs e)
