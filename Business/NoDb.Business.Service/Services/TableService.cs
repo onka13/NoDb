@@ -1,4 +1,4 @@
-﻿using CoreCommon.Infra.Helpers;
+﻿using CoreCommon.Infrastructure.Helpers;
 using NoDb.Business.Service.Templates;
 using NoDb.Data.Domain.Converters;
 using NoDb.Data.Domain.DbModels;
@@ -42,6 +42,13 @@ namespace NoDb.Business.Service.Services
             }
         }
 
+        public NoDbTable New(NoDbTable table)
+        {
+            Tables.Add(table);
+            WriteToFile();
+            return table;
+        }
+        
         public NoDbTable New(string tableName, string template = "")
         {
             if (string.IsNullOrEmpty(tableName))

@@ -46,6 +46,7 @@ namespace NoDb.Business.Service.Queries
                 "bigint" => NoDbDataType.LONG,
                 "bit" => NoDbDataType.BOOL,
                 "float" => NoDbDataType.FLOAT,
+                "numeric" => NoDbDataType.DECIMAL,
                 "decimal" => NoDbDataType.DECIMAL,
                 "date" => NoDbDataType.DATE,
                 "datetime" => NoDbDataType.DATETIME,

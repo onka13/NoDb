@@ -13,9 +13,9 @@ using System.Diagnostics;
 using NoDb.Business.Service.Templates;
 using NoDb.Data.Domain.Converters;
 using NoDb.Data.Domain.SearchModels;
-using CoreCommon.Infra.Helpers;
 using System.IO;
 using Newtonsoft.Json.Linq;
+using CoreCommon.Infrastructure.Helpers;
 
 namespace NoDb.Apps.UI
 {
@@ -293,7 +293,8 @@ namespace NoDb.Apps.UI
         private void XImport_Click(object sender, RoutedEventArgs e)
         {
             var window = new SubWindows.ImportFromSqlWindow(_noDbService);
-            window.Show();
+            window.ShowDialog();
+            refreshStaticManagerSolutions();
         }
 
         private void XMenuSetting_Click(object sender, RoutedEventArgs e)

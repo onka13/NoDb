@@ -74,12 +74,12 @@ namespace NoDb.Business.Service.Services
 
             foreach (var noDbTable in allNoDbTables)
             {
-                var tableOriginal = _noDbService.TableService.Tables.FirstOrDefault(x => x.Detail.SystemName == noDbTable.Detail.SystemName);
+                var tableOriginal = _noDbService.TableService.Tables.FirstOrDefault(x => (x.Detail.SystemName ?? x.Detail.Name) == noDbTable.Detail.SystemName);
                 if (tableOriginal == null)
                 {
-                    continue;
+                    tableOriginal = _noDbService.TableService.New(noDbTable);
                 }
-                if (tableOriginal.Detail.ConnectionType == NoDbConnectionType.None)
+                else if (tableOriginal.Detail.ConnectionType == NoDbConnectionType.None)
                 {
                     if (noDbSetting.ConnectionType != noDbTable.Detail.ConnectionType)
                     {
@@ -126,6 +126,11 @@ namespace NoDb.Business.Service.Services
 
             if (isUpdated)
             {
+                if (string.IsNullOrEmpty(tableOriginal.Detail.TitleColumn))
+                {
+                    tableOriginal.Detail.TitleColumn = tableOriginal.Columns[0].Name;
+                }
+
                 _noDbService.TableService.UpdateTable(tableOriginal, false);
             }
         }

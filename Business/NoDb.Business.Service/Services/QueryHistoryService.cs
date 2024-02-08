@@ -1,6 +1,4 @@
-﻿using CoreCommon.Infra.Helpers;
-using NoDb.Data.Domain.DbModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;

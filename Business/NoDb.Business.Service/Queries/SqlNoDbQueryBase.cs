@@ -51,17 +51,17 @@ namespace NoDb.Business.Service.Queries
             string schema = GetSchema(table);
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.AppendFormat("ALTER TABLE {2}.{0} ADD CONSTRAINT {1}\n", Escape(table.Detail.GetTableDbName()), Escape(relation.Name), schema);
-            stringBuilder.AppendFormat("FOREIGN KEY ({0}) REFERENCES {3}.{1} ({2})\n",
+            stringBuilder.AppendFormat("FOREIGN KEY ({0}) REFERENCES {3}.{1} ({2}) ",
                                                 string.Join(",", relation.Items.Select(x => Escape(x.ColumnName))),
                                                 Escape(relation.ForeignTable),
                                                 string.Join(",", relation.Items.Select(x => Escape(x.ForeignColumn))),
                                                 schema
                                             );
-            stringBuilder.AppendFormat("ON DELETE {0}\nON UPDATE {1};", ToRule(relation.DeleteRule), ToRule(relation.UpdateRule));
+            stringBuilder.AppendFormat("ON DELETE {0} ON UPDATE {1};", ToRule(relation.DeleteRule), ToRule(relation.UpdateRule));
             return stringBuilder.ToString();
         }
 
-        public override string CreateTableQuery(NoDbTable table)
+        public override string CreateTableQuery(NoDbTable table, bool onlyTable = false)
         {
             string schema = GetSchema(table);
             StringBuilder stringBuilder = new StringBuilder();
@@ -70,14 +70,43 @@ namespace NoDb.Business.Service.Queries
             stringBuilder.AppendFormat("\t{0}\n", string.Join(",\n\t", table.ColumnsWithRelated().Select(x => ColumnQuery(x))));
 
             stringBuilder.Append("\n);\n");
+
+            if (!onlyTable)
+            {
+                foreach (var item in table.Indices)
+                {
+                    stringBuilder.Append(CreateIndexQuery(table, item) + "\n");
+                }
+                foreach (var item in table.Relations)
+                {
+                    stringBuilder.Append(CreateRelationQuery(table, item) + "\n");
+                }
+            }
+
+            return stringBuilder.ToString();
+        }
+
+        public override string CreateAllIndexQuery(NoDbTable table)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+
             foreach (var item in table.Indices)
             {
                 stringBuilder.Append(CreateIndexQuery(table, item) + "\n");
             }
+
+            return stringBuilder.ToString();
+        }
+        
+        public override string CreateAllRelationQuery(NoDbTable table)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+
             foreach (var item in table.Relations)
             {
-                stringBuilder.Append(CreateRelationQuery(table, item));
+                stringBuilder.Append(CreateRelationQuery(table, item) + "\n");
             }
+
             return stringBuilder.ToString();
         }
 
