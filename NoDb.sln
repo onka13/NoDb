@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoreCommon.Data.EntityFrame
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoreCommon.Data.Domain", "..\dotnet-core-common\CoreCommon.Data.Domain\CoreCommon.Data.Domain.csproj", "{A47AB09E-0C11-48CF-A82C-DFDC6A50EEDF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoreCommon.Infrastructure", "..\dotnet-core-common\CoreCommon.Infra\CoreCommon.Infrastructure.csproj", "{44B815F7-A102-427F-AD4D-0AD4CB1E75D3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoreCommon.Infrastructure", "..\dotnet-core-common\CoreCommon.Infrastructure\CoreCommon.Infrastructure.csproj", "{44B815F7-A102-427F-AD4D-0AD4CB1E75D3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

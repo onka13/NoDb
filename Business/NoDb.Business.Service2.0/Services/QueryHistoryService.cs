@@ -1,4 +1,4 @@
-﻿using CoreCommon.Infra.Helpers;
+﻿using CoreCommon.Infrastructure.Helpers;
 using NoDb.Data.Domain.DbModels;
 using System;
 using System.Collections.Generic;
