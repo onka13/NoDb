@@ -29,7 +29,7 @@ namespace NoDb.Business.Service.Services
         public List<NoDbProject> GetSelectedProjects() => _noDbSolution.Projects.Where(x =>
         {
             return x.IsSelected;
-        }).ToList();
+        }).OrderBy(x => x.Name).ToList();
 
         public NoDbSolutionService(string solutionFolder)
         {

@@ -114,9 +114,9 @@ namespace NoDb.Data.Domain.DbModels
 
         public DotNetCoreProject()
         {
-            //EntityNamespaces = "using CoreCommon.Data.Domain.Entitites;\r\nusing CoreCommon.Data.Domain.Enums;";
-            //RepositoryNamespaces = "using CoreCommon.Data.Domain.Entitites;\r\nusing CoreCommon.Data.Domain.Enums;\r\nusing CoreCommon.Data.EntityFrameworkBase.Base;\r\nusing CoreCommon.Data.ElasticSearch.Base;\r\nusing CoreCommon.Data.Domain.Business;";
-            //ServiceNamespaces = "using CoreCommon.Business.Service.Base;\r\nusing CoreCommon.Data.Domain.Business;\r\nusing CoreCommon.Data.Domain.Entitites;\r\nusing CoreCommon.Data.Domain.Enums;";
+            //EntityNamespaces = "using CoreCommon.Data.Domain.Entities;\r\nusing CoreCommon.Data.Domain.Enums;";
+            //RepositoryNamespaces = "using CoreCommon.Data.Domain.Entities;\r\nusing CoreCommon.Data.Domain.Enums;\r\nusing CoreCommon.Data.EntityFrameworkBase.Base;\r\nusing CoreCommon.Data.ElasticSearch.Base;\r\nusing CoreCommon.Data.Domain.Business;";
+            //ServiceNamespaces = "using CoreCommon.Business.Service.Base;\r\nusing CoreCommon.Data.Domain.Business;\r\nusing CoreCommon.Data.Domain.Entities;\r\nusing CoreCommon.Data.Domain.Enums;";
             //DbContextNamespaces = "CoreCommon.Data.EntityFrameworkBase.Base";
             //EntityBase = "IEntityBase";
             //EntityRepoBase = "EntityFrameworkBaseRepository";
