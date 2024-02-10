@@ -41,7 +41,7 @@
                 <MenuItem Name="xMenuSetting" Header="_Settings" Click="XMenuSetting_Click" />
             </MenuItem>
             <MenuItem Header="_Tools">
-                <MenuItem Name="xSplitTablesJson" Header="_Split Tables Json" Click="xSplitTablesJson_Click"/>
+                <MenuItem Name="xUpgradeToVersion8" Header="_Split Tables Json" Click="xUpgradeToVersion8_Click"/>
                 <Separator />
             </MenuItem>
         </Menu>

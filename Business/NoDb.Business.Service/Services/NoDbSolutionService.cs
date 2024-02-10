@@ -2,6 +2,7 @@
 using NoDb.Data.Domain.DbModels;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace NoDb.Business.Service.Services
 {
@@ -27,6 +28,11 @@ namespace NoDb.Business.Service.Services
         {
             _noDbSolution.Projects = projects;
             WriteToFile();
+        }
+
+        public NoDbProject GetProject(string projectName)
+        {
+            return noDbService.NoDbSolutionService.Projects.FirstOrDefault(x => x.Name == projectName);
         }
 
         private void WriteToFile()

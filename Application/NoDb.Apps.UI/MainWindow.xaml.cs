@@ -29,16 +29,11 @@ namespace NoDb.Apps.UI
         /// Clone of the selected table.
         /// </summary>
         private NoDbTable selectedTable;
-        private readonly NoDbService noDbService;
+        private NoDbService noDbService => App.NoDbService;
 
-        public MainWindow() : this(null)
-        {
-        }
-
-        public MainWindow(NoDbService noDbService)
+        public MainWindow()
         {
             InitializeComponent();
-            this.noDbService = noDbService ?? App.NoDbService;
         }
 
         #region " Events "
@@ -517,9 +512,9 @@ namespace NoDb.Apps.UI
             lcv.RemoveAt(xColumns.SelectedIndex);
         }
 
-        private void xSplitTablesJson_Click(object sender, RoutedEventArgs e)
+        private void xUpgradeToVersion8_Click(object sender, RoutedEventArgs e)
         {
-            var window = new SubWindows.SplitTablesJson();
+            var window = new SubWindows.UpgradeToVersion8();
             window.Show();
         }
 

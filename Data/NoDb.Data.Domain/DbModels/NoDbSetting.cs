@@ -29,7 +29,7 @@ namespace NoDb.Data.Domain.DbModels
 
         [TypeConverter(typeof(ExpandableObjectConverter))]
         [Category("Project")]
-        public DotNetCoreProject DotNetCoreProject { get; set; }
+        public ProjectSetting ProjectSetting { get; set; }
 
         [Category("Project")]
         public string JsPanelProjectPath { get; set; }
@@ -43,7 +43,7 @@ namespace NoDb.Data.Domain.DbModels
         public NoDbSetting()
         {
             Connections = new List<NoDbSettingConnection>();
-            DotNetCoreProject = new DotNetCoreProject();
+            ProjectSetting = new ProjectSetting();
             Schema = "dbo";
             ConnectionType = NoDbConnectionType.Mssql;
             ConnectionName = "MainConnection";
@@ -70,7 +70,7 @@ namespace NoDb.Data.Domain.DbModels
         }
     }
 
-    public class DotNetCoreProject
+    public class ProjectSetting
     {
         [Description("Root namespace")]
         [Category("General")]
@@ -91,14 +91,14 @@ namespace NoDb.Data.Domain.DbModels
 
         public string ApiProject { get; set; }
 
-        public DotNetCoreProject()
+        public ProjectSetting()
         {
             CoreCommonDataNamespace = "CoreCommon.Data";
         }
 
         public override string ToString()
         {
-            return ".NET Core Project";
+            return "Project Settings";
         }
     }
 }

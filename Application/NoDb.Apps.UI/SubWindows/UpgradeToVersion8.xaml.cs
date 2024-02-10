@@ -16,11 +16,11 @@ using WF = System.Windows.Forms;
 namespace NoDb.Apps.UI.SubWindows
 {
     /// <summary>
-    /// Interaction logic for SplitTablesJson.xaml
+    /// Interaction logic for UpgradeToVersion8.xaml
     /// </summary>
-    public partial class SplitTablesJson : Window
+    public partial class UpgradeToVersion8 : Window
     {
-        public SplitTablesJson()
+        public UpgradeToVersion8()
         {
             InitializeComponent();
         }

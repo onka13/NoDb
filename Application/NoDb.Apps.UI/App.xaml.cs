@@ -30,7 +30,7 @@ namespace NoDb.Apps.UI
         {
             base.OnStartup(e);
 
-            string solution = null; 
+            string solutionFolder = null; 
             bool openSettings = false, openSolutionSettings = false;
 
             var args = e.Args;
@@ -39,9 +39,9 @@ namespace NoDb.Apps.UI
                 for (int i = 0; i < args.Length; i += 2)
                 {
                     if (args.Length < i + 1) continue;
-                    if (args[i] == "-solution")
+                    if (args[i] == "-solutionFolder")
                     {
-                        solution = args[i + 1];
+                        solutionFolder = args[i + 1];
                     }
                     else if (args[i] == "-openSettings")
                     {
@@ -54,7 +54,7 @@ namespace NoDb.Apps.UI
                 }
             }
 
-            InitNoDbService(solution);
+            InitNoDbService(solutionFolder);
 
             if (openSettings)
             {

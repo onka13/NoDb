@@ -32,17 +32,7 @@ namespace NoDb.Apps.UI.SubWindows
         {
             if (string.IsNullOrWhiteSpace(xSettingKey.Text)) return;
 
-            noDbService.SettingsService.New(new NoDbSetting
-            {
-                SettingsKey = xSettingKey.Text,
-                Schema = "dbo",
-                ConnectionType = Data.Domain.Enums.NoDbConnectionType.Mssql,
-                ConnectionName = "MainConnection",
-                DotNetCoreProject = new DotNetCoreProject
-                {
-
-                }
-            });
+            noDbService.SettingsService.New(xSettingKey.Text);
             xSettingKey.Text = "";
             BindSettings();
             xSettings.SelectedIndex = xSettings.Items.Count - 1;

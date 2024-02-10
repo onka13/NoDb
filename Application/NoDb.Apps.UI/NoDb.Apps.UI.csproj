@@ -11,7 +11,7 @@
     <PackageProjectUrl>https://github.com/onka13/NoDb</PackageProjectUrl>
     <RepositoryUrl>https://github.com/onka13/NoDb</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <Version>0.1.8</Version>
+    <Version>8.0.0</Version>
     <StartupObject>NoDb.Apps.UI.App</StartupObject>
   </PropertyGroup>
 
@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="SubWindows\SplitTablesJson.xaml.cs">
+    <Compile Update="SubWindows\UpgradeToVersion8.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="SubWindows\QueryHistoryWindow.xaml.cs">

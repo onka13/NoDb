@@ -3,6 +3,7 @@ using NoDb.Data.Domain.DbModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace NoDb.Business.Service.Services
 {
@@ -28,6 +29,11 @@ namespace NoDb.Business.Service.Services
                 var setting = ConversionHelper.Deserialize<NoDbSetting>(json);
                 Settings.Add(setting);
             }
+
+            if (settingFiles.Length == 0)
+            {
+                New("dev");
+            }
         }
 
         public void Save(NoDbSetting setting)
@@ -37,6 +43,31 @@ namespace NoDb.Business.Service.Services
             ReadFromSettingsFolder();
         }
 
+        public void New(string key)
+        {
+            var projectPrefix = "ABC";
+            if (noDbService.NoDbSolutionService.Projects.Count > 0)
+            {
+                projectPrefix = noDbService.NoDbSolutionService.Projects.FirstOrDefault().Name.Split('.').FirstOrDefault() ?? "ABC";
+            }
+
+            New(new NoDbSetting
+            {
+                SettingsKey = key,
+                Schema = "dbo",
+                ConnectionType = Data.Domain.Enums.NoDbConnectionType.Mssql,
+                ConnectionName = "MainConnection",
+                ProjectSetting = new ProjectSetting
+                {
+                    ApiProject = $"{projectPrefix}.API",
+                    ApplicationProject = $"{projectPrefix}.Application",
+                    InfrastructureProject = $"{projectPrefix}.Infrastructure",
+                    DomainProject = $"{projectPrefix}.Domain",
+                    CoreCommonDataNamespace = "DotNetCommon",
+        }
+            });
+        }
+        
         public void New(NoDbSetting setting)
         {
             if (string.IsNullOrWhiteSpace(setting.SettingsKey))
