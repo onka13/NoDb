@@ -8,8 +8,7 @@
         mc:Ignorable="d"
         Title="NoDb" Height="600" Width="1000" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" Background="#FFEFEFEF">
     <Window.CommandBindings>
-        <CommandBinding Command="Open" Executed="XMenuNew_Click"/>
-        <CommandBinding Command="New" Executed="XMenuNew_Click"/>
+        <CommandBinding Command="Open" Executed="xMenuOpen_Click"/>
     </Window.CommandBindings>
     <Window.InputBindings>
         <KeyBinding Key="N" Modifiers="Control" Command="New"/>
@@ -17,16 +16,13 @@
     </Window.InputBindings>
     <Window.Resources>
         <ContextMenu x:Key="xContextMenuForColumns">
-            <MenuItem Header="Remove" />
+            <MenuItem Header="Remove" Click="xContextMenuRemove_Click" />
         </ContextMenu>
     </Window.Resources>
     <DockPanel>
         <Menu DockPanel.Dock="Top" Padding="6">
             <MenuItem Header="_File">
-                <MenuItem Name="xMenuNew" Header="_New" Command="Open"/>
-                <MenuItem Name="xMenuOpen" Header="_Open" Command="New" />
-                <Separator />
-                <MenuItem Header="_Open Solution" Click="xSolution_Click"/>
+                <MenuItem Name="xMenuOpen" Header="_Open" Command="Open" />
                 <Separator />
                 <MenuItem Header="_Exit" Click="XMenuItemExit_Click" />
             </MenuItem>
@@ -39,7 +35,6 @@
             </MenuItem>
             <MenuItem Header="_Settings">
                 <MenuItem Name="xQueryHistories" Header="_Query Histories" Click="XQueryHistories_Click" />
-                <MenuItem Name="xSolutionSetting" Header="_Projects" Click="XSolutionSetting_Click" />
                 <MenuItem Name="xMenuSetting" Header="_Settings" Click="XMenuSetting_Click" />
             </MenuItem>
         </Menu>
@@ -48,12 +43,6 @@
                 <TextBlock Name="lblStatusInfo" TextTrimming="CharacterEllipsis"/>
             </StatusBarItem>
         </StatusBar>
-        <Grid DockPanel.Dock="Top" Margin="10,0,10,0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
-            </Grid.RowDefinitions>
-            <ComboBox Name="xProjects" Grid.Row="0" HorizontalAlignment="Left" SelectionChanged="XProjects_SelectionChanged" IsTextSearchEnabled="False" MinWidth="190"/>
-        </Grid>
         <Grid x:Name="xMainGrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="200" MinWidth="100" />
@@ -92,7 +81,7 @@
                         </Grid.RowDefinitions>
                         <ToolBarTray>
                             <ToolBar HorizontalAlignment="Left">
-                                <Button Content="Save" Style="{StaticResource ButtonSuccess}" Click="Save" />
+                                <Button x:Name="btnSave" Content="Save" Style="{StaticResource ButtonSuccess}" Click="Save" />
                             </ToolBar>
                             <ToolBar HorizontalAlignment="Right">
                                 <Separator />

@@ -8,11 +8,11 @@ namespace NoDb.Business.Service.Services
 {
     public class SearchService
     {
-        NoDbService _noDbService;
+        private readonly NoDbService noDbService;
 
         public SearchService(NoDbService noDbService)
         {
-            _noDbService = noDbService;
+            this.noDbService = noDbService;
         }
 
         public NoDbSearchItem GetDefaultSearchItem(NoDbTable table, List<NoDbSearchItem> currentItems)

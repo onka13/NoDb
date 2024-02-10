@@ -6,16 +6,16 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using WF = System.Windows.Forms;
 using System.Windows.Input;
-using NoDb.Business.Service.Services;
 using NoDb.Data.Domain.DbModels;
 using NoDb.Data.Domain.Enums;
 using System.Diagnostics;
 using NoDb.Business.Service.Templates;
 using NoDb.Data.Domain.Converters;
 using NoDb.Data.Domain.SearchModels;
-using System.IO;
 using Newtonsoft.Json.Linq;
 using CoreCommon.Infrastructure.Helpers;
+using MySqlX.XDevAPI.Relational;
+using System.Windows.Documents;
 
 namespace NoDb.Apps.UI
 {
@@ -24,12 +24,10 @@ namespace NoDb.Apps.UI
     /// </summary>
     public partial class MainWindow : Window
     {
-        NoDbService _noDbService;
-
         /// <summary>
         /// Clone of the selected table.
         /// </summary>
-        NoDbTable _selectedTable;
+        private NoDbTable selectedTable;
 
         public MainWindow()
         {
@@ -96,12 +94,35 @@ namespace NoDb.Apps.UI
             xColumnsGrid.IsEnabled = false;
             xViewMenu.IsEnabled = false;
 
-            if (!string.IsNullOrEmpty(App.Folder))
+            if (App.NoDbService != null)
             {
-                lblStatusInfo.Text = App.Folder;
-                InitService(App.Folder);
+                lblStatusInfo.Text = App.NoDbService.NoDbFolder;
             }
-            BindProjects();
+            InitService();
+        }
+
+        public void OpenNoDbFolder()
+        {
+            var dialog = new WF.FolderBrowserDialog();
+            dialog.RootFolder = Environment.SpecialFolder.Desktop;
+            if (dialog.ShowDialog() != WF.DialogResult.OK) return;
+
+            App.InitNoDbService(dialog.SelectedPath);
+            InitService();
+        }
+
+        public void InitService()
+        {
+            if (App.NoDbService == null)
+            {
+                ClearServiceValues();
+                return;
+            }
+
+            lblStatusInfo.Text = App.NoDbService.NoDbFolder;
+            BindTables();
+            xMainGrid.IsEnabled = true;
+            xViewMenu.IsEnabled = true;
         }
 
         private void XColumns_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -121,59 +142,50 @@ namespace NoDb.Apps.UI
             var row = sender as DataGridRow;
             if (row == null) return;
 
+            xColumns.CancelEdit();
+
             row.IsSelected = true;
+            // TODO: fix the related bugs
             var contextMenu = FindResource("xContextMenuForColumns") as ContextMenu;
             contextMenu.PlacementTarget = row;
             contextMenu.IsOpen = true;
-        }
-
-        private void XMenuNew_Click(object sender, ExecutedRoutedEventArgs e)
-        {
-            var dialog = new WF.FolderBrowserDialog();
-            dialog.RootFolder = Environment.SpecialFolder.Desktop;
-            if (dialog.ShowDialog() != WF.DialogResult.OK) return;
-            lblStatusInfo.Text = dialog.SelectedPath;
-
-            InitService(dialog.SelectedPath);
         }
 
         private void XTables_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (xTables.SelectedItem == null)
             {
-                _selectedTable = null;
+                selectedTable = null;
                 ClearAllRelatedWithTable();
                 StaticManager.SelectedTable = null;
                 return;
             }
 
-            _selectedTable = (xTables.SelectedItem as NoDbTable).JsonClone();
-            xColumns.ItemsSource = _selectedTable.Columns;
-            xTableDetail.SelectedObject = _selectedTable.Detail;
+            selectedTable = (xTables.SelectedItem as NoDbTable).JsonClone();
+            xColumns.ItemsSource = selectedTable.Columns;
+            xTableDetail.SelectedObject = selectedTable.Detail;
             xColumnsGrid.IsEnabled = true;
-            StaticManager.SelectedTable = _selectedTable;
+            StaticManager.SelectedTable = selectedTable;
         }
 
         private void NewTableButton_Click(object sender, RoutedEventArgs e)
         {
             var newTableWindow = new SubWindows.NewTable((string name, string template) =>
             {
-                _selectedTable = _noDbService.TableService.New(name, template);
+                selectedTable = App.NoDbService.TableService.New(name, template);
                 BindTables();
                 return true;
             });
 
             newTableWindow.ShowDialog();
-            refreshStaticManagerSolutions();
         }
 
         private void DeleteTableButton_Click(object sender, RoutedEventArgs e)
         {
             var table = GetOriginalSelectedTable();
             if (table == null) return;
-            _noDbService.TableService.Delete(table);
+            App.NoDbService.TableService.Delete(table);
             BindTables();
-            refreshStaticManagerSolutions();
         }
 
         private void XMenuItemExit_Click(object sender, RoutedEventArgs e)
@@ -184,17 +196,17 @@ namespace NoDb.Apps.UI
 
         private void IndexButton_Clicked(object sender, RoutedEventArgs e)
         {
-            if (_selectedTable == null) return;
+            if (selectedTable == null) return;
             var editor = new SubWindows.ListEditor("Indexes / Keys");
-            editor.InitList(_selectedTable.Indices);
+            editor.InitList(selectedTable.Indices);
             editor.ShowDialog();
         }
 
         private void RelationButton_Clicked(object sender, RoutedEventArgs e)
         {
-            if (_selectedTable == null) return;
+            if (selectedTable == null) return;
             var editor = new SubWindows.ListEditor("Relations");
-            editor.InitList(_selectedTable.Relations, onSelectionChanged: relation =>
+            editor.InitList(selectedTable.Relations, onSelectionChanged: relation =>
             {
             });
             editor.ShowDialog();
@@ -202,20 +214,20 @@ namespace NoDb.Apps.UI
 
         private void SearchButton_Clicked(object sender, RoutedEventArgs e)
         {
-            if (_selectedTable == null) return;
+            if (selectedTable == null) return;
             var editor = new SubWindows.ListEditor("Search Items");
-            editor.InitList(_selectedTable.SearchItems, defaultValueFunc: (list) =>
+            editor.InitList(selectedTable.SearchItems, defaultValueFunc: (list) =>
             {
-                return _noDbService.SearchService.GetDefaultSearchItem(_selectedTable, list as List<NoDbSearchItem>);
+                return App.NoDbService.SearchService.GetDefaultSearchItem(selectedTable, list as List<NoDbSearchItem>);
             }, extraActions: new Dictionary<string, Action<NoDbSearchItem>>
             {
                 {"Refresh All Col.", (NoDbSearchItem searchItem) => {
                     if(searchItem == null) return;
-                    searchItem.AllColumns = _noDbService.SearchService.GetDefaultSearchItem(_selectedTable, null).AllColumns;
+                    searchItem.AllColumns = App.NoDbService.SearchService.GetDefaultSearchItem(selectedTable, null).AllColumns;
                 }},
                 {"Add Missing Col.", (NoDbSearchItem searchItem) => {
                     if(searchItem == null) return;
-                    var newColumns = _noDbService.SearchService.GetDefaultSearchItem(_selectedTable, null).AllColumns;
+                    var newColumns = App.NoDbService.SearchService.GetDefaultSearchItem(selectedTable, null).AllColumns;
                     for (int i = 0; i < newColumns.Count; i++)
                     {
                         if(!searchItem.AllColumns.Any(x => x.Name == newColumns[i].Name))
@@ -226,11 +238,11 @@ namespace NoDb.Apps.UI
                 }},
                 {"Refresh Filter Col.", (NoDbSearchItem searchItem) => {
                     if(searchItem == null) return;
-                    searchItem.Columns = _noDbService.SearchService.GetDefaultSearchItem(_selectedTable, null).Columns;
+                    searchItem.Columns = App.NoDbService.SearchService.GetDefaultSearchItem(selectedTable, null).Columns;
                 }},
                 {"Refresh Grid Col.", (NoDbSearchItem searchItem) => {
                     if(searchItem == null) return;
-                    searchItem.DisplayedColumns = _noDbService.SearchService.GetDefaultSearchItem(_selectedTable, null).DisplayedColumns;
+                    searchItem.DisplayedColumns = App.NoDbService.SearchService.GetDefaultSearchItem(selectedTable, null).DisplayedColumns;
                 }}
             });
             editor.ShowDialog();
@@ -239,13 +251,13 @@ namespace NoDb.Apps.UI
         private void XMenuEnum_Click(object sender, RoutedEventArgs e)
         {
             var editor = new SubWindows.ListEditor("Enum List");
-            editor.InitList(_noDbService.EnumService.Enums.EnumList.JsonClone(), (list) =>
+            editor.InitList(App.NoDbService.EnumService.Enums.EnumList.JsonClone(), (list) =>
             {
                 return EnumTemplates.Default();
             }, (list) =>
             {
-                _noDbService.EnumService.Enums.EnumList = list;
-                _noDbService.EnumService.Save();
+                App.NoDbService.EnumService.Enums.EnumList = list;
+                App.NoDbService.EnumService.Save();
             }, extraActions: new Dictionary<string, Action<NoDbEnumDetail>>
             {
                 {"Auto Numerate", (NoDbEnumDetail item) => {
@@ -262,28 +274,28 @@ namespace NoDb.Apps.UI
 
         private void XMenuRevision_Click(object sender, RoutedEventArgs e)
         {
-            var window = new SubWindows.RevisionsWindow(_noDbService);
+            var window = new SubWindows.RevisionsWindow(App.NoDbService);
             window.Show();
         }
 
         private void XMenuTableScripts_Click(object sender, RoutedEventArgs e)
         {
-            var window = new SubWindows.TableScriptsWindow(_noDbService);
+            var window = new SubWindows.TableScriptsWindow(App.NoDbService);
             window.Show();
         }
 
         private void XExecuteQuery_Click(object sender, RoutedEventArgs e)
         {
-            var window = new SubWindows.ExecuteQueryWindow(_noDbService);
+            var window = new SubWindows.ExecuteQueryWindow(App.NoDbService);
             window.SetQuery("", NoDbConnectionType.Mssql);
             window.Show();
         }
 
         private void XQueryHistories_Click(object sender, RoutedEventArgs e)
         {
-            if (App.SolutionService == null)
+            if (App.NoDbService == null)
             {
-                xSolution_Click(null, null);
+                OpenNoDbFolder();
                 return;
             }
             var window = new SubWindows.QueryHistoryWindow();
@@ -292,93 +304,30 @@ namespace NoDb.Apps.UI
 
         private void XImport_Click(object sender, RoutedEventArgs e)
         {
-            var window = new SubWindows.ImportFromSqlWindow(_noDbService);
+            var window = new SubWindows.ImportFromSqlWindow(App.NoDbService);
             window.ShowDialog();
-            refreshStaticManagerSolutions();
         }
 
         private void XMenuSetting_Click(object sender, RoutedEventArgs e)
         {
-            if (App.SolutionService == null)
+            if (App.NoDbService == null)
             {
-                xSolution_Click(null, null);
+                OpenNoDbFolder();
                 return;
             }
             var window = new SubWindows.SettingsWindow();
             window.Show();
         }
 
-        private void xSolution_Click(object sender, RoutedEventArgs e)
-        {
-            var dialog = new WF.FolderBrowserDialog();
-            if (dialog.ShowDialog() != WF.DialogResult.OK) return;
-            App.SolutionFolder = dialog.SelectedPath;
-            App.SolutionService = new NoDbSolutionService(App.SolutionFolder);
-            BindProjects();
-        }
-
-        private void XProjects_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (App.SolutionFolder == null || xProjects.SelectedItem == null)
-            {
-                ClearServiceValues();
-                return;
-            }
-            var project = xProjects.SelectedItem as NoDbProject;
-            InitService(Path.Combine(App.SolutionFolder, project.Path, NoDbSolutionService.NODB_FOLDER_NAME));
-            StaticManager.SelectedProject = project.Name;
-        }
-
-        private void XSolutionSetting_Click(object sender, RoutedEventArgs e)
-        {
-            if (App.SolutionService == null)
-            {
-                xSolution_Click(null, null);
-                return;
-            }
-            var window = new SubWindows.SolutionWindow();
-            window.OnUpdated = () =>
-            {
-                BindProjects();
-            };
-            window.Show();
-        }
-
         #endregion
-
-        public void InitService(string selectedPath)
-        {
-            _noDbService = new NoDbService(selectedPath);
-            BindTables();
-            xMainGrid.IsEnabled = true;
-            xViewMenu.IsEnabled = true;
-        }
 
         void BindTables()
         {
             ClearAllRelatedWithTable();
-            var lastSelectedTableHash = _selectedTable?.Hash;
+            var lastSelectedTableHash = selectedTable?.Hash;
             xTables.ItemsSource = null;
-            xTables.ItemsSource = _noDbService.TableService.Tables.OrderBy(x => x.Detail.Name).ToList();
-            if (lastSelectedTableHash != null) xTables.SelectedItem = _noDbService.TableService.Tables.FirstOrDefault(x => x.Hash == lastSelectedTableHash);
-        }
-
-        void BindProjects()
-        {
-            if (App.SolutionService == null) return;
-            var projects = App.SolutionService.GetSelectedProjects();
-            var selected = xProjects.SelectedIndex;
-            if (App.InitialProject != null)
-            {
-                selected = projects.FindIndex(x => x.Name == App.InitialProject);
-                App.InitialProject = null;
-            }
-            xProjects.ItemsSource = null;
-            xProjects.ItemsSource = projects;
-            xProjects.SelectedIndex = selected != -1 ? selected : 0;
-            XProjects_SelectionChanged(null, null);
-
-            refreshStaticManagerSolutions();
+            xTables.ItemsSource = App.NoDbService.TableService.Tables.OrderBy(x => x.Detail.Name).ToList();
+            if (lastSelectedTableHash != null) xTables.SelectedItem = App.NoDbService.TableService.Tables.FirstOrDefault(x => x.Hash == lastSelectedTableHash);
         }
 
         /// <summary>
@@ -392,7 +341,6 @@ namespace NoDb.Apps.UI
 
         void ClearServiceValues()
         {
-            _noDbService = null;
             xMainGrid.IsEnabled = false;
             xViewMenu.IsEnabled = false;
             xTables.ItemsSource = null;
@@ -409,32 +357,17 @@ namespace NoDb.Apps.UI
 
         void Save(object sender, RoutedEventArgs e)
         {
-            var table = _selectedTable;
+            xColumns.CommitEdit();
+            xColumns.CancelEdit();
+
+            var table = selectedTable;
             if (table == null) return;
             table.Columns = xColumns.ItemsSource as List<NoDbColumn>;
             table.Detail = xTableDetail.SelectedObject as NoDbTableDetail;
-            _noDbService.TableService.UpdateTable(table);
+            App.NoDbService.TableService.UpdateTable(table);
             BindTables();
 
             WF.MessageBox.Show("Saved");
-        }
-
-        void refreshStaticManagerSolutions()
-        {
-            var projects = App.SolutionService.GetSelectedProjects();
-            StaticManager.Solution = new NoDbSolutionModel
-            {
-                Projects = projects.Select(x =>
-                {
-                    var projectService = new NoDbService(Path.Combine(App.SolutionFolder, x.Path, NoDbSolutionService.NODB_FOLDER_NAME));
-                    return new NoDbProjectModel
-                    {
-                        Project = x,
-                        Tables = projectService.TableService.Tables,
-                        NoDbEnum = projectService.EnumService.Enums
-                    };
-                }).ToList()
-            };
         }
 
         private void ImportButton_Clicked(object sender, RoutedEventArgs e)
@@ -445,7 +378,7 @@ namespace NoDb.Apps.UI
                 {
                     var jsonData = JObject.Parse(json).ToObject<Dictionary<string, object>>();
 
-                    var table = _selectedTable;
+                    var table = selectedTable;
                     if (table == null) return false;
                     var columns = table.Columns = xColumns.ItemsSource as List<NoDbColumn>;
 
@@ -510,6 +443,29 @@ namespace NoDb.Apps.UI
             });
 
             newTableWindow.ShowDialog();
+        }
+
+
+        private void xMenuOpen_Click(object sender, ExecutedRoutedEventArgs e)
+        {
+            OpenNoDbFolder();
+        }
+
+        private void xContextMenuRemove_Click(object sender, RoutedEventArgs e)
+        {
+            var lcv = (ListCollectionView)CollectionViewSource.GetDefaultView(xColumns.ItemsSource);
+
+            if (
+                xColumns.SelectedIndex < 0 || 
+                xColumns.SelectedIndex >= selectedTable.Columns.Count ||
+                lcv.IsAddingNew ||
+                lcv.IsEditingItem
+                )
+            {
+                return;
+            }
+            
+            lcv.RemoveAt(xColumns.SelectedIndex);
         }
     }
 }

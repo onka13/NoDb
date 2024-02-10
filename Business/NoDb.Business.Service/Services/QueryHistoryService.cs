@@ -8,29 +8,26 @@ namespace NoDb.Business.Service.Services
 {
     public class QueryHistoryService
     {
-        public const string HISTORY_FOLDER = "queries";
+        private readonly NoDbService noDbService;
 
-        readonly string _settingsFolder;
-        public List<string> HistoryFiles { get; set; }
-        public List<string> HistoryFileNames { get; set; }
-
-        public QueryHistoryService(string settingsFolder)
+        public QueryHistoryService(NoDbService noDbService)
         {
-            _settingsFolder = settingsFolder;
+            this.noDbService = noDbService;
             ReadFromSettingsFolder();
         }
 
+        public List<string> HistoryFiles { get; private set; }
+        public List<string> HistoryFileNames { get; private set; }
+
         public void ReadFromSettingsFolder()
         {
-            var dir = Path.Combine(_settingsFolder, HISTORY_FOLDER);
-            Directory.CreateDirectory(dir);
-            HistoryFiles = Directory.GetFiles(dir, "*.txt").ToList();
+            HistoryFiles = Directory.GetFiles(noDbService.QueriesFolder, "*.txt").ToList();
             HistoryFileNames = HistoryFiles.Select(x => new FileInfo(x).Name.Replace(".txt", "")).ToList();
         }
 
         public string GetPath(string name)
         {
-            return Path.Combine(_settingsFolder, HISTORY_FOLDER, name + ".txt");
+            return Path.Combine(noDbService.QueriesFolder, name + ".txt");
         }
 
         public void Save(string name, string content, bool append = false)

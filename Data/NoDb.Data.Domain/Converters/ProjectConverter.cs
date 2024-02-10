@@ -14,7 +14,7 @@ namespace NoDb.Data.Domain.Converters
 
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
         {
-            var values = StaticManager.Solution.Projects.Select(x => x.Project.Name).ToList();
+            var values = StaticManager.Projects.Select(x => x.Name).ToList();
             values.Insert(0, "");
             return new StandardValuesCollection(values);
         }

@@ -51,13 +51,13 @@ namespace NoDb.Business.Service.Queries
             string schema = GetSchema(table);
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.AppendFormat("ALTER TABLE {2}.{0} ADD CONSTRAINT {1}\n", Escape(table.Detail.GetTableDbName()), Escape(relation.Name), schema);
-            stringBuilder.AppendFormat("FOREIGN KEY ({0}) REFERENCES {3}.{1} ({2}) ",
+            stringBuilder.AppendFormat("FOREIGN KEY ({0}) REFERENCES {3}.{1} ({2})\n",
                                                 string.Join(",", relation.Items.Select(x => Escape(x.ColumnName))),
                                                 Escape(relation.ForeignTable),
                                                 string.Join(",", relation.Items.Select(x => Escape(x.ForeignColumn))),
                                                 schema
                                             );
-            stringBuilder.AppendFormat("ON DELETE {0} ON UPDATE {1};", ToRule(relation.DeleteRule), ToRule(relation.UpdateRule));
+            stringBuilder.AppendFormat("ON DELETE {0}\nON UPDATE {1};", ToRule(relation.DeleteRule), ToRule(relation.UpdateRule));
             return stringBuilder.ToString();
         }
 

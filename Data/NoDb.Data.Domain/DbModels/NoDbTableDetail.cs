@@ -37,13 +37,6 @@ namespace NoDb.Data.Domain.DbModels
         [Category("Connection")]
         public string ConnectionName { get; set; }
 
-        //[Description("Custom base class")]
-        //public string BaseFullName { get; set; }
-        
-        [Description("Custom base project name")]
-        [TypeConverter(typeof(ProjectConverter))]
-        public string BaseProject { get; set; }
-
         [Description("Custom base table name")]
         [TypeConverter(typeof(TableConverter))]
         public string BaseTable { get; set; }

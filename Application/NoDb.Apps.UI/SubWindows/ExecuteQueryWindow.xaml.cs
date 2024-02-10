@@ -1,19 +1,9 @@
-﻿using CoreCommon.Data.EntityFrameworkBase.Components;
-using NoDb.Business.Service.Managers;
+﻿using NoDb.Business.Service.Managers;
 using NoDb.Business.Service.Services;
 using NoDb.Data.Domain.DbModels;
 using NoDb.Data.Domain.Enums;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace NoDb.Apps.UI.SubWindows
 {
@@ -22,9 +12,7 @@ namespace NoDb.Apps.UI.SubWindows
     /// </summary>
     public partial class ExecuteQueryWindow : Window
     {
-        NoDbService _noDbService;
-        NoDbConnectionType _connectionType;
-        QueryHistoryService queryHistoryService;
+        private readonly NoDbService noDbService;
 
         public ExecuteQueryWindow() : this(null)
         {
@@ -32,16 +20,15 @@ namespace NoDb.Apps.UI.SubWindows
 
         public ExecuteQueryWindow(NoDbService noDbService)
         {
-            _noDbService = noDbService ?? App.NoDbService;
+            this.noDbService = noDbService ?? App.NoDbService;
             InitializeComponent();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            xSettings.ItemsSource = new SettingsService(App.SolutionService.GetSettingsFolder()).Settings;
+            xSettings.ItemsSource = noDbService.SettingsService.Settings;
             if (xSettings.Items.Count > 0) xSettings.SelectedIndex = 0;
-            queryHistoryService = new QueryHistoryService(App.SolutionService.GetSettingsFolder());
-            xQueryHistory.ItemsSource = queryHistoryService.HistoryFileNames;
+            xQueryHistory.ItemsSource = noDbService.QueryHistoryService.HistoryFileNames;
             if (xQueryHistory.Items.Count > 0) xQueryHistory.SelectedIndex = 0;
         }
 
@@ -60,7 +47,6 @@ namespace NoDb.Apps.UI.SubWindows
 
         public void SetQuery(string query, NoDbConnectionType type)
         {
-            _connectionType = type;
             xQuery.SyntaxHighlighting = ICSharpCode.AvalonEdit.Highlighting.HighlightingManager.Instance.GetDefinitionByExtension(".sql");
             xQuery.Text = query;
         }
@@ -76,13 +62,13 @@ namespace NoDb.Apps.UI.SubWindows
         private void XAppendQuery_Click(object sender, RoutedEventArgs e)
         {
             if (xQueryHistory.SelectedItem == null) return;
-            queryHistoryService.Save(xQueryHistory.SelectedItem.ToString(), xQuery.Text, true); 
+            noDbService.QueryHistoryService.Save(xQueryHistory.SelectedItem.ToString(), xQuery.Text, true); 
             System.Windows.Forms.MessageBox.Show("Saved!");
         }
 
         private void XOpenQueryHistory_Click(object sender, RoutedEventArgs e)
         {
-            var window = new SubWindows.QueryHistoryWindow();
+            var window = new QueryHistoryWindow();
             window.Show();
         }
     }

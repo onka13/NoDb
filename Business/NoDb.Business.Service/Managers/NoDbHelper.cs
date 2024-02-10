@@ -41,8 +41,22 @@ namespace NoDb.Business.Service.Managers
         public static string ColumnDataType(NoDbColumn column)
         {
             if (column == null) return "";
+
+            if (!string.IsNullOrEmpty(column.CustomDataType))
+            {
+                if (column.IsList)
+                {
+                    return string.Format("List<{0}>", column.CustomDataType);
+                }
+                return column.CustomDataType;
+            }
+
             if (!string.IsNullOrEmpty(column.EnumName))
             {
+                if (column.IsList)
+                {
+                    return string.Format("List<{0}>", column.EnumName);
+                }
                 return column.EnumName + (column.Required ? "" : "?");
             }
             string output;

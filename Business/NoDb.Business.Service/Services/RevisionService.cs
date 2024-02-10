@@ -1,6 +1,5 @@
 ﻿using CoreCommon.Infrastructure.Helpers;
 using NoDb.Business.Service.Managers;
-using NoDb.Business.Service.Templates;
 using NoDb.Data.Domain.DbModels;
 using NoDb.Data.Domain.Enums;
 using NoDb.Data.Domain.RevisionModels;
@@ -14,26 +13,18 @@ namespace NoDb.Business.Service.Services
 {
     public class RevisionService
     {
-        NoDbService _noDbService;
-
-        public string RevisionFolder
-        {
-            get
-            {
-                return _noDbService.NoDbFolder + Path.DirectorySeparatorChar + "Revisions";
-            }
-        }
+        private readonly NoDbService noDbService;
 
         public RevisionService(NoDbService noDbService)
         {
-            _noDbService = noDbService;
+            this.noDbService = noDbService;
         }
 
         public List<string> GetRevisionFiles()
         {
             try
             {
-                return Directory.GetFiles(RevisionFolder).Select(x => x.Replace(RevisionFolder + Path.DirectorySeparatorChar, "").Replace(".json", "")).OrderByDescending(x => x).ToList();
+                return Directory.GetFiles(noDbService.RevisionFolder).Select(x => x.Replace(noDbService.RevisionFolder + Path.DirectorySeparatorChar, "").Replace(".json", "")).OrderByDescending(x => x).ToList();
             }
             catch
             {
@@ -44,14 +35,14 @@ namespace NoDb.Business.Service.Services
 
         public NoDbRevision ReadRevision(string revisionFileName)
         {
-            var revisionFilePath = RevisionFolder + Path.DirectorySeparatorChar + revisionFileName + ".json";
+            var revisionFilePath = Path.Combine(noDbService.RevisionFolder, revisionFileName + ".json");
             var json = File.ReadAllText(revisionFilePath);
             return ConversionHelper.Deserialize<NoDbRevision>(json);
         }
 
         public void DeleteRevision(string revisionFileName)
         {
-            var revisionFilePath = RevisionFolder + Path.DirectorySeparatorChar + revisionFileName + ".json";
+            var revisionFilePath = Path.Combine(noDbService.RevisionFolder, revisionFileName + ".json");
             File.Delete(revisionFilePath);
         }
 
@@ -64,7 +55,7 @@ namespace NoDb.Business.Service.Services
         public void SaveRevision(NoDbRevision revision)
         {
             if (revision == null) return;
-            var revisionPath = RevisionFolder;
+            var revisionPath = noDbService.RevisionFolder;
             if (!Directory.Exists(revisionPath))
             {
                 Directory.CreateDirectory(revisionPath);

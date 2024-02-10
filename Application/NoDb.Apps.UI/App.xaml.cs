@@ -9,67 +9,60 @@ namespace NoDb.Apps.UI
     /// </summary>
     public partial class App : Application
     {
-        public static string Folder { get; set; }
-        public static string SolutionFolder { get; set; }
-        public static string InitialProject { get; set; }
-        public static bool OpenSettings { get; set; }
-        public static bool OpenSolutionSettings { get; set; }
-        public static NoDbSolutionService SolutionService { get; set; }
-        public static NoDbService NoDbService { get; set; }
+        public static NoDbService NoDbService { get; private set; }
 
         public App()
         {
             Dispatcher.UnhandledException += Dispatcher_UnhandledException;
         }
 
+        public static void InitNoDbService(string solution)
+        {
+            if (string.IsNullOrEmpty(solution))
+            {
+                return;
+            }
+
+            NoDbService = new NoDbService(solution);
+        }
+
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+
+            string solution = null; 
+            bool openSettings = false, openSolutionSettings = false;
+
             var args = e.Args;
             if (args != null)
             {
                 for (int i = 0; i < args.Length; i += 2)
                 {
                     if (args.Length < i + 1) continue;
-                    if (args[i] == "-folder")
+                    if (args[i] == "-solution")
                     {
-                        Folder = args[i + 1];
-                    }
-                    else if (args[i] == "-solution")
-                    {
-                        SolutionFolder = args[i + 1];
-                    }
-                    else if (args[i] == "-project")
-                    {
-                        InitialProject = args[i + 1];
+                        solution = args[i + 1];
                     }
                     else if (args[i] == "-openSettings")
                     {
-                        OpenSettings = args[i + 1] == "true";
+                        openSettings = args[i + 1] == "true";
                     }
                     else if (args[i] == "-openSolutionSettings")
                     {
-                        OpenSolutionSettings = args[i + 1] == "true";
+                        openSolutionSettings = args[i + 1] == "true";
                     }
                 }
             }
-            if (SolutionFolder != null)
-            {
-                SolutionService = new NoDbSolutionService(SolutionFolder);
-            }
 
-            if (Folder != null)
-            {
-                NoDbService = new NoDbService(Folder);
-            }
+            InitNoDbService(solution);
 
-            if (OpenSettings)
+            if (openSettings)
             {
                 StartupUri = new Uri("SubWindows/SettingsWindow.xaml", UriKind.Relative);
                 return;
             }
 
-            if (OpenSolutionSettings)
+            if (openSolutionSettings)
             {
                 StartupUri = new Uri("SubWindows/SolutionWindow.xaml", UriKind.Relative);
                 return;

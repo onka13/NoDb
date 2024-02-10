@@ -16,8 +16,7 @@ namespace NoDb.Data.Domain.Converters
             var onkafAttribute = (NoDbColumnAttribute)context.PropertyDescriptor.Attributes?[typeof(NoDbColumnAttribute)];
             if (onkafAttribute != null)
             {
-                var project = StaticManager.GetSelectedProject(StaticManager.SelectedProject);
-                var table = project.Tables.FirstOrDefault(x => x.Detail.Name == StaticManager.SelectedForeignTable);
+                var table = StaticManager.Tables.FirstOrDefault(x => x.Detail.Name == StaticManager.SelectedForeignTable);
                 if (table != null)
                     response = table.ColumnsWithRelated();
             }

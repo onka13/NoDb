@@ -18,8 +18,6 @@ namespace NoDb.Data.Domain.DbModels
 
         public string Path { get; set; }
 
-        public bool IsSelected { get; set; }
-
         public override string ToString()
         {
             return Name;

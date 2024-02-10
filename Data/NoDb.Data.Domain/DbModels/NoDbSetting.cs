@@ -80,55 +80,20 @@ namespace NoDb.Data.Domain.DbModels
         [Category("General")]
         public string CoreCommonDataNamespace { get; set; }
 
-        //[Category("Entity")]
-        //public string EntityNamespaces { get; set; }
-        //[Category("Entity")]
-        //public string ElasticEntityBase { get; set; }
-        //[Category("Entity")]
-        //public string EntityBase { get; set; }
-
-        //[Category("Context")]
-        //public string DbContextNamespaces { get; set; }
-
-        //[Category("Repository")]
-        //public string ElasticRepoBase { get; set; }
-        //[Category("Repository")]
-        //public string EntityRepoBase { get; set; }
-        //[Category("Repository")]
-        //public string RepositoryNamespaces { get; set; }
-        //[Category("Repository")]
-        //public string EntityRepoInterfaceBase { get; set; }
-
-        //[Category("Service")]
-        //public string ServiceNamespaces { get; set; }
-        //[Category("Service")]
-        //public string EntityServiceBase { get; set; }
-        //[Category("Service")]
-        //public string EntityServiceInterfaceBase { get; set; }
-
         [Category("Search")]
         public string SearchRequestBase { get; set; }
 
-        //[Category("Search")]
-        //public string SearchControllerNamespaces { get; set; }
+        public string DomainProject { get; set; }
+
+        public string ApplicationProject { get; set; }
+
+        public string InfrastructureProject { get; set; }
+
+        public string ApiProject { get; set; }
 
         public DotNetCoreProject()
         {
-            //EntityNamespaces = "using CoreCommon.Data.Domain.Entities;\r\nusing CoreCommon.Data.Domain.Enums;";
-            //RepositoryNamespaces = "using CoreCommon.Data.Domain.Entities;\r\nusing CoreCommon.Data.Domain.Enums;\r\nusing CoreCommon.Data.EntityFrameworkBase.Base;\r\nusing CoreCommon.Data.ElasticSearch.Base;\r\nusing CoreCommon.Data.Domain.Business;";
-            //ServiceNamespaces = "using CoreCommon.Business.Service.Base;\r\nusing CoreCommon.Data.Domain.Business;\r\nusing CoreCommon.Data.Domain.Entities;\r\nusing CoreCommon.Data.Domain.Enums;";
-            //DbContextNamespaces = "CoreCommon.Data.EntityFrameworkBase.Base";
-            //EntityBase = "IEntityBase";
-            //EntityRepoBase = "EntityFrameworkBaseRepository";
-            //EntityServiceBase = "BusinessLogicBase";
-            //ElasticEntityBase = "IElasticSearchEntity";
-            //ElasticRepoBase = "ElasticSearchRepositoryBase";
-            //EntityRepoInterfaceBase = "IRepositoryBase";
-            //EntityServiceInterfaceBase = "IBusinessLogicBase";
-            SearchRequestBase = "";
-            RootNamespace = "";
             CoreCommonDataNamespace = "CoreCommon.Data";
-            //SearchControllerNamespaces = "using CoreCommon.Data.Domain.Business;\r\nusing CoreCommon.Data.Domain.Models;\r\nusing CoreCommon.Data.Domain.Attributes;\r\n";
         }
 
         public override string ToString()

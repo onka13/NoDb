@@ -16,25 +16,7 @@ namespace NoDb.Data.Domain.Converters
 
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
         {
-            var projectName = StaticManager.SelectedProject;
-            if (context.PropertyDescriptor.Name == "BaseTable")
-            {
-                var instance = (context.Instance as NoDbTableDetail);
-                if (instance != null && !string.IsNullOrEmpty(instance.BaseProject))
-                {
-                    projectName = instance.BaseProject;
-                }
-                else
-                {
-                    if(instance != null) instance.BaseTable = null;
-                    return new StandardValuesCollection(new List<string>());
-                }
-            }
-
-            var project = StaticManager.GetSelectedProject(projectName);
-            if (project != null) return new StandardValuesCollection(project.Tables.Select(x => x.Detail.Name).ToList());
-
-            return new StandardValuesCollection(new List<string>());
+            return new StandardValuesCollection(StaticManager.Tables.Select(x => x.Detail.Name).ToList());
         }
 
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)

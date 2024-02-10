@@ -6,40 +6,34 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace NoDb.Business.Service.Services
 {
     public class TableService
     {
-        NoDbService _noDbService;
-        public string TableFilePath
-        {
-            get
-            {
-                return _noDbService.NoDbFolder + Path.DirectorySeparatorChar + "Tables.json";
-            }
-        }
-
-        public List<NoDbTable> Tables { get; set; }
+        private readonly NoDbService noDbService;        
 
         public TableService(NoDbService noDbService)
         {
-            _noDbService = noDbService;
+            this.noDbService = noDbService;
             ReadFromSettingsFolder();
         }
 
+        public List<NoDbTable> Tables { get; private set; }
+
         public void ReadFromSettingsFolder()
         {
-            if (!File.Exists(TableFilePath))
+            if (!File.Exists(noDbService.TableFilePath))
             {
                 Tables = new List<NoDbTable>();
             }
             else
             {
-                var json = File.ReadAllText(TableFilePath);
+                var json = File.ReadAllText(noDbService.TableFilePath);
                 Tables = ConversionHelper.Deserialize<List<NoDbTable>>(json).OrderBy(x => x?.Detail?.Name).ToList();
             }
+
+            StaticManager.Tables = Tables;
         }
 
         public NoDbTable New(NoDbTable table)
@@ -73,7 +67,7 @@ namespace NoDb.Business.Service.Services
 
         public void Delete(NoDbTable table)
         {
-            _noDbService.RevisionService.SaveRevision(table, null);
+            noDbService.RevisionService.SaveRevision(table, null);
             Tables.Remove(table);
             WriteToFile();
         }
@@ -84,11 +78,27 @@ namespace NoDb.Business.Service.Services
             {
                 throw new Exception("Please enter TitleColumn field!");
             }
+
+            if (updatedTable.Columns.Count == 0)
+            {
+                throw new Exception("Please enter one column at least!");
+            }
+            
+            if (updatedTable.Columns.Any(x => string.IsNullOrWhiteSpace(x.Name)))
+            {
+                throw new Exception("Empty column name not allowed!");
+            }
+            
+            if (updatedTable.Columns.Select(x => x.Name).Distinct().Count() != updatedTable.Columns.Count)
+            {
+                throw new Exception("Duplicated column names not allowed!");
+            }
+
             var index = Tables.FindIndex(x => x.Hash == updatedTable.Hash);
             var originalTable = Tables[index];
             if(saveRevision)
             {
-                _noDbService.RevisionService.SaveRevision(originalTable, updatedTable);
+                noDbService.RevisionService.SaveRevision(originalTable, updatedTable);
             }
 
             Tables[index] = updatedTable;
@@ -98,7 +108,8 @@ namespace NoDb.Business.Service.Services
         private void WriteToFile()
         {
             var json = ConversionHelper.Serialize(Tables, isIndented: true);
-            File.WriteAllText(TableFilePath, json);
+            File.WriteAllText(noDbService.TableFilePath, json);
+            StaticManager.Tables = Tables;
         }
     }
 }

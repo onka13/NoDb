@@ -10,15 +10,15 @@ namespace NoDb.Apps.UI.SubWindows
     /// </summary>
     public partial class SettingsWindow : Window
     {
-        SettingsService _settingsService;
+        private readonly NoDbService noDbService;
 
         public SettingsWindow() : this(null)
         {
         }
 
-        public SettingsWindow(SettingsService settingsService)
+        public SettingsWindow(NoDbService noDbService)
         {
-            _settingsService = settingsService ?? new SettingsService(App.SolutionService.GetSettingsFolder());
+            this.noDbService = noDbService ?? App.NoDbService;
             InitializeComponent();
         }
 
@@ -31,13 +31,17 @@ namespace NoDb.Apps.UI.SubWindows
         private void XCreateNew_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(xSettingKey.Text)) return;
-            _settingsService.New(new NoDbSetting
+
+            noDbService.SettingsService.New(new NoDbSetting
             {
                 SettingsKey = xSettingKey.Text,
                 Schema = "dbo",
                 ConnectionType = Data.Domain.Enums.NoDbConnectionType.Mssql,
                 ConnectionName = "MainConnection",
-                DotNetCoreProject = new DotNetCoreProject()
+                DotNetCoreProject = new DotNetCoreProject
+                {
+
+                }
             });
             xSettingKey.Text = "";
             BindSettings();
@@ -53,7 +57,7 @@ namespace NoDb.Apps.UI.SubWindows
         private void XSave_Click(object sender, RoutedEventArgs e)
         {
             if (xSettings.SelectedItem == null) return;
-            _settingsService.Save(xSettings.SelectedItem as NoDbSetting);
+            noDbService.SettingsService.Save(xSettings.SelectedItem as NoDbSetting);
             BindSettings();
             System.Windows.Forms.MessageBox.Show("Saved");
         }
@@ -62,7 +66,7 @@ namespace NoDb.Apps.UI.SubWindows
         {
             var selected = xSettings.SelectedIndex;
             xSettings.ItemsSource = null;
-            xSettings.ItemsSource = _settingsService.Settings;
+            xSettings.ItemsSource = noDbService.SettingsService.Settings;
             xSettings.SelectedIndex = selected;
         }
 

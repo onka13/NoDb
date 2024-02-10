@@ -15,7 +15,7 @@ namespace NoDb.Apps.UI.SubWindows
     /// </summary>
     public partial class ImportFromSqlWindow : Window
     {
-        NoDbService _noDbService;
+        private readonly NoDbService noDbService;
         List<InformationSchemaTable> dbTables;
         List<InformationSchemaColumn> dbColumns;
 
@@ -25,13 +25,13 @@ namespace NoDb.Apps.UI.SubWindows
 
         public ImportFromSqlWindow(NoDbService noDbService)
         {
-            _noDbService = noDbService ?? App.NoDbService;
+            this.noDbService = noDbService ?? App.NoDbService;
             InitializeComponent();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            xSettings.ItemsSource = new SettingsService(App.SolutionService.GetSettingsFolder()).Settings;
+            xSettings.ItemsSource = noDbService.SettingsService.Settings;
             if (xSettings.Items.Count > 0) xSettings.SelectedIndex = 0;
         }
 
@@ -85,7 +85,7 @@ namespace NoDb.Apps.UI.SubWindows
             {
                 var setting = xSettings.SelectedItem as NoDbSetting;
                 var connection = xConnections.SelectedItem as NoDbSettingConnection;
-                new ImportService(_noDbService).SyncFromDb(setting, connection.ConnectionType, dbTables, dbColumns);
+                new ImportService(noDbService).SyncFromDb(setting, connection.ConnectionType, dbTables, dbColumns);
                 System.Windows.Forms.MessageBox.Show("Done!");
             }
             catch (System.Exception ex)

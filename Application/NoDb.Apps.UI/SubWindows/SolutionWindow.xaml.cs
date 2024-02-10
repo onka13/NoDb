@@ -11,27 +11,28 @@ namespace NoDb.Apps.UI.SubWindows
     /// </summary>
     public partial class SolutionWindow : Window
     {
-        NoDbSolutionService solutionService;
-        public Action OnUpdated { get; set; }
+        private readonly NoDbService noDbService;
+
+        public SolutionWindow(NoDbService noDbService)
+        {
+            this.noDbService = noDbService ?? App.NoDbService;
+            InitializeComponent();
+        }
 
         public SolutionWindow() : this(null)
         {
         }
 
-        public SolutionWindow(string solutionDir)
-        {
-            solutionService = solutionDir != null ? new NoDbSolutionService(solutionDir) : App.SolutionService;
-            InitializeComponent();
-        }
+        public Action OnUpdated { get; set; }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            xProjects.ItemsSource = solutionService.Projects;
+            xProjects.ItemsSource = noDbService.NoDbSolutionService.Projects;
         }
 
         private void XSave_Click(object sender, RoutedEventArgs e)
         {
-            solutionService.UpdateAllModules(xProjects.ItemsSource as List<NoDbProject>, false);
+            noDbService.NoDbSolutionService.SetProjects(xProjects.ItemsSource as List<NoDbProject>);
             System.Windows.Forms.MessageBox.Show("Saved");
             OnUpdated?.Invoke();
         }

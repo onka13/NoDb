@@ -30,14 +30,11 @@ namespace NoDb.Data.Domain.DbModels
 
         private NoDbTable GetBaseTable()
         {
-            if (!string.IsNullOrEmpty(Detail.BaseProject))
+            if (!string.IsNullOrEmpty(Detail.BaseTable))
             {
-                var relatedProject = StaticManager.Solution.Projects.FirstOrDefault(x => x.Project.Name == Detail.BaseProject);
-                if (relatedProject != null)
-                {
-                    return relatedProject.Tables.FirstOrDefault(x => x.Detail.Name == Detail.BaseTable);                    
-                }
+                return StaticManager.Tables.FirstOrDefault(x => x.Detail.Name == Detail.BaseTable);
             }
+
             return null;
         }
 
