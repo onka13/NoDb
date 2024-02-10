@@ -82,13 +82,15 @@ namespace NoDb.Apps.UI
 
             xColumns.ItemContainerStyle = new Style
             {
-                TargetType = typeof(DataGridRow)
+                TargetType = typeof(DataGridRow),
             };
             xColumns.ItemContainerStyle.Setters.Add(new EventSetter
             {
                 Event = MouseUpEvent,
                 Handler = new MouseButtonEventHandler(XColumns_MouseUp)
             });
+            xColumns.PreviewKeyUp += XColumns_PreviewKey;
+            xColumns.PreviewKeyDown += XColumns_PreviewKey; ;
 
             xMainGrid.IsEnabled = false;
             xColumnsGrid.IsEnabled = false;
@@ -99,6 +101,47 @@ namespace NoDb.Apps.UI
                 lblStatusInfo.Text = App.NoDbService.NoDbFolder;
             }
             InitService();
+        }
+
+        bool isCtrlDown = false;
+        private void XColumns_PreviewKey(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.LeftCtrl)
+            {
+                e.Handled = true;
+                isCtrlDown = e.IsDown;
+            }
+            else if (isCtrlDown && e.IsDown && (e.Key == Key.Down || e.Key == Key.Up))
+            {
+                e.Handled = true;
+
+                var lcv = (ListCollectionView)CollectionViewSource.GetDefaultView(xColumns.ItemsSource);
+                if (lcv.IsAddingNew || lcv.IsEditingItem)
+                {
+                    return;
+                }
+
+                Action<int, int> move = (int i, int to) =>
+                {
+                    var temp = selectedTable.Columns[i];
+                    selectedTable.Columns.RemoveAt(i);
+                    selectedTable.Columns.Insert(to, temp);
+                    xColumns.Items.Refresh();
+                    xColumns.SelectedIndex = to;
+                    xColumns.Focus();
+                };
+
+                var i = xColumns.SelectedIndex;
+                if (e.Key == Key.Down && i + 1 < selectedTable.Columns.Count)
+                {
+                    move(i, i + 1);
+                }
+
+                if (e.Key == Key.Up && i > 0)
+                {
+                    move(i, i - 1);
+                }
+            }
         }
 
         public void OpenNoDbFolder()
@@ -456,7 +499,7 @@ namespace NoDb.Apps.UI
             var lcv = (ListCollectionView)CollectionViewSource.GetDefaultView(xColumns.ItemsSource);
 
             if (
-                xColumns.SelectedIndex < 0 || 
+                xColumns.SelectedIndex < 0 ||
                 xColumns.SelectedIndex >= selectedTable.Columns.Count ||
                 lcv.IsAddingNew ||
                 lcv.IsEditingItem
@@ -464,7 +507,7 @@ namespace NoDb.Apps.UI
             {
                 return;
             }
-            
+
             lcv.RemoveAt(xColumns.SelectedIndex);
         }
     }
