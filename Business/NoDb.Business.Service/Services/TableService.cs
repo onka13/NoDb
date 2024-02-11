@@ -144,6 +144,12 @@ namespace NoDb.Business.Service.Services
         {
             foreach (var table in Tables)
             {
+                table.Detail.Name = StringHelper.FirstCharToUpper(table.Detail.Name);
+                for (int i = 0; i < table.Columns.Count; i++)
+                {
+                    table.Columns[i].Name = StringHelper.FirstCharToUpper(table.Columns[i].Name);
+                }
+
                 var json = ConversionHelper.Serialize(table, isIndented: true, minimise: true);
                 File.WriteAllText(Path.Combine(noDbService.TableFolderPath, table.Detail.Name + ".json"), json);
             }
