@@ -12,7 +12,7 @@ namespace NoDb.Business.Service.Services
 {
     public class TableService
     {
-        private readonly NoDbService noDbService;        
+        private readonly NoDbService noDbService;
 
         public TableService(NoDbService noDbService)
         {
@@ -148,6 +148,42 @@ namespace NoDb.Business.Service.Services
                 for (int i = 0; i < table.Columns.Count; i++)
                 {
                     table.Columns[i].Name = StringHelper.FirstCharToUpper(table.Columns[i].Name);
+                }
+
+                for (int i = 0; i < table.Indices.Count; i++)
+                {
+                    for (int j = 0; j < table.Indices[i].Columns.Count; j++)
+                    {
+                        table.Indices[i].Columns[j].ColumnName = StringHelper.FirstCharToUpper(table.Indices[i].Columns[j].ColumnName);
+                    }
+                }
+
+                for (int i = 0; i < table.Relations.Count; i++)
+                {
+                    for (int j = 0; j < table.Relations[i].Items.Count; j++)
+                    {
+                        table.Relations[i].Items[j].ColumnName = StringHelper.FirstCharToUpper(table.Relations[i].Items[j].ColumnName);
+                        table.Relations[i].Items[j].ForeignColumn = StringHelper.FirstCharToUpper(table.Relations[i].Items[j].ForeignColumn);
+                    }
+                }
+
+                for (int i = 0; i < table.SearchItems.Count; i++)
+                {
+                    for (int j = 0; j < table.SearchItems[i].Columns.Count; j++)
+                    {
+                        table.SearchItems[i].Columns[j].ColumnName = StringHelper.FirstCharToUpper(table.SearchItems[i].Columns[j].ColumnName);
+                    }
+
+                    for (int j = 0; j < table.SearchItems[i].AllColumns.Count; j++)
+                    {
+                        table.SearchItems[i].AllColumns[j].Name = StringHelper.FirstCharToUpper(table.SearchItems[i].AllColumns[j].Name);
+                    }
+
+                    for (int j = 0; j < table.SearchItems[i].DisplayedColumns.Count; j++)
+                    {
+                        table.SearchItems[i].DisplayedColumns[j].ColumnName = StringHelper.FirstCharToUpper(table.SearchItems[i].DisplayedColumns[j].ColumnName);
+                        table.SearchItems[i].DisplayedColumns[j].RelationColumnName = StringHelper.FirstCharToUpper(table.SearchItems[i].DisplayedColumns[j].RelationColumnName);
+                    }
                 }
 
                 var json = ConversionHelper.Serialize(table, isIndented: true, minimise: true);
